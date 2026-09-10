@@ -22,7 +22,7 @@ Machine schema: [`config.schema.json`](config.schema.json).
   "gates": {
     "tiers": {
       "pr": ["planning-coverage", "adr-link", "wave-sync", "readme-sync", "agents-parity", "no-secrets"],
-      "ops": ["program-inventory"]
+      "ops": ["program-inventory", "evidence-quality", "release-readiness"]
     },
     "custom": [
       { "name": "openapi-routes", "command": "npm run check:routes", "description": "Spec matches handlers" }
@@ -45,7 +45,13 @@ Machine schema: [`config.schema.json`](config.schema.json).
   },
   "adapters": { "tools": ["claude", "gemini", "copilot", "cursor", "windsurf"] },
   "runners": { "default": null },
-  "escalation": { "tiers": [], "maxFailuresDefault": 2 }
+  "escalation": { "tiers": [], "maxFailuresDefault": 2 },
+  "hooks": {
+    "on_claim": "echo claimed $WHW_REF >> .whw/hooks.log",
+    "on_done": "echo done $WHW_REF >> .whw/hooks.log",
+    "on_gate_fail": "echo fail $WHW_GATES >> .whw/hooks.log",
+    "on_close": "echo closed $WHW_TRACK >> .whw/hooks.log"
+  }
 }
 ```
 
@@ -65,7 +71,15 @@ Machine schema: [`config.schema.json`](config.schema.json).
   `.whw/adapters.json` manifest exists.
 - **runners.default** — shell command for `whw run` (env: `WHW_PROMPT_FILE`,
   `WHW_ROLE`, `WHW_REF`, `WHW_ROOT`, `WHW_ATTEMPT`, `WHW_TIER`).
-- **escalation** — ladder tiers `[{name, runner, maxFailures} | {name, human}]`.
+- **escalation** — ladder tiers `[{name, runner, maxFailures, model?, costClass?} | {name, human}]`.
+  `costClass` is documentary (`open-weight`, `closed`, `human`); `model` is
+  a free-form label written into `.whw/runs/*.log`.
+- **hooks** — optional shell commands after `claim`, `done`, gate NO_GO, and
+  `close`. Post-event only: a failing hook is logged and does **not** roll back
+  the transition. Env: `WHW_HOOK`, `WHW_ROOT`, plus `WHW_REF` / `WHW_FROM` /
+  `WHW_TO` / `WHW_ACTOR` (claim/done), `WHW_GATES` (comma-separated failed
+  names), `WHW_WAVE` / `WHW_TRACK` (close). Only from repos you trust (same
+  bar as custom gates). Omit the object — this repo does — when unused.
 
 ## Environment overrides
 

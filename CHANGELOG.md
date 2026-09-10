@@ -7,6 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- README quick start uses `npx @fabioeloi/whw` now that `0.1.1` is on npm
+  ([#28](https://github.com/fabioeloi/WHW/issues/28)).
+
+### Added (wave 011)
+
+- `release-readiness` ops gate: when `package.json` exists, name/semver/license,
+  `LICENSE`, `README.md`, CHANGELOG heading, and `bin` paths must agree. Does
+  not publish npm or create tags.
+
+### Added (wave 010)
+
+- `whw resume [--no-sync]`: git baseline, optional `sync --all`, queue, next
+  step. Does not claim. AGENTS.md resume protocol as one command.
+- Config `hooks` (`on_claim`, `on_done`, `on_gate_fail`, `on_close`): post-event
+  shell commands. Non-zero exit is logged; the transition is not rolled back.
+- Live `docs/handoff/` package (`whw handoff --from cursor --to claude`).
+
+### Added
+
+- `evidence-quality` ops gate: from wave 007 onward, `done` evidence must name
+  a SHA, PR `#N`, test/gate command, or checkpoint path (ADR 0011).
+- `whw claim --force-wip` to override the one-claim-per-actor guard.
+
+### Fixed
+
+- Gate runner NO_GO `unsynced-state` when planning seeds exist and `todos` is
+  empty, before individual gates can GO vacuously.
+- `whw sync` preserves `in_progress`, `blocked`, and `cancelled` (not only
+  `done`), so re-applying seeds cannot unclaim work.
+
+### Changed
+
+- Gitignore timestamped checkpoint copies; track `.whw/checkpoints/**/latest.txt`
+  only. Scaffold `GITIGNORE_BLOCK` matches.
+
+### Added (wave 009)
+
+- `whw run` unit tests for `composePrompt`, escalation, and stub open-weight →
+  closed CLIs. Optional `model` / `costClass` on escalation tiers (logged with
+  `durationMs`). Open-model examples (Ollama, llama.cpp, Aider) in
+  `docs/how/escalation.md`. `.whw/runs/` is gitignored. `whw run` now reaches
+  the `human` tier immediately when the previous tier is exhausted.
+
 ## [0.1.1] - 2026-09-10
 
 ### Added

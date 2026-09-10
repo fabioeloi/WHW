@@ -5,8 +5,10 @@
  */
 
 import { join } from 'node:path';
-import { closeDb, openDb } from '../db/sqlite.js';
+import { closeDb, get, openDb } from '../db/sqlite.js';
+import { runHook } from '../hooks.js';
 import { localDate, runShell, utcStamp, writeText } from '../util.js';
+import { listSeedFiles } from '../planning/seed.js';
 import * as planningCoverage from './builtin/planning-coverage.js';
 import * as adrLink from './builtin/adr-link.js';
 import * as programInventory from './builtin/program-inventory.js';
@@ -14,9 +16,11 @@ import * as waveSync from './builtin/wave-sync.js';
 import * as readmeSync from './builtin/readme-sync.js';
 import * as agentsParity from './builtin/agents-parity.js';
 import * as noSecrets from './builtin/no-secrets.js';
+import * as evidenceQuality from './builtin/evidence-quality.js';
+import * as releaseReadiness from './builtin/release-readiness.js';
 
 export const BUILTINS = [
-  planningCoverage, adrLink, programInventory, waveSync, readmeSync, agentsParity, noSecrets,
+  planningCoverage, adrLink, programInventory, waveSync, readmeSync, agentsParity, noSecrets, evidenceQuality, releaseReadiness,
 ];
 
 /**
@@ -124,29 +128,56 @@ export async function cmdGateRun(positionals, ctx, sub = null) {
     return 0;
   }
   const db = openDb(ctx.paths.state);
+  /** @type {string[]} */
+  let failedNames = [];
+  let code = 0;
   try {
-    const results = [];
-    for (const gateName of selected) {
-      let result;
-      try {
-        result = await runOne(ctx, { name: gateName }, db);
-      } catch (err) {
-        result = { status: 'NO_GO', failures: [err instanceof Error ? err.message : String(err)], details: [] };
+    const seedFiles = listSeedFiles(ctx.paths.planning);
+    const todoCount = Number(get(db, 'SELECT COUNT(*) AS n FROM todos;')?.n ?? 0);
+    if (seedFiles.length && todoCount === 0) {
+      const result = {
+        status: 'NO_GO',
+        failures: [`${seedFiles.length} planning seed(s) but 0 todos in state.db — run \`whw sync --all\``],
+        details: [],
+      };
+      const cp = writeCheckpoint(ctx, 'unsynced-state', result);
+      if (ctx.json) {
+        ctx.log.data({ results: [{ name: 'unsynced-state', ...result, checkpoint: cp.latest }] });
+      } else {
+        ctx.log.info(`NO_GO unsynced-state (${cp.latest})`);
+        ctx.log.info(`      FAIL ${result.failures[0]}`);
       }
-      const cp = writeCheckpoint(ctx, gateName, result);
-      results.push({ name: gateName, ...result, checkpoint: cp.latest });
+      failedNames = ['unsynced-state'];
+      code = 1;
+    } else {
+      const results = [];
+      for (const gateName of selected) {
+        let result;
+        try {
+          result = await runOne(ctx, { name: gateName }, db);
+        } catch (err) {
+          result = { status: 'NO_GO', failures: [err instanceof Error ? err.message : String(err)], details: [] };
+        }
+        const cp = writeCheckpoint(ctx, gateName, result);
+        results.push({ name: gateName, ...result, checkpoint: cp.latest });
+      }
+      const failed = results.filter((r) => r.status !== 'GO');
+      failedNames = failed.map((r) => r.name);
+      code = failed.length ? 1 : 0;
+      if (ctx.json) {
+        ctx.log.data({ results });
+      } else {
+        for (const r of results) {
+          ctx.log.info(`${r.status === 'GO' ? 'GO  ' : 'NO_GO'} ${r.name} (${r.checkpoint})`);
+          for (const f of r.failures) ctx.log.info(`      FAIL ${f}`);
+        }
+      }
     }
-    const failed = results.filter((r) => r.status !== 'GO');
-    if (ctx.json) {
-      ctx.log.data({ results });
-      return failed.length ? 1 : 0;
-    }
-    for (const r of results) {
-      ctx.log.info(`${r.status === 'GO' ? 'GO  ' : 'NO_GO'} ${r.name} (${r.checkpoint})`);
-      for (const f of r.failures) ctx.log.info(`      FAIL ${f}`);
-    }
-    return failed.length ? 1 : 0;
   } finally {
     closeDb(db);
   }
+  if (failedNames.length) {
+    await runHook(ctx, 'on_gate_fail', { WHW_GATES: failedNames.join(',') });
+  }
+  return code;
 }

@@ -43,7 +43,7 @@ the queue. If it diverges, stop and reconcile git first.
 ## Continuity checklist
 
 1. Baseline matches.
-2. `whw sync --all` → `whw queue` — SQL is the source of truth.
+2. `whw resume` (or `whw sync --all` → `whw queue`) — SQL is the source of truth.
 3. `whw gate run --tier pr` green before new work.
 4. Resume the top queue item; claim before coding.
 5. Report Status / Evidence / Next step at the first milestone.

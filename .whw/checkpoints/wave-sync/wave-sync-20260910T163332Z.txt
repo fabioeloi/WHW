@@ -1,5 +1,0 @@
-# whw gate wave-sync — 2026-09-10T163332Z (20260910T163332Z)
-[163332Z] PASS wave-001-repo-scaffold: synced (.done.sql + plan + addendum)
-[163332Z] PASS wave-002-sql-cli-core: synced (.done.sql + plan + addendum)
-[163332Z] PASS wave-003-scaffolds-gates: synced (.done.sql + plan + addendum)
-status=GO failures=0

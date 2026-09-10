@@ -4,7 +4,8 @@
 -- The default backend is SQLite (.whw/state.db); use this schema only when a
 -- shared database is genuinely needed.
 --
--- Idempotent seed pattern (never downgrade `done`):
+-- Idempotent seed pattern (never downgrade `done`; `whw sync` also restores
+-- in_progress/blocked/cancelled after apply):
 --   INSERT INTO todos (ref, title, status, track, step, letter, adr, notes) VALUES
 --     ('wave001-A', 'Wave 001 A — Plan …', 'pending', 'wave-001-slug', 1, 'A', '0009', '…')
 --   ON CONFLICT (ref) DO UPDATE SET

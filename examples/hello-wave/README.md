@@ -99,7 +99,7 @@ whw done wave001-D --evidence "addendum in 0001-hello.md, entry in docs/plan.md"
 
 ```bash
 whw close 001              # asserts A–D terminal + addendum + sync gates GO
-whw gate run --tier pr     # all six GO, checkpoints committed as proof
+whw gate run --tier pr     # all six GO; commit latest.txt as proof
 whw status                 # Status / Evidence / Next step
 whw metrics                # reproducible numbers
 ```
@@ -107,6 +107,7 @@ whw metrics                # reproducible numbers
 ## 7. Leave or migrate
 
 ```bash
+whw resume                 # git + sync + queue (does not claim)
 whw handoff --from <your-tool> --to <next-tool>   # resumable package
 ```
 

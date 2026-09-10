@@ -119,55 +119,55 @@ metrics, retrospective. ADR: `docs/adr/0008-program-001.md`.
 
 Sync: `whw sync wave-006-program-close` · Close: `whw close wave-006-program-close`
 
-## Wave 007 — publish-release — **in progress**
+## Wave 007 — publish-release — **done**
 
-Make the public quick start true: npm publish policy, GitHub Release, README
-truth, Actions hygiene. Implementation (B) waits on an explicit go. ADR:
-`docs/adr/0010-release-policy.md`.
+Release plumbing is in git (PRs #1 merged, #3 open). ADR 0010 Accepted. npm
+tag still waits on `NPM_TOKEN`. ADR: `docs/adr/0010-release-policy.md`.
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Charter + seeds | ADR 0009–0012, `whw wave new` × 5, plan stubs | no wave without an ADR | `docs/adr/`, `planning/` | 007 | solo | (Wave 007 A) |
-| B | Release plumbing | `release.yml`, topics, protection, README/`pt-BR`, CHANGELOG | `npx` must resolve | `.github/`, README | 007 | solo | (Wave 007 B) |
-| C | Verify | `pr` gates + dry-run publish checklist | stranger-followable | CI | 007 | solo | (Wave 007 C) |
+| A | Charter + seeds | ADR 0009–0012, `whw wave new` × 5, plan stubs | no wave without an ADR | `docs/adr/`, `planning/` | 007 | solo | [#1](https://github.com/fabioeloi/WHW/pull/1) |
+| B | Release plumbing | `release.yml`, topics, protection, README/`pt-BR`, CHANGELOG | `npx` must resolve | `.github/`, README | 007 | solo | [#3](https://github.com/fabioeloi/WHW/pull/3) |
+| C | Verify | Ubuntu matrix + `ci` aggregator | stranger-followable | Actions | 007 | solo | [run 34518046761](https://github.com/fabioeloi/WHW/actions/runs/34518046761) |
 | D | Decide | ADR 0010 addendum | record publish decision | `docs/adr/0010` | 007 | solo | (Wave 007 D) |
-| E | Close | `whw close` + sync gates | canonical close | planning/ | 007 | solo | (Wave 007 E) |
+| E | Close | `whw close` + sync gates | canonical close | planning/ | 007 | solo | `whw close 007` |
 
 Sync: `whw sync wave-007-publish-release` · Close: `whw close wave-007-publish-release`
 
-## Wave 008 — state-hygiene — **planned**
+## Wave 008 — state-hygiene — **done**
 
-Checkpoint gitignore, evidence-quality gate, WIP claim guard, unsynced-DB
-precondition, doctor tests, docs drift from the review. ADR:
-`docs/adr/0011-derived-state.md`.
+Checkpoint gitignore (`latest.txt` only), `evidence-quality` ops gate, WIP
+claim guard (`--force-wip`), unsynced-DB precondition, doctor tests, docs
+drift from the review, sync preserves live statuses. ADR:
+`docs/adr/0011-derived-state.md` Accepted.
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-008-state-hygiene.todos.sql` | 008 | solo | (Wave 008 A) |
-| B | Implementation | gitignore + gates + claim guard | stop dirty trees and vacuous GO | `src/`, `.gitignore` | 008 | solo | (Wave 008 B) |
-| C | Verification | tests + `pr` gates | proof | `tests/` | 008 | solo | (Wave 008 C) |
-| D | Decision record | ADR 0011 addendum | record policy | `docs/adr/0011` | 008 | solo | (Wave 008 D) |
-| E | Canonical close | `whw close` + sync | close | planning/ | 008 | solo | (Wave 008 E) |
+| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-008-state-hygiene.todos.sql` | 008 | solo | [#8](https://github.com/fabioeloi/WHW/pull/8) |
+| B | Implementation | gitignore + gates + claim guard | stop dirty trees and vacuous GO | `src/`, `.gitignore` | 008 | solo | [#9](https://github.com/fabioeloi/WHW/pull/9) |
+| C | Verification | tests + `pr` gates | proof | `tests/` | 008 | solo | [#10](https://github.com/fabioeloi/WHW/pull/10) |
+| D | Decision record | ADR 0011 addendum | record policy | `docs/adr/0011` | 008 | solo | [#11](https://github.com/fabioeloi/WHW/pull/11) |
+| E | Canonical close | `whw close` + sync | close | planning/ | 008 | solo | `whw close 008` |
 
 Sync: `whw sync wave-008-state-hygiene` · Close: `whw close wave-008-state-hygiene`
 
-## Wave 009 — runner-proof — **planned**
+## Wave 009 — runner-proof — **done**
 
-Exercise `whw run` with one open-weight and one closed CLI; unit-test
-`composePrompt` / escalation; optional cost fields; open-model examples in
-escalation docs. ADR: `docs/adr/0009-program-002.md`.
+Exercise `whw run` with stub open-weight and closed CLIs; unit-test
+`composePrompt` / escalation; optional `model` / `costClass` on tiers;
+open-model examples in escalation docs. ADR: `docs/adr/0009-program-002.md`.
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` | charter first | `planning/wave-009-runner-proof.todos.sql` | 009 | solo | (Wave 009 A) |
-| B | Implementation | real `whw run` + tests | "any model" must be proven | `src/run.js`, `tests/`, `.whw/runs/` | 009 | solo | (Wave 009 B) |
-| C | Verification | tests + `pr` gates | proof | `tests/` | 009 | solo | (Wave 009 C) |
-| D | Decision record | ADR 0009 addendum | record runner evidence | `docs/adr/0009` | 009 | solo | (Wave 009 D) |
-| E | Canonical close | `whw close` + sync | close | planning/ | 009 | solo | (Wave 009 E) |
+| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-009-runner-proof.todos.sql` | 009 | solo | [#13](https://github.com/fabioeloi/WHW/pull/13) |
+| B | Implementation | real `whw run` + tests | "any model" must be proven | `src/run.js`, `tests/`, `.whw/runs/` | 009 | solo | [#14](https://github.com/fabioeloi/WHW/pull/14) |
+| C | Verification | tests + `pr` gates | proof | `tests/` | 009 | solo | [#15](https://github.com/fabioeloi/WHW/pull/15) |
+| D | Decision record | ADR 0009 addendum | record runner evidence | `docs/adr/0009` | 009 | solo | [#16](https://github.com/fabioeloi/WHW/pull/16) |
+| E | Canonical close | `whw close` + sync | close | planning/ | 009 | solo | `whw close 009` |
 
 Sync: `whw sync wave-009-runner-proof` · Close: `whw close wave-009-runner-proof`
 
-## Wave 010 — continuity-proof — **planned**
+## Wave 010 — continuity-proof — **done**
 
 `whw resume`, a real `docs/handoff/` between two tools, and config `hooks`
 (`on_claim`, `on_done`, `on_gate_fail`, `on_close`). ADR:
@@ -175,32 +175,33 @@ Sync: `whw sync wave-009-runner-proof` · Close: `whw close wave-009-runner-proo
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` | charter first | `planning/wave-010-continuity-proof.todos.sql` | 010 | solo | (Wave 010 A) |
-| B | Implementation | `resume` + hooks + live handoff | survive interruption for real | `src/`, `docs/handoff/` | 010 | solo | (Wave 010 B) |
-| C | Verification | tests + `pr` gates | proof | `tests/` | 010 | solo | (Wave 010 C) |
-| D | Decision record | ADR 0009 addendum | record continuity | `docs/adr/0009` | 010 | solo | (Wave 010 D) |
-| E | Canonical close | `whw close` + sync | close | planning/ | 010 | solo | (Wave 010 E) |
+| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-010-continuity-proof.todos.sql` | 010 | solo | [#18](https://github.com/fabioeloi/WHW/pull/18) |
+| B | Implementation | `resume` + hooks + live handoff | survive interruption for real | `src/`, `docs/handoff/` | 010 | solo | [#19](https://github.com/fabioeloi/WHW/pull/19) |
+| C | Verification | tests + `pr` gates | proof | `tests/` | 010 | solo | [#20](https://github.com/fabioeloi/WHW/pull/20) |
+| D | Decision record | ADR 0009 addendum | record continuity | `docs/adr/0009` | 010 | solo | [#21](https://github.com/fabioeloi/WHW/pull/21) |
+| E | Canonical close | `whw close` + sync | close | planning/ | 010 | solo | `whw close 010` |
 
 Sync: `whw sync wave-010-continuity-proof` · Close: `whw close wave-010-continuity-proof`
 
-## Wave 011 — program-close — **planned**
+## Wave 011 — program-close — **done**
 
-`release-readiness` gate (the one README already advertises), ADR 0012
-Accepted, inventory GO, metrics, retrospective. ADR:
+`release-readiness` ops gate (local package hygiene — not npm publish),
+ADR 0012 Accepted, inventory GO, metrics snapshot, retrospective. npm
+tag `v0.1.1` stays blocked on operator `NPM_TOKEN`. ADR:
 `docs/adr/0012-maintenance-policy.md`.
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` | charter first | `planning/wave-011-program-close.todos.sql` | 011 | solo | (Wave 011 A) |
-| B | Inventory work | release-readiness gate + policy | close deliberately | `src/gates/`, `docs/adr/0012` | 011 | solo | (Wave 011 B) |
-| C | Verify | inventory GO, metrics snap | evidence of done | `.whw/` | 011 | solo | (Wave 011 C) |
-| D | Decide | ADR 0009 + 0012 retrospective | record outcome | `docs/adr/0009`, `0012` | 011 | solo | (Wave 011 D) |
-| E | Close | `whw close` + sync gates | canonical close | planning/ | 011 | solo | (Wave 011 E) |
+| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-011-program-close.todos.sql` | 011 | solo | [#23](https://github.com/fabioeloi/WHW/pull/23) |
+| B | Inventory work | `release-readiness` + policy docs | close deliberately | `src/gates/`, `docs/` | 011 | solo | [#24](https://github.com/fabioeloi/WHW/pull/24) |
+| C | Verify | inventory GO, metrics snap | evidence of done | `.whw/` | 011 | solo | [#25](https://github.com/fabioeloi/WHW/pull/25) |
+| D | Decide | ADR 0009 + 0012 retrospective | record outcome | `docs/adr/0009`, `0012` | 011 | solo | [#26](https://github.com/fabioeloi/WHW/pull/26) |
+| E | Close | `whw close` + sync gates | canonical close | planning/ | 011 | solo | `whw close 011` |
 
 Sync: `whw sync wave-011-program-close` · Close: `whw close wave-011-program-close`
 
 ## Next
 
-Wave 007 A (charter + seeds) is the active letter. **Do not start 007 B**
-until the operator says go (`start`, `implement`, `proceed`). npm publish
-remains a confirm-at-execution-time step.
+Program 002 is **closed** (waves 007–011). `@fabioeloi/whw@0.1.1` is on npm;
+GitHub Release [v0.1.1](https://github.com/fabioeloi/WHW/releases/tag/v0.1.1).
+There is no wave 012 without a new charter ADR.

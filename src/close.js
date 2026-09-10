@@ -8,7 +8,8 @@
 import { all, closeDb, get, openDb, run } from './db/sqlite.js';
 import { runOne, writeCheckpoint } from './gates/runner.js';
 import { findAdrFile, listWaveFiles } from './gates/util.js';
-import { fileExists, readText } from './util.js';
+import { runHook } from './hooks.js';
+import { readText } from './util.js';
 
 const SYNC_GATES = ['planning-coverage', 'adr-link', 'wave-sync', 'readme-sync'];
 
@@ -35,6 +36,7 @@ export async function cmdClose(positionals, ctx) {
   const prefix = `wave${w.nnn}`;
   if (!w.done) throw new Error(`${track}: .done.sql hook missing in planning/`);
   const db = openDb(ctx.paths.state);
+  let closed = false;
   try {
     const e = get(db, 'SELECT status FROM todos WHERE ref = ?;', `${prefix}-E`);
     if (!e) throw new Error(`${track}: not synced (run \`whw sync ${track}\`)`);
@@ -81,14 +83,18 @@ export async function cmdClose(positionals, ctx) {
         run(db, 'UPDATE todos SET evidence = ? WHERE ref = ?;', cur ? `${cur} | ${evidence}` : evidence, row.ref);
       }
     }
+    closed = true;
     if (ctx.json) {
       ctx.log.data({ wave: w.nnn, track, closed: before.map((r) => r.ref) });
-      return 0;
+    } else {
+      ctx.log.info(`${track}: closed (${before.map((r) => r.ref).join(', ') || 'E already terminal'} → done)`);
+      ctx.log.info(`sync gates GO (${SYNC_GATES.join(', ')}); addendum verified in ${adrFile.split('/').pop()}`);
     }
-    ctx.log.info(`${track}: closed (${before.map((r) => r.ref).join(', ') || 'E already terminal'} → done)`);
-    ctx.log.info(`sync gates GO (${SYNC_GATES.join(', ')}); addendum verified in ${adrFile.split('/').pop()}`);
-    return 0;
   } finally {
     closeDb(db);
   }
+  if (closed) {
+    await runHook(ctx, 'on_close', { WHW_WAVE: w.nnn, WHW_TRACK: track });
+  }
+  return 0;
 }

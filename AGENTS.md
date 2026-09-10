@@ -8,8 +8,8 @@ edit here, not there.
 
 1. `whw sync --all`, then `whw queue` — **SQL is the source of truth**, never
    chat memory or scratch lists.
-2. `whw claim <ref>` — one claim at a time; `whw block <ref> --reason "…"`
-   instead of improvising around obstacles.
+2. `whw claim <ref>` — one claim at a time (`--force-wip` to override);
+   `whw block <ref> --reason "…"` instead of improvising around obstacles.
 3. Implement on `feat/wave-NNN-<slug>-<letter>`; commit
    `type(scope): summary (Wave NNN L)`.
 4. `whw done <ref> --evidence "<commit/PR/tests>"` — evidence is required and
@@ -45,7 +45,15 @@ Plan + seeds first (`whw adr new`, `whw program new`, `whw wave new`,
 
 ## Resume after interruption
 
-Revalidate, then continue from the nearest pending step; report only the delta:
+Revalidate with `whw resume` (git baseline, `whw sync --all`, queue, next
+step). It does **not** auto-claim. Then continue the nearest pending step and
+report only the delta:
+
+```bash
+whw resume
+```
+
+Equivalent by hand:
 
 ```bash
 git status --short --branch

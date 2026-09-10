@@ -1,4 +1,0 @@
-# whw gate program-inventory — 2026-09-10T163339Z (20260910T163339Z)
-[163339Z] PASS program whw-v0-1-0: waves 1–6 (0008-program-001.md)
-[163339Z] PASS program whw-v0-1-0: closed — verifying inventory
-status=GO failures=0

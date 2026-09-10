@@ -3,6 +3,7 @@
 
 import { readdirSync } from 'node:fs';
 import { basename, join } from 'node:path';
+import { all, run } from '../db/sqlite.js';
 import { isDir, readText } from '../util.js';
 
 /**
@@ -27,8 +28,12 @@ export function listSeedFiles(planningDir, opts = {}) {
   return files;
 }
 
+const PRESERVE_STATUSES = new Set(['done', 'in_progress', 'blocked', 'cancelled']);
+
 /**
- * Apply one seed file. Seeds must be idempotent upserts that never downgrade `done`.
+ * Apply one seed file. Seeds are idempotent upserts; live statuses
+ * (`done`, `in_progress`, `blocked`, `cancelled`) are restored after apply so
+ * `whw sync` cannot unclaim or unblock work.
  * @param {import('node:sqlite').DatabaseSync} db
  * @param {string} file absolute path
  * @returns {{ file: string, todos: number }}
@@ -37,7 +42,12 @@ export function applySeedFile(db, file) {
   const sql = readText(file);
   try {
     db.exec('BEGIN;');
+    const preserved = all(db, "SELECT ref, status FROM todos WHERE status != 'pending';");
     db.exec(sql);
+    for (const row of preserved) {
+      if (!PRESERVE_STATUSES.has(row.status)) continue;
+      run(db, 'UPDATE todos SET status = ? WHERE ref = ?;', row.status, row.ref);
+    }
     db.exec('COMMIT;');
   } catch (err) {
     try {
