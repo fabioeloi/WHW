@@ -4,8 +4,8 @@
 -- Idempotent: re-syncing never downgrades `done`. Close with `whw close wave-008-state-hygiene`.
 
 INSERT INTO todos (ref, title, status, track, step, letter, adr, notes) VALUES
-  ('wave008-A', 'Wave 008 A — Plan: state-hygiene', 'pending', 'wave-008-state-hygiene', 1, 'A', '0011', 'Seed planning + branch per letter. PR A: this seed file.'),
-  ('wave008-B', 'Wave 008 B — Build: state-hygiene', 'pending', 'wave-008-state-hygiene', 2, 'B', '0011', 'Implement the wave scope. Small PRs only.'),
+  ('wave008-A', 'Wave 008 A — Plan: state-hygiene', 'pending', 'wave-008-state-hygiene', 1, 'A', '0011', 'Plan in progress: gitignore stamps, evidence-quality ops gate, claim WIP guard, unsynced-state precondition. ADR 0011.'),
+  ('wave008-B', 'Wave 008 B — Build: state-hygiene', 'pending', 'wave-008-state-hygiene', 2, 'B', '0011', 'Implement gitignore + GITIGNORE_BLOCK, evidence-quality, claim --force-wip, unsynced-state, doctor tests, docs drift.'),
   ('wave008-C', 'Wave 008 C — Verify: state-hygiene', 'pending', 'wave-008-state-hygiene', 3, 'C', '0011', 'Tests + `whw gate run --tier pr` green.'),
   ('wave008-D', 'Wave 008 D — Decide: state-hygiene', 'pending', 'wave-008-state-hygiene', 4, 'D', '0011', 'Append the ADR addendum recording the decision. (ADR 0011)'),
   ('wave008-E', 'Wave 008 E — Close: state-hygiene', 'pending', 'wave-008-state-hygiene', 5, 'E', '0011', 'Run `whw close <wave>` (applies the .done.sql, runs sync gates).')
