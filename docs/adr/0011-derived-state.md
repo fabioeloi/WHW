@@ -52,4 +52,20 @@ only `planning-coverage` catches unsynced seeds.
 - [docs/how/evidence.md](../how/evidence.md)
 - [docs/how/gates.md](../how/gates.md)
 
+## Addendum Wave 008 — state-hygiene
+
+Shipped: gitignore timestamped checkpoint copies (`latest.txt` only);
+`evidence-quality` ops gate (wave 007+); `whw claim --force-wip`; unsynced-state
+NO_GO before vacuous GO; doctor warn on empty DB + seeds; `whw sync` restores
+`in_progress`/`blocked`/`cancelled` (not only `done`). ADR 0008 close-criteria
+checkboxes filled. Evidence: PRs
+[#8](https://github.com/fabioeloi/WHW/pull/8),
+[#9](https://github.com/fabioeloi/WHW/pull/9),
+[#10](https://github.com/fabioeloi/WHW/pull/10),
+[#11](https://github.com/fabioeloi/WHW/pull/11); `npm test` 39/39;
+`whw gate run --tier pr` GO. Historic Program 001 evidence is not rewritten;
+`evidence-quality` is `ops` so `wave007-A`'s seed-style string does not block
+PRs. Follow-ups: wave 009 runner-proof; do not tag `v0.1.1` until `NPM_TOKEN`
+is confirmed.
+
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->
