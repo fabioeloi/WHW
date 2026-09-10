@@ -134,11 +134,19 @@ tag still waits on `NPM_TOKEN`. ADR: `docs/adr/0010-release-policy.md`.
 
 Sync: `whw sync wave-007-publish-release` · Close: `whw close wave-007-publish-release`
 
-## Wave 008 — state-hygiene — **planned**
+## Wave 008 — state-hygiene — **in progress**
 
-Checkpoint gitignore, evidence-quality gate, WIP claim guard, unsynced-DB
-precondition, doctor tests, docs drift from the review. ADR:
-`docs/adr/0011-derived-state.md`.
+Checkpoint gitignore (`latest.txt` only), `evidence-quality` ops gate, WIP
+claim guard (`--force-wip`), unsynced-DB precondition, doctor tests, docs
+drift from the review. ADR: `docs/adr/0011-derived-state.md`.
+
+| #   | What | How | Why | Where | When | Who | How much |
+| --- | ---- | ---- | --- | ----- | ---- | --- | -------- |
+| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-008-state-hygiene.todos.sql` | 008 | solo | (Wave 008 A) |
+| B | Implementation | gitignore + gates + claim guard | stop dirty trees and vacuous GO | `src/`, `.gitignore` | 008 | solo | (Wave 008 B) |
+| C | Verification | tests + `pr` gates | proof | `tests/` | 008 | solo | (Wave 008 C) |
+| D | Decision record | ADR 0011 addendum | record policy | `docs/adr/0011` | 008 | solo | (Wave 008 D) |
+| E | Canonical close | `whw close` + sync | close | planning/ | 008 | solo | (Wave 008 E) |
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
@@ -200,5 +208,5 @@ Sync: `whw sync wave-011-program-close` · Close: `whw close wave-011-program-cl
 
 ## Next
 
-Wave 007 is **closed**. Next: wave 008 A (state-hygiene) after an explicit go.
-Do not tag `v0.1.1` until npm credentials are confirmed.
+Wave 008 is **in progress**. Finish A–E (state-hygiene) before 009. Do not tag
+`v0.1.1` until npm credentials are confirmed.
