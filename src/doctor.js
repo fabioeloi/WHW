@@ -55,13 +55,13 @@ export async function cmdDoctor(positionals, ctx) {
   // State DB opens
   try {
     const { openDb, closeDb, get } = await import('./db/sqlite.js');
-    const { listWaveFiles } = await import('./gates/util.js');
-    const seedWaves = listWaveFiles(ctx.paths.planning);
+    const { listSeedFiles } = await import('./planning/seed.js');
+    const seedFiles = listSeedFiles(ctx.paths.planning);
     const db = openDb(ctx.paths.state);
     try {
       const n = get(db, 'SELECT COUNT(*) AS n FROM todos;')?.n ?? 0;
-      if (Number(n) === 0 && seedWaves.length) {
-        warn('state', `${ctx.paths.state} (0 todos, ${seedWaves.length} wave seeds — run \`whw sync --all\`)`);
+      if (Number(n) === 0 && seedFiles.length) {
+        warn('state', `${ctx.paths.state} (0 todos, ${seedFiles.length} planning seeds — run \`whw sync --all\`)`);
       } else {
         ok('state', `${ctx.paths.state} (${n} todos)`);
       }

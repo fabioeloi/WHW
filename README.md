@@ -161,8 +161,8 @@ checkpoints (`.whw/checkpoints/<gate>/latest.txt`). Two tiers keep CI honest:
 
 - `pr` — blocking and **lean**: planning coverage, ADR linkage, wave sync,
   README sync, agent-adapter parity, secret scan.
-- `ops` — on demand: program inventory. A `release-readiness` gate is chartered
-  for wave 011 (ADR 0009).
+- `ops` — on demand: program inventory, evidence quality. A `release-readiness`
+  gate is chartered for wave 011 (ADR 0009).
 
 The anti-philosophy is explicit: no gate cascades as maturity theater
 (see `docs/why/principles.md`). Every gate failure names the smallest fix.

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 /** Status transitions with audit trail (every change lands in `transitions`). */
 
-import { get, run } from '../db/sqlite.js';
+import { all, get, run } from '../db/sqlite.js';
 
 export const STATUSES = ['pending', 'in_progress', 'done', 'blocked', 'cancelled'];
 
@@ -32,7 +32,7 @@ function joinEvidence(cur, add) {
  * @param {import('node:sqlite').DatabaseSync} db
  * @param {string} ref
  * @param {string} to
- * @param {{ actor?: string, evidence?: string, note?: string }} [opts]
+ * @param {{ actor?: string, evidence?: string, note?: string, forceWip?: boolean }} [opts]
  */
 export function setStatus(db, ref, to, opts = {}) {
   assertStatus(to);
@@ -47,6 +47,22 @@ export function setStatus(db, ref, to, opts = {}) {
     throw new Error(`refusing to mark ${ref} done without --evidence (evidence over chat)`);
   }
   const actor = opts.actor || process.env.USER || process.env.USERNAME || 'agent';
+  if (to === 'in_progress' && !opts.forceWip) {
+    const others = all(db, "SELECT ref FROM todos WHERE status = 'in_progress' AND ref != ?;", ref);
+    for (const o of others) {
+      const last = get(
+        db,
+        "SELECT actor FROM transitions WHERE ref = ? AND to_status = 'in_progress' ORDER BY id DESC LIMIT 1;",
+        o.ref,
+      );
+      const otherActor = last?.actor || actor;
+      if (otherActor === actor) {
+        throw new Error(
+          `already in_progress: ${o.ref} (actor ${actor}). Finish or block it, or pass --force-wip`,
+        );
+      }
+    }
+  }
   db.exec('BEGIN;');
   try {
     if (to === 'done') {

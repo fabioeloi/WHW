@@ -15,15 +15,20 @@ whw gate run --all         # everything
 ```
 
 Exit 0 = all GO; exit 1 = any NO_GO. Every run writes a checkpoint:
-`.whw/checkpoints/<gate>/<gate>-<stamp>.txt` plus a `latest.txt` copy with
-`PASS` lines, `FAIL` lines, and a final `status=GO|NO_GO failures=N`.
+`.whw/checkpoints/<gate>/<gate>-<stamp>.txt` (local, gitignored) plus a
+`latest.txt` copy (tracked) with `PASS` lines, `FAIL` lines, and a final
+`status=GO|NO_GO failures=N`.
+
+If `planning/*.todos.sql` seeds exist and `todos` is empty, the runner writes
+an `unsynced-state` NO_GO and stops before individual gates can GO vacuously.
+Rebuild with `whw sync --all`.
 
 ## The two tiers
 
 | Tier | Meaning | Members (default) |
 | ---- | ------- | ----------------- |
 | `pr` | Blocking, **lean**. Must be GO to merge. | planning-coverage, adr-link, wave-sync, readme-sync, agents-parity, no-secrets |
-| `ops` | On demand: closes, releases, drills. | program-inventory |
+| `ops` | On demand: closes, releases, drills. | program-inventory, evidence-quality |
 
 The anti-philosophy is explicit: gate cascades as maturity theater are
 rejected. A new blocking gate must earn its place by catching real drift with
@@ -42,6 +47,10 @@ a failure message naming the smallest fix. When in doubt, it goes to `ops`.
   text files.
 - **program-inventory** (`ops`) — waves stay inside chartered ranges; closed
   programs are fully inventoried (seeds + done hooks + terminal todos).
+- **evidence-quality** (`ops`) — from wave 007 onward, `done` evidence must
+  name a SHA, PR `#N`, a test/gate command (`npm test`, `node --test`,
+  `whw gate`, `whw evaluate`, `whw close`), or a `.whw/checkpoints/` path.
+  Program 001 rows are not rewritten (`done` is terminal).
 
 ## Custom gates
 

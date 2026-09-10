@@ -26,7 +26,7 @@ export function defaultConfig() {
     gates: {
       tiers: {
         pr: ['planning-coverage', 'adr-link', 'wave-sync', 'readme-sync', 'agents-parity', 'no-secrets'],
-        ops: ['program-inventory'],
+        ops: ['program-inventory', 'evidence-quality'],
       },
       custom: [],
     },

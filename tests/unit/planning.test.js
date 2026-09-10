@@ -79,4 +79,19 @@ describe('planning transitions', () => {
     setStatus(db, 't1-1', 'done', { actor: 't', evidence: 'e' });
     assert.throws(() => setStatus(db, 't1-1', 'in_progress', {}), /illegal transition done -> in_progress/);
   });
+
+  it('refuses a second in_progress for the same actor unless forceWip', (t) => {
+    const { db } = seededDb();
+    t.after(() => closeDb(db));
+    setStatus(db, 't1-1', 'in_progress', { actor: 'amy' });
+    assert.throws(
+      () => setStatus(db, 't1-2', 'in_progress', { actor: 'amy' }),
+      /already in_progress: t1-1/,
+    );
+    const other = setStatus(db, 't1-2', 'in_progress', { actor: 'bob' });
+    assert.equal(other.changed, true);
+    setStatus(db, 't1-2', 'pending', { actor: 'bob' });
+    const forced = setStatus(db, 't1-2', 'in_progress', { actor: 'amy', forceWip: true });
+    assert.equal(forced.changed, true);
+  });
 });

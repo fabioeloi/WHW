@@ -8,6 +8,8 @@ package-lock.json
 .whw/state.db-wal
 .whw/state.db-shm
 .whw/*.log
+.whw/checkpoints/**/*.txt
+!.whw/checkpoints/**/latest.txt
 
 # OS / editors
 .DS_Store

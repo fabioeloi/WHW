@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `evidence-quality` ops gate: from wave 007 onward, `done` evidence must name
+  a SHA, PR `#N`, test/gate command, or checkpoint path (ADR 0011).
+- `whw claim --force-wip` to override the one-claim-per-actor guard.
+
+### Fixed
+
+- Gate runner NO_GO `unsynced-state` when planning seeds exist and `todos` is
+  empty, before individual gates can GO vacuously.
+
+### Changed
+
+- Gitignore timestamped checkpoint copies; track `.whw/checkpoints/**/latest.txt`
+  only. Scaffold `GITIGNORE_BLOCK` matches.
+
 ## [0.1.1] - 2026-09-10
 
 ### Added
