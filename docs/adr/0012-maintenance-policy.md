@@ -1,6 +1,6 @@
 # ADR 0012 — Maintenance policy
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-10
 - **Wave:** 011
 - **Related:** WHY.md, [0005](0005-wave-contract.md), [0008](0008-program-001.md), [0009](0009-program-002.md)
@@ -47,5 +47,15 @@ the same process debt.
 
 - [AGENTS.md](../../AGENTS.md) — never merge on red; never start the next wave until `main` is green
 - [docs/how/conventions.md](../how/conventions.md)
+
+## Addendum Wave 011 — program-close
+
+Accepted as the post-close exception for red CI: `chore(maint)` only with a
+`maint` issue, one concern, and `pr` gates GO. Wave 011 did not add a maint
+lint gate (no abuse observed). No `chore(maint)` SHAs in Program 002. Evidence:
+PRs [#23](https://github.com/fabioeloi/WHW/pull/23),
+[#24](https://github.com/fabioeloi/WHW/pull/24),
+[#25](https://github.com/fabioeloi/WHW/pull/25); `npm test` 56/56;
+`whw gate run --tier pr` GO; `whw gate run --tier ops` GO.
 
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->
