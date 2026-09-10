@@ -183,16 +183,17 @@ Sync: `whw sync wave-009-runner-proof` · Close: `whw close wave-009-runner-proo
 
 Sync: `whw sync wave-010-continuity-proof` · Close: `whw close wave-010-continuity-proof`
 
-## Wave 011 — program-close — **planned**
+## Wave 011 — program-close — **in progress**
 
-`release-readiness` gate (the one README already advertises), ADR 0012
-Accepted, inventory GO, metrics, retrospective. ADR:
+`release-readiness` ops gate (local package hygiene — not npm publish),
+ADR 0012 Accepted, inventory GO, metrics snapshot, retrospective. npm
+tag `v0.1.1` stays blocked on operator `NPM_TOKEN`. ADR:
 `docs/adr/0012-maintenance-policy.md`.
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` | charter first | `planning/wave-011-program-close.todos.sql` | 011 | solo | (Wave 011 A) |
-| B | Inventory work | release-readiness gate + policy | close deliberately | `src/gates/`, `docs/adr/0012` | 011 | solo | (Wave 011 B) |
+| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-011-program-close.todos.sql` | 011 | solo | (Wave 011 A) |
+| B | Inventory work | `release-readiness` + policy docs | close deliberately | `src/gates/`, `docs/` | 011 | solo | (Wave 011 B) |
 | C | Verify | inventory GO, metrics snap | evidence of done | `.whw/` | 011 | solo | (Wave 011 C) |
 | D | Decide | ADR 0009 + 0012 retrospective | record outcome | `docs/adr/0009`, `0012` | 011 | solo | (Wave 011 D) |
 | E | Close | `whw close` + sync gates | canonical close | planning/ | 011 | solo | (Wave 011 E) |
@@ -201,5 +202,5 @@ Sync: `whw sync wave-011-program-close` · Close: `whw close wave-011-program-cl
 
 ## Next
 
-Wave 010 is **closed**. Next: wave 011 A (program-close) after an explicit go.
-Do not tag `v0.1.1` until npm credentials are confirmed.
+Wave 011 is **in progress**. Finish A–E (program-close) before any further
+wave. Do not tag `v0.1.1` until npm credentials are confirmed.
