@@ -134,19 +134,20 @@ tag still waits on `NPM_TOKEN`. ADR: `docs/adr/0010-release-policy.md`.
 
 Sync: `whw sync wave-007-publish-release` · Close: `whw close wave-007-publish-release`
 
-## Wave 008 — state-hygiene — **in progress**
+## Wave 008 — state-hygiene — **done**
 
 Checkpoint gitignore (`latest.txt` only), `evidence-quality` ops gate, WIP
 claim guard (`--force-wip`), unsynced-DB precondition, doctor tests, docs
-drift from the review. ADR: `docs/adr/0011-derived-state.md`.
+drift from the review, sync preserves live statuses. ADR:
+`docs/adr/0011-derived-state.md` Accepted.
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
 | A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-008-state-hygiene.todos.sql` | 008 | solo | [#8](https://github.com/fabioeloi/WHW/pull/8) |
 | B | Implementation | gitignore + gates + claim guard | stop dirty trees and vacuous GO | `src/`, `.gitignore` | 008 | solo | [#9](https://github.com/fabioeloi/WHW/pull/9) |
 | C | Verification | tests + `pr` gates | proof | `tests/` | 008 | solo | [#10](https://github.com/fabioeloi/WHW/pull/10) |
-| D | Decision record | ADR 0011 addendum | record policy | `docs/adr/0011` | 008 | solo | (Wave 008 D) |
-| E | Canonical close | `whw close` + sync | close | planning/ | 008 | solo | (Wave 008 E) |
+| D | Decision record | ADR 0011 addendum | record policy | `docs/adr/0011` | 008 | solo | [#11](https://github.com/fabioeloi/WHW/pull/11) |
+| E | Canonical close | `whw close` + sync | close | planning/ | 008 | solo | `whw close 008` |
 
 Sync: `whw sync wave-008-state-hygiene` · Close: `whw close wave-008-state-hygiene`
 
@@ -200,5 +201,5 @@ Sync: `whw sync wave-011-program-close` · Close: `whw close wave-011-program-cl
 
 ## Next
 
-Wave 008 is **in progress**. Finish A–E (state-hygiene) before 009. Do not tag
-`v0.1.1` until npm credentials are confirmed.
+Wave 008 is **closed**. Next: wave 009 A (runner-proof) after an explicit go.
+Do not tag `v0.1.1` until npm credentials are confirmed.
