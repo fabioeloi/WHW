@@ -167,7 +167,7 @@ open-model examples in escalation docs. ADR: `docs/adr/0009-program-002.md`.
 
 Sync: `whw sync wave-009-runner-proof` · Close: `whw close wave-009-runner-proof`
 
-## Wave 010 — continuity-proof — **in progress**
+## Wave 010 — continuity-proof — **done**
 
 `whw resume`, a real `docs/handoff/` between two tools, and config `hooks`
 (`on_claim`, `on_done`, `on_gate_fail`, `on_close`). ADR:
@@ -177,9 +177,9 @@ Sync: `whw sync wave-009-runner-proof` · Close: `whw close wave-009-runner-proo
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
 | A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-010-continuity-proof.todos.sql` | 010 | solo | [#18](https://github.com/fabioeloi/WHW/pull/18) |
 | B | Implementation | `resume` + hooks + live handoff | survive interruption for real | `src/`, `docs/handoff/` | 010 | solo | [#19](https://github.com/fabioeloi/WHW/pull/19) |
-| C | Verification | tests + `pr` gates | proof | `tests/` | 010 | solo | (Wave 010 C) |
-| D | Decision record | ADR 0009 addendum | record continuity | `docs/adr/0009` | 010 | solo | (Wave 010 D) |
-| E | Canonical close | `whw close` + sync | close | planning/ | 010 | solo | (Wave 010 E) |
+| C | Verification | tests + `pr` gates | proof | `tests/` | 010 | solo | [#20](https://github.com/fabioeloi/WHW/pull/20) |
+| D | Decision record | ADR 0009 addendum | record continuity | `docs/adr/0009` | 010 | solo | [#21](https://github.com/fabioeloi/WHW/pull/21) |
+| E | Canonical close | `whw close` + sync | close | planning/ | 010 | solo | `whw close 010` |
 
 Sync: `whw sync wave-010-continuity-proof` · Close: `whw close wave-010-continuity-proof`
 
@@ -201,5 +201,5 @@ Sync: `whw sync wave-011-program-close` · Close: `whw close wave-011-program-cl
 
 ## Next
 
-Wave 010 is **in progress**. Finish A–E (continuity-proof) before 011. Do not tag
-`v0.1.1` until npm credentials are confirmed.
+Wave 010 is **closed**. Next: wave 011 A (program-close) after an explicit go.
+Do not tag `v0.1.1` until npm credentials are confirmed.
