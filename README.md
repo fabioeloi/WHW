@@ -73,23 +73,16 @@ files and SQL — tools come and go, evidence stays.
 Requirements: Node.js ≥ 22.13 (uses built-in `node:sqlite`), git. Zero
 dependencies — no `npm install` needed.
 
-Until `@fabioeloi/whw` is on npm (tag `v0.1.1` + `NPM_TOKEN`, ADR 0010), run
-from a clone. After publish, `npx @fabioeloi/whw` is the same CLI.
-
 ```bash
-# 1. Try it (clone until npm publish lands)
-git clone https://github.com/fabioeloi/WHW.git
-cd WHW
-node ./bin/whw.js doctor
-
-# After publish:
-# npx @fabioeloi/whw doctor
+# 1. Try it
+npx @fabioeloi/whw doctor
 
 # 2. Adopt it in your repo
 cd your-project
-node /path/to/WHW/bin/whw.js init --tools claude,cursor,codex,copilot,gemini
-# After publish: npx @fabioeloi/whw init --tools claude,cursor,codex,copilot,gemini
-node ./bin/whw.js doctor
+npx @fabioeloi/whw init --tools claude,cursor,codex,copilot,gemini
+npx @fabioeloi/whw doctor
+# after init, the local CLI is the same:
+# node ./bin/whw.js doctor
 
 # 3. Charter a program, then a wave
 whw program new checkout-revamp --waves 4
@@ -161,8 +154,8 @@ checkpoints (`.whw/checkpoints/<gate>/latest.txt`). Two tiers keep CI honest:
 
 - `pr` — blocking and **lean**: planning coverage, ADR linkage, wave sync,
   README sync, agent-adapter parity, secret scan.
-- `ops` — on demand: program inventory. A `release-readiness` gate is chartered
-  for wave 011 (ADR 0009).
+- `ops` — on demand: program inventory, evidence quality, `release-readiness`
+  (package hygiene; does not publish npm — ADR 0010).
 
 The anti-philosophy is explicit: no gate cascades as maturity theater
 (see `docs/why/principles.md`). Every gate failure names the smallest fix.
@@ -194,9 +187,12 @@ requires a specific model.
 
 ### Continuity — survive interruptions and tool switches
 
-`whw handoff --from cursor --to codex` emits a package with the git baseline,
-queue snapshot, gate results, and next action. Sessions resume from SQL, not
-from "what were we doing?". See `docs/how/continuity.md`.
+`whw resume` revalidates git + queue after a reboot or new chat (it does not
+claim). `whw handoff --from cursor --to claude` emits a package with the git
+baseline, queue snapshot, gate results, and next action. A live package lives
+in `docs/handoff/`. Sessions resume from SQL, not from "what were we doing?".
+See `docs/how/continuity.md`. Optional config `hooks` (`on_claim`, `on_done`,
+`on_gate_fail`, `on_close`) fire after those events without rolling them back.
 
 ---
 
@@ -213,6 +209,7 @@ from "what were we doing?". See `docs/how/continuity.md`.
 | `docs/what/`                | CLI reference, schema, config, templates, adapters, metrics |
 | `docs/adr/`                 | WHW's own decisions (0001–0008)                             |
 | `docs/plan.md`              | Narrative plan with 5W2H wave entries (this repo, live)     |
+| `docs/handoff/`             | Live IDE/agent migration packages (`whw handoff`)           |
 | `templates/`                | WHY, AGENTS, ADR, charter, wave SQL, PR, handoff, …         |
 | `examples/hello-wave/`      | Minimal end-to-end worked example                           |
 
@@ -221,11 +218,8 @@ from "what were we doing?". See `docs/how/continuity.md`.
 ## 🗺️ Roadmap
 
 - `v0.1.0` — Core harness (Program 001): CLI, SQL planning, gates, roles, skills, docs.
-- `v0.1.1` — Publish plumbing (Program 002 wave 007): CI syncs seeds before gates,
-  `release.yml` (GitHub Release + npm with provenance), clone-first quick start.
-- Next (Program 002 waves 008–011) — checkpoint hygiene, evidence-quality / WIP
-  guards, real `whw run` proof, `whw resume` + config hooks, `release-readiness`
-  gate and a maintenance policy.
+- `v0.1.1` — Program 002 (waves 007–011) published: GitHub Release +
+  `@fabioeloi/whw` on npm with provenance. `npx @fabioeloi/whw doctor`.
 - Later — `whw serve`, live PostgreSQL adapter, `whw migrate` importers, `whw board`,
   translations beyond pt-BR.
 

@@ -1,6 +1,6 @@
 # ADR 0010 — Release policy
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-10
 - **Wave:** 007
 - **Related:** WHY.md, [0009](0009-program-002.md)
@@ -22,7 +22,7 @@ the "tag exists, install does not" gap.
 | npm | `@fabioeloi/whw` published from CI on tag, with provenance. Confirm credentials at execution time — publish is irreversible |
 | GitHub Release | Every `v*` tag gets a Release whose notes match CHANGELOG |
 | Workflow | `.github/workflows/release.yml` publishes on tag; Dependabot watches GitHub Actions |
-| Branch protection | `main` requires the `ci` check; no force-push |
+| Branch protection | `main` requires `whw (node 22)` and `whw (node 24)` (the matrix jobs that already exist). Workflow also emits a `ci` aggregator for a future single context. Force-push disabled |
 | Actions | Pin `actions/checkout` and `actions/setup-node` to versions that do not target deprecated Node 20 |
 | README truth | Quick start must resolve (`npx` or documented git-clone fallback until the first publish lands). Remove the `node_modules/.bin` line. Sync `README.pt-BR.md` Roadmap |
 | Topics | Set GitHub topics to match `package.json` keywords (subset) |
@@ -51,5 +51,17 @@ the "tag exists, install does not" gap.
 
 - [CHANGELOG.md](../../CHANGELOG.md)
 - [templates/ci-whw.yml](../../templates/ci-whw.yml)
+
+## Addendum Wave 007 — publish-release
+
+Shipped: `.github/workflows/release.yml` (GitHub Release on `v*` tags, then
+`npm publish --provenance` if `NPM_TOKEN` is set), Dependabot for Actions,
+`actions/checkout@v5` + `actions/setup-node@v5`, clone-first README + pt-BR
+Roadmap, package `0.1.1`, GitHub topics, `main` protection (required matrix
+checks, no force-push). Evidence: PR #1 (A, merged), PR #3 (B, reopened after
+#2's base was deleted), Actions
+https://github.com/fabioeloi/WHW/actions/runs/34518046761 green. **npm publish
+and tag `v0.1.1` are still blocked on operator confirmation of `NPM_TOKEN`.**
+Follow-ups: wave 008 hygiene; tag only after that confirmation.
 
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->

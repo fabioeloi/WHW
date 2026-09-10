@@ -97,11 +97,24 @@
               "name": { "type": "string" },
               "runner": { "type": "string" },
               "maxFailures": { "type": "number" },
-              "human": { "type": "boolean" }
+              "human": { "type": "boolean" },
+              "model": { "type": "string" },
+              "costClass": { "type": "string", "description": "open-weight | closed | human (documentary)" }
             },
             "additionalProperties": false
           }
         }
+      },
+      "additionalProperties": false
+    },
+    "hooks": {
+      "type": "object",
+      "description": "Optional post-event shell commands. Non-zero exit is logged; the transition is not rolled back. Same trust bar as custom gates.",
+      "properties": {
+        "on_claim": { "type": "string", "description": "After a successful claim (status actually changed)" },
+        "on_done": { "type": "string", "description": "After a successful done (status actually changed)" },
+        "on_gate_fail": { "type": "string", "description": "After any gate run that produced a NO_GO (including unsynced-state)" },
+        "on_close": { "type": "string", "description": "After a successful canonical close (not already-closed)" }
       },
       "additionalProperties": false
     }

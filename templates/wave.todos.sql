@@ -1,7 +1,8 @@
 -- Wave {{WAVE}} — {{SLUG}} (ADR {{ADR}})
 -- Apply: whw sync {{TRACK}}
 -- Refs: {{REF_PREFIX}}-A .. {{REF_PREFIX}}-E (chain A→B→C→D→E)
--- Idempotent: re-syncing never downgrades `done`. Close with `whw close {{TRACK}}`.
+-- Idempotent: re-syncing never downgrades `done` (runtime also preserves
+-- in_progress/blocked/cancelled). Close with `whw close {{TRACK}}`.
 
 INSERT INTO todos (ref, title, status, track, step, letter, adr, notes) VALUES
 {{ROWS}}

@@ -16,6 +16,7 @@
 | Evidence | Re-runnable proof (commits, PRs, checkpoints, test output) |
 | Gate | Executable GO/NO_GO check (`whw gate run`) |
 | Handoff | Tool-migration package (`whw handoff --from X --to Y`) |
+| Hook | Optional post-event shell command (`hooks.on_claim` / `on_done` / `on_gate_fail` / `on_close`) |
 | Letter | Wave step A–E (Plan, Build, Check, Decide, End) |
 | Metrics | Reproducible repo numbers (`whw metrics`) |
 | Planner | Role: idea → verifiable plan + seeds (no implementation) |

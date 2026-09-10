@@ -28,6 +28,7 @@ describe('e2e full loop', () => {
 
     assert.equal(await run(['sync', '--all']), 0);
     assert.equal(await run(['queue']), 0);
+    assert.equal(await run(['run', 'planner', '--dry-run', '--json', '--task', 'pick next']), 0);
 
     for (const l of ['A', 'B', 'C', 'D']) {
       assert.equal(await run(['claim', `wave001-${l}`]), 0);
@@ -47,6 +48,7 @@ describe('e2e full loop', () => {
     assert.equal(await run(['gate', 'run', '--tier', 'pr']), 0);
     assert.equal(await run(['gate', 'run', '--tier', 'ops']), 0);
     assert.equal(await run(['metrics']), 0);
+    assert.equal(await run(['resume', '--no-sync', '--json']), 0);
     assert.equal(await run(['handoff', '--from', 'cursor', '--to', 'codex']), 0);
     assert.ok(fileExists(join(root, 'docs', 'handoff', 'handoff-20260910-cursor-to-codex.md')) || fileExists(join(root, 'docs', 'handoff')));
 

@@ -15,7 +15,7 @@ Move the work, not the chat. Raw transcripts stay local — pointers only.
 1. `whw handoff --from <tool> --to <tool>` → `docs/handoff/handoff-<date>-<from>-to-<to>.md`.
 2. Confirm the git baseline in the target: `git status --short --branch`,
    `git log --oneline -n 10` — must match the package.
-3. In the target: `whw sync --all` → `whw queue` → resume the top item.
+3. In the target: `whw resume` (sync + queue; does not claim) → resume the top item.
 4. `whw gate run --tier pr` before new work; report Status / Evidence / Next.
 
 ## Package contents

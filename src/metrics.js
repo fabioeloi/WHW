@@ -4,6 +4,7 @@
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { closeDb, get, openDb } from './db/sqlite.js';
+import { BUILTINS } from './gates/runner.js';
 import { fileExists, isDir, isGitRepo, listFilesRecursive, readText, runCmd, writeText } from './util.js';
 
 /**
@@ -101,7 +102,7 @@ export async function collectMetrics(ctx) {
     adrs,
     waves: { total: waves, closed: wavesClosed },
     planning: { seeds: tracks, ...planning },
-    gates: { builtin: 7, custom: customs, checkpointsGo, checkpointsTotal },
+    gates: { builtin: BUILTINS.length, custom: customs, checkpointsGo, checkpointsTotal },
     tests,
   };
 }

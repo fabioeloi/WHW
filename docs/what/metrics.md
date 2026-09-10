@@ -12,7 +12,7 @@ half of evidence. Same repo + same command = same numbers.
 | `adrs` | Count of `docs/adr/*.md` |
 | `waves` | `total` seed files, `closed` (E done) |
 | `planning` | `seeds`, `todos`, `done`, `tracks`, `doneRatio` |
-| `gates` | `builtin` (7), `custom`, `checkpointsGo`, `checkpointsTotal` |
+| `gates` | `builtin` (8), `custom`, `checkpointsGo`, `checkpointsTotal` |
 | `tests` | `testFiles`, `testCases` (`test(`/`it(` occurrences under `tests/`) |
 
 ```bash
