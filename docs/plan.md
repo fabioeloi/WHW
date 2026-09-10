@@ -121,15 +121,14 @@ Sync: `whw sync wave-006-program-close` · Close: `whw close wave-006-program-cl
 
 ## Wave 007 — publish-release — **in progress**
 
-Make the public quick start true: npm publish policy, GitHub Release, README
-truth, Actions hygiene. Implementation (B) waits on an explicit go. ADR:
-`docs/adr/0010-release-policy.md`.
+Release plumbing is in git (PRs #1 merged, #3 open). ADR 0010 Accepted. npm
+tag still waits on `NPM_TOKEN`. ADR: `docs/adr/0010-release-policy.md`.
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Charter + seeds | ADR 0009–0012, `whw wave new` × 5, plan stubs | no wave without an ADR | `docs/adr/`, `planning/` | 007 | solo | (Wave 007 A) |
-| B | Release plumbing | `release.yml`, topics, protection, README/`pt-BR`, CHANGELOG | `npx` must resolve | `.github/`, README | 007 | solo | (Wave 007 B) |
-| C | Verify | `pr` gates + dry-run publish checklist | stranger-followable | CI | 007 | solo | (Wave 007 C) |
+| A | Charter + seeds | ADR 0009–0012, `whw wave new` × 5, plan stubs | no wave without an ADR | `docs/adr/`, `planning/` | 007 | solo | [#1](https://github.com/fabioeloi/WHW/pull/1) |
+| B | Release plumbing | `release.yml`, topics, protection, README/`pt-BR`, CHANGELOG | `npx` must resolve | `.github/`, README | 007 | solo | [#3](https://github.com/fabioeloi/WHW/pull/3) |
+| C | Verify | Ubuntu matrix + `ci` aggregator | stranger-followable | Actions | 007 | solo | [run 34518046761](https://github.com/fabioeloi/WHW/actions/runs/34518046761) |
 | D | Decide | ADR 0010 addendum | record publish decision | `docs/adr/0010` | 007 | solo | (Wave 007 D) |
 | E | Close | `whw close` + sync gates | canonical close | planning/ | 007 | solo | (Wave 007 E) |
 
@@ -201,6 +200,5 @@ Sync: `whw sync wave-011-program-close` · Close: `whw close wave-011-program-cl
 
 ## Next
 
-Wave 007 A (charter + seeds) is the active letter. **Do not start 007 B**
-until the operator says go (`start`, `implement`, `proceed`). npm publish
-remains a confirm-at-execution-time step.
+Wave 007 D (ADR addendum) is the active letter. Merge PR #3, then close 007
+(`whw close 007`). **Do not tag `v0.1.1` until npm credentials are confirmed.**
