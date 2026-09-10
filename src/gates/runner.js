@@ -5,8 +5,9 @@
  */
 
 import { join } from 'node:path';
-import { closeDb, openDb } from '../db/sqlite.js';
+import { closeDb, get, openDb } from '../db/sqlite.js';
 import { localDate, runShell, utcStamp, writeText } from '../util.js';
+import { listSeedFiles } from '../planning/seed.js';
 import * as planningCoverage from './builtin/planning-coverage.js';
 import * as adrLink from './builtin/adr-link.js';
 import * as programInventory from './builtin/program-inventory.js';
@@ -14,9 +15,10 @@ import * as waveSync from './builtin/wave-sync.js';
 import * as readmeSync from './builtin/readme-sync.js';
 import * as agentsParity from './builtin/agents-parity.js';
 import * as noSecrets from './builtin/no-secrets.js';
+import * as evidenceQuality from './builtin/evidence-quality.js';
 
 export const BUILTINS = [
-  planningCoverage, adrLink, programInventory, waveSync, readmeSync, agentsParity, noSecrets,
+  planningCoverage, adrLink, programInventory, waveSync, readmeSync, agentsParity, noSecrets, evidenceQuality,
 ];
 
 /**
@@ -125,6 +127,23 @@ export async function cmdGateRun(positionals, ctx, sub = null) {
   }
   const db = openDb(ctx.paths.state);
   try {
+    const seedFiles = listSeedFiles(ctx.paths.planning);
+    const todoCount = Number(get(db, 'SELECT COUNT(*) AS n FROM todos;')?.n ?? 0);
+    if (seedFiles.length && todoCount === 0) {
+      const result = {
+        status: 'NO_GO',
+        failures: [`${seedFiles.length} planning seed(s) but 0 todos in state.db — run \`whw sync --all\``],
+        details: [],
+      };
+      const cp = writeCheckpoint(ctx, 'unsynced-state', result);
+      if (ctx.json) {
+        ctx.log.data({ results: [{ name: 'unsynced-state', ...result, checkpoint: cp.latest }] });
+      } else {
+        ctx.log.info(`NO_GO unsynced-state (${cp.latest})`);
+        ctx.log.info(`      FAIL ${result.failures[0]}`);
+      }
+      return 1;
+    }
     const results = [];
     for (const gateName of selected) {
       let result;

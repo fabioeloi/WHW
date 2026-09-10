@@ -52,5 +52,8 @@ instead of hand-counting.
   checkpoint paths, exact commands) — never "fixed" or "tested".
 - PR numbers flow back into todo evidence, the plan entry, and the ADR
   addendum. Three pointers, zero archaeology.
-- Checkpoints are committed (they are proof); `state.db` is not (it is
-  derived — rebuild with `whw sync --all`).
+- Track `latest.txt` as proof; timestamped checkpoint copies stay on disk and
+  are gitignored. `state.db` is derived — rebuild with `whw sync --all`.
+- From wave 007 onward, `whw gate run evidence-quality` (`ops`) fails `done`
+  rows whose evidence is not re-runnable. Historic Program 001 strings stay
+  as written.

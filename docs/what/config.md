@@ -22,7 +22,7 @@ Machine schema: [`config.schema.json`](config.schema.json).
   "gates": {
     "tiers": {
       "pr": ["planning-coverage", "adr-link", "wave-sync", "readme-sync", "agents-parity", "no-secrets"],
-      "ops": ["program-inventory"]
+      "ops": ["program-inventory", "evidence-quality"]
     },
     "custom": [
       { "name": "openapi-routes", "command": "npm run check:routes", "description": "Spec matches handlers" }

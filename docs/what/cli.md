@@ -29,7 +29,7 @@ escalation (`whw run` exhausted).
 | ------- | ------ |
 | `whw sync [track\|--all]` | Apply seed(s) to `.whw/state.db` (idempotent, never downgrades `done`). Bare `sync` applies all. |
 | `whw queue [--track T] [--status S] [--limit N]` | Actionable work: `in_progress` first, then dependency-ready `pending`. `--status` lists verbatim. |
-| `whw claim <ref> [--actor A]` | `pending`/`blocked` → `in_progress`. |
+| `whw claim <ref> [--actor A] [--force-wip]` | `pending`/`blocked` → `in_progress`. Refuses a second `in_progress` for the same actor unless `--force-wip`. |
 | `whw done <ref> --evidence E [--actor A]` | `in_progress` → `done`. Evidence required. Terminal. |
 | `whw block <ref> --reason R` | → `blocked` (reason appended to notes). |
 | `whw cancel <ref> [--reason R]` | → `cancelled`. |

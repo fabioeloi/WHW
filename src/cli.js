@@ -111,7 +111,7 @@ Charter (WHY → HOW)
 Execute (HOW)
   sync [track|--all]                               apply planning seeds to .whw/state.db
   queue [--track T] [--status S] [--limit N]       actionable work (in_progress, then ready)
-  claim <ref> [--actor A]                          pending|blocked → in_progress
+  claim <ref> [--actor A] [--force-wip]            pending|blocked → in_progress
   done <ref> --evidence E [--actor A]              in_progress → done (evidence required)
   block <ref> --reason R                           → blocked
   cancel <ref> [--reason R]                        → cancelled
@@ -136,6 +136,7 @@ Docs: docs/why (manifesto) · docs/how (process) · docs/what (reference).`;
 const HELP_TOPICS = {
   init: 'whw init [--tools claude,cursor,codex,copilot,gemini,windsurf,opencode,aider] [--project NAME] [--force]\n\nScaffold WHW in a repo: whw.config.json, WHY.md, AGENTS.md + tool adapters,\nplanning/, docs/adr/, templates/, roles/, skills/, .github/ CI + PR template.\nIdempotent; --force overwrites WHW-managed files (never your code).',
   queue: 'whw queue [--track T] [--status S] [--limit N]\n\nShow actionable work: in_progress todos first, then pending todos whose\ndependencies are all done/cancelled. --status lists one status verbatim.',
+  claim: 'whw claim <ref> [--actor A] [--force-wip]\n\nMark pending|blocked → in_progress. Refuses a second in_progress todo\nfor the same actor unless --force-wip (one claim at a time).',
   done: 'whw done <ref> --evidence "PR #12, tests green" [--actor NAME]\n\nMark in_progress → done. Evidence is REQUIRED (commit/PR/test proof).\n`done` is terminal: to revisit, charter a new wave — never a downgrade.',
   close: 'whw close <wave>\n\nCanonical close: asserts A–D done, ADR addendum present, sync gates green,\nthen applies the .done.sql and marks E. <wave> accepts 001, wave-001,\nor the full track wave-001-slug.',
   gate: 'whw gate run [NAME|--tier pr|--all]\n\nRun gates → GO/NO_GO with checkpoints at .whw/checkpoints/<gate>/latest.txt.\nTier `pr` is blocking and lean; `ops` runs on demand. Exit 1 on NO_GO.',
@@ -287,7 +288,7 @@ export async function cmdTransition(positionals, ctx, kind) {
   const db = openDb(paths.state);
   try {
     let res;
-    if (kind === 'claim') res = setStatus(db, ref, 'in_progress', { actor: flags.actor });
+    if (kind === 'claim') res = setStatus(db, ref, 'in_progress', { actor: flags.actor, forceWip: Boolean(flags['force-wip']) });
     else if (kind === 'done') {
       if (!flags.evidence) throw new Error(`whw done requires --evidence (e.g. --evidence "PR #12, tests green")`);
       res = setStatus(db, ref, 'done', { actor: flags.actor, evidence: flags.evidence });

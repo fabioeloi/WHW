@@ -8,8 +8,8 @@ edit here, not there.
 
 1. `whw sync --all`, then `whw queue` — **SQL is the source of truth**, never
    chat memory or scratch lists.
-2. `whw claim <ref>` — one claim at a time; `whw block <ref> --reason "…"`
-   instead of improvising around obstacles.
+2. `whw claim <ref>` — one claim at a time (`--force-wip` to override);
+   `whw block <ref> --reason "…"` instead of improvising around obstacles.
 3. Implement on `feat/wave-NNN-<slug>-<letter>`; commit
    `type(scope): summary (Wave NNN L)`.
 4. `whw done <ref> --evidence "<commit/PR/tests>"` — evidence is required and

@@ -12,9 +12,9 @@ describe('gate runner', () => {
   it('lists builtins with tiers and resolves selections', () => {
     const ctx = makeCtx(makeTmp());
     const gates = listGates(ctx);
-    assert.equal(gates.filter((g) => g.builtin).length, 7);
+    assert.equal(gates.filter((g) => g.builtin).length, 8);
     assert.deepEqual(resolveSelection(ctx, [], {}), ctx.config.gates.tiers.pr);
-    assert.deepEqual(resolveSelection(ctx, [], { tier: 'ops' }), ['program-inventory']);
+    assert.deepEqual(resolveSelection(ctx, [], { tier: 'ops' }), ['program-inventory', 'evidence-quality']);
     assert.deepEqual(resolveSelection(ctx, ['no-secrets'], {}), ['no-secrets']);
     assert.throws(() => resolveSelection(ctx, ['nope'], {}), /unknown gate/);
     assert.throws(() => resolveSelection(ctx, [], { tier: 'nope' }), /unknown tier/);
@@ -70,5 +70,43 @@ describe('gate runner', () => {
     const bad = await gate.run(ctx);
     assert.equal(bad.status, 'NO_GO');
     assert.match(bad.failures[0], /private-key/);
+  });
+
+  it('evidence-quality skips pre-007 and requires durable artifacts after', async (t) => {
+    const root = makeTmp();
+    const ctx = makeCtx(root);
+    const db = openDb(ctx.paths.state);
+    t.after(() => closeDb(db));
+    db.exec(`
+      INSERT INTO todos (ref, title, status, track, step, evidence) VALUES
+        ('wave006-E', 'old', 'done', 'wave-006-x', 5, 'session shipped'),
+        ('wave007-B', 'new', 'done', 'wave-007-y', 2, 'vibes only');
+    `);
+    const gate = (await import('../../src/gates/builtin/evidence-quality.js'));
+    const bad = await gate.run(ctx, db);
+    assert.equal(bad.status, 'NO_GO');
+    assert.match(bad.failures[0], /wave007-B/);
+    db.exec("UPDATE todos SET evidence = 'PR #3, npm test' WHERE ref = 'wave007-B';");
+    const ok = await gate.run(ctx, db);
+    assert.equal(ok.status, 'GO');
+    assert.equal(gate.evidenceLooksDurable('abc1234'), true);
+    assert.equal(gate.evidenceLooksDurable('fixed it'), false);
+    assert.equal(gate.waveNumberOf({ ref: 'wave008-A', track: 'wave-008-x' }), 8);
+  });
+
+  it('NO_GO unsynced-state when seeds exist and todos are empty', async () => {
+    const root = makeTmp();
+    writeSeed(root);
+    /** @type {any[]} */
+    const captured = [];
+    const ctx = makeCtx(root);
+    ctx.json = true;
+    ctx.log = { info() {}, warn() {}, error() {}, data(d) { captured.push(d); } };
+    const { cmdGateRun } = await import('../../src/gates/runner.js');
+    const code = await cmdGateRun([], ctx);
+    assert.equal(code, 1);
+    assert.equal(captured[0].results[0].name, 'unsynced-state');
+    assert.equal(captured[0].results[0].status, 'NO_GO');
+    assert.match(captured[0].results[0].failures[0], /whw sync --all/);
   });
 });
