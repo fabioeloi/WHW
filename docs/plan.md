@@ -151,15 +151,15 @@ drift from the review, sync preserves live statuses. ADR:
 
 Sync: `whw sync wave-008-state-hygiene` · Close: `whw close wave-008-state-hygiene`
 
-## Wave 009 — runner-proof — **planned**
+## Wave 009 — runner-proof — **in progress**
 
-Exercise `whw run` with one open-weight and one closed CLI; unit-test
-`composePrompt` / escalation; optional cost fields; open-model examples in
-escalation docs. ADR: `docs/adr/0009-program-002.md`.
+Exercise `whw run` with stub open-weight and closed CLIs; unit-test
+`composePrompt` / escalation; optional `model` / `costClass` on tiers;
+open-model examples in escalation docs. ADR: `docs/adr/0009-program-002.md`.
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` | charter first | `planning/wave-009-runner-proof.todos.sql` | 009 | solo | (Wave 009 A) |
+| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-009-runner-proof.todos.sql` | 009 | solo | (Wave 009 A) |
 | B | Implementation | real `whw run` + tests | "any model" must be proven | `src/run.js`, `tests/`, `.whw/runs/` | 009 | solo | (Wave 009 B) |
 | C | Verification | tests + `pr` gates | proof | `tests/` | 009 | solo | (Wave 009 C) |
 | D | Decision record | ADR 0009 addendum | record runner evidence | `docs/adr/0009` | 009 | solo | (Wave 009 D) |
@@ -201,5 +201,5 @@ Sync: `whw sync wave-011-program-close` · Close: `whw close wave-011-program-cl
 
 ## Next
 
-Wave 008 is **closed**. Next: wave 009 A (runner-proof) after an explicit go.
-Do not tag `v0.1.1` until npm credentials are confirmed.
+Wave 009 is **in progress**. Finish A–E (runner-proof) before 010. Do not tag
+`v0.1.1` until npm credentials are confirmed.
