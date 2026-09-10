@@ -151,7 +151,7 @@ drift from the review, sync preserves live statuses. ADR:
 
 Sync: `whw sync wave-008-state-hygiene` · Close: `whw close wave-008-state-hygiene`
 
-## Wave 009 — runner-proof — **in progress**
+## Wave 009 — runner-proof — **done**
 
 Exercise `whw run` with stub open-weight and closed CLIs; unit-test
 `composePrompt` / escalation; optional `model` / `costClass` on tiers;
@@ -162,8 +162,8 @@ open-model examples in escalation docs. ADR: `docs/adr/0009-program-002.md`.
 | A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-009-runner-proof.todos.sql` | 009 | solo | [#13](https://github.com/fabioeloi/WHW/pull/13) |
 | B | Implementation | real `whw run` + tests | "any model" must be proven | `src/run.js`, `tests/`, `.whw/runs/` | 009 | solo | [#14](https://github.com/fabioeloi/WHW/pull/14) |
 | C | Verification | tests + `pr` gates | proof | `tests/` | 009 | solo | [#15](https://github.com/fabioeloi/WHW/pull/15) |
-| D | Decision record | ADR 0009 addendum | record runner evidence | `docs/adr/0009` | 009 | solo | (Wave 009 D) |
-| E | Canonical close | `whw close` + sync | close | planning/ | 009 | solo | (Wave 009 E) |
+| D | Decision record | ADR 0009 addendum | record runner evidence | `docs/adr/0009` | 009 | solo | [#16](https://github.com/fabioeloi/WHW/pull/16) |
+| E | Canonical close | `whw close` + sync | close | planning/ | 009 | solo | `whw close 009` |
 
 Sync: `whw sync wave-009-runner-proof` · Close: `whw close wave-009-runner-proof`
 
@@ -201,5 +201,5 @@ Sync: `whw sync wave-011-program-close` · Close: `whw close wave-011-program-cl
 
 ## Next
 
-Wave 009 is **in progress**. Finish A–E (runner-proof) before 010. Do not tag
-`v0.1.1` until npm credentials are confirmed.
+Wave 009 is **closed**. Next: wave 010 A (continuity-proof) after an explicit go.
+Do not tag `v0.1.1` until npm credentials are confirmed.
