@@ -14,8 +14,8 @@ jobs:
         node: ['22', '24']
     name: whw (node ${{ matrix.node }})
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node }}
       - name: Tests
@@ -26,3 +26,12 @@ jobs:
         run: node ./bin/whw.js doctor
       - name: PR gates
         run: node ./bin/whw.js gate run --tier pr
+
+  ci:
+    name: ci
+    if: always()
+    needs: whw
+    runs-on: ubuntu-latest
+    steps:
+      - name: All matrix cells green
+        run: test "${{ needs.whw.result }}" = "success"
