@@ -73,23 +73,16 @@ files and SQL — tools come and go, evidence stays.
 Requirements: Node.js ≥ 22.13 (uses built-in `node:sqlite`), git. Zero
 dependencies — no `npm install` needed.
 
-Until `@fabioeloi/whw` is on npm (tag `v0.1.1` + `NPM_TOKEN`, ADR 0010), run
-from a clone. After publish, `npx @fabioeloi/whw` is the same CLI.
-
 ```bash
-# 1. Try it (clone until npm publish lands)
-git clone https://github.com/fabioeloi/WHW.git
-cd WHW
-node ./bin/whw.js doctor
-
-# After publish:
-# npx @fabioeloi/whw doctor
+# 1. Try it
+npx @fabioeloi/whw doctor
 
 # 2. Adopt it in your repo
 cd your-project
-node /path/to/WHW/bin/whw.js init --tools claude,cursor,codex,copilot,gemini
-# After publish: npx @fabioeloi/whw init --tools claude,cursor,codex,copilot,gemini
-node ./bin/whw.js doctor
+npx @fabioeloi/whw init --tools claude,cursor,codex,copilot,gemini
+npx @fabioeloi/whw doctor
+# after init, the local CLI is the same:
+# node ./bin/whw.js doctor
 
 # 3. Charter a program, then a wave
 whw program new checkout-revamp --waves 4
@@ -225,11 +218,8 @@ See `docs/how/continuity.md`. Optional config `hooks` (`on_claim`, `on_done`,
 ## 🗺️ Roadmap
 
 - `v0.1.0` — Core harness (Program 001): CLI, SQL planning, gates, roles, skills, docs.
-- `v0.1.1` — Publish plumbing (Program 002 wave 007): CI syncs seeds before gates,
-  `release.yml` (GitHub Release + npm with provenance), clone-first quick start.
-- Next (Program 002 waves 008–011) — checkpoint hygiene, evidence-quality / WIP
-  guards, real `whw run` proof, `whw resume` + config hooks, `release-readiness`
-  gate and a maintenance policy.
+- `v0.1.1` — Program 002 (waves 007–011) published: GitHub Release +
+  `@fabioeloi/whw` on npm with provenance. `npx @fabioeloi/whw doctor`.
 - Later — `whw serve`, live PostgreSQL adapter, `whw migrate` importers, `whw board`,
   translations beyond pt-BR.
 

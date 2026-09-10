@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- README quick start uses `npx @fabioeloi/whw` now that `0.1.1` is on npm
+  ([#28](https://github.com/fabioeloi/WHW/issues/28)).
+
 ### Added (wave 011)
 
 - `release-readiness` ops gate: when `package.json` exists, name/semver/license,
