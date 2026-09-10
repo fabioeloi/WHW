@@ -50,7 +50,9 @@ WHERE t.status = 'pending'
 
 ## Seed contract
 
-Seeds are idempotent upserts that never downgrade `done`:
+Seeds are idempotent upserts. SQL still refuses to overwrite `done`; `whw sync`
+also restores `in_progress`, `blocked`, and `cancelled` after apply so a
+re-sync cannot unclaim work:
 
 ```sql
 INSERT INTO todos (…) VALUES (…)

@@ -33,6 +33,23 @@ describe('seed', () => {
     assert.equal(get(db, 'SELECT status FROM todos WHERE ref = ?', 'w-1').status, 'done');
   });
 
+  it('re-sync preserves in_progress, blocked, and cancelled', (t) => {
+    const root = makeTmp();
+    const db = openDb(join(root, '.whw', 'state.db'));
+    t.after(() => closeDb(db));
+    const file = join(root, 'planning', 'w.todos.sql');
+    writeText(file, seedSql('w'));
+    applySeedFile(db, file);
+    setStatus(db, 'w-1', 'in_progress', { actor: 't' });
+    setStatus(db, 'w-2', 'blocked', { actor: 't', evidence: 'waiting' });
+    applySeedFile(db, file);
+    assert.equal(get(db, 'SELECT status FROM todos WHERE ref = ?', 'w-1').status, 'in_progress');
+    assert.equal(get(db, 'SELECT status FROM todos WHERE ref = ?', 'w-2').status, 'blocked');
+    setStatus(db, 'w-2', 'cancelled', { actor: 't', evidence: 'wont' });
+    applySeedFile(db, file);
+    assert.equal(get(db, 'SELECT status FROM todos WHERE ref = ?', 'w-2').status, 'cancelled');
+  });
+
   it('rolls back a broken seed with filename in the error', (t) => {
     const root = makeTmp();
     const db = openDb(join(root, '.whw', 'state.db'));

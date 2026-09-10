@@ -141,17 +141,9 @@ claim guard (`--force-wip`), unsynced-DB precondition, doctor tests, docs
 drift from the review. ADR: `docs/adr/0011-derived-state.md`.
 
 | #   | What | How | Why | Where | When | Who | How much |
-| --- | ---- | ---- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-008-state-hygiene.todos.sql` | 008 | solo | (Wave 008 A) |
-| B | Implementation | gitignore + gates + claim guard | stop dirty trees and vacuous GO | `src/`, `.gitignore` | 008 | solo | (Wave 008 B) |
-| C | Verification | tests + `pr` gates | proof | `tests/` | 008 | solo | (Wave 008 C) |
-| D | Decision record | ADR 0011 addendum | record policy | `docs/adr/0011` | 008 | solo | (Wave 008 D) |
-| E | Canonical close | `whw close` + sync | close | planning/ | 008 | solo | (Wave 008 E) |
-
-| #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-008-state-hygiene.todos.sql` | 008 | solo | (Wave 008 A) |
-| B | Implementation | gitignore + gates + claim guard | stop dirty trees and vacuous GO | `src/`, `.gitignore` | 008 | solo | (Wave 008 B) |
+| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-008-state-hygiene.todos.sql` | 008 | solo | [#8](https://github.com/fabioeloi/WHW/pull/8) |
+| B | Implementation | gitignore + gates + claim guard | stop dirty trees and vacuous GO | `src/`, `.gitignore` | 008 | solo | [#9](https://github.com/fabioeloi/WHW/pull/9) |
 | C | Verification | tests + `pr` gates | proof | `tests/` | 008 | solo | (Wave 008 C) |
 | D | Decision record | ADR 0011 addendum | record policy | `docs/adr/0011` | 008 | solo | (Wave 008 D) |
 | E | Canonical close | `whw close` + sync | close | planning/ | 008 | solo | (Wave 008 E) |

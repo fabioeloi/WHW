@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Gate runner NO_GO `unsynced-state` when planning seeds exist and `todos` is
   empty, before individual gates can GO vacuously.
+- `whw sync` preserves `in_progress`, `blocked`, and `cancelled` (not only
+  `done`), so re-applying seeds cannot unclaim work.
 
 ### Changed
 
