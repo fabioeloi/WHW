@@ -167,7 +167,7 @@ open-model examples in escalation docs. ADR: `docs/adr/0009-program-002.md`.
 
 Sync: `whw sync wave-009-runner-proof` · Close: `whw close wave-009-runner-proof`
 
-## Wave 010 — continuity-proof — **planned**
+## Wave 010 — continuity-proof — **in progress**
 
 `whw resume`, a real `docs/handoff/` between two tools, and config `hooks`
 (`on_claim`, `on_done`, `on_gate_fail`, `on_close`). ADR:
@@ -175,7 +175,7 @@ Sync: `whw sync wave-009-runner-proof` · Close: `whw close wave-009-runner-proo
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` | charter first | `planning/wave-010-continuity-proof.todos.sql` | 010 | solo | (Wave 010 A) |
+| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-010-continuity-proof.todos.sql` | 010 | solo | (Wave 010 A) |
 | B | Implementation | `resume` + hooks + live handoff | survive interruption for real | `src/`, `docs/handoff/` | 010 | solo | (Wave 010 B) |
 | C | Verification | tests + `pr` gates | proof | `tests/` | 010 | solo | (Wave 010 C) |
 | D | Decision record | ADR 0009 addendum | record continuity | `docs/adr/0009` | 010 | solo | (Wave 010 D) |
@@ -201,5 +201,5 @@ Sync: `whw sync wave-011-program-close` · Close: `whw close wave-011-program-cl
 
 ## Next
 
-Wave 009 is **closed**. Next: wave 010 A (continuity-proof) after an explicit go.
-Do not tag `v0.1.1` until npm credentials are confirmed.
+Wave 010 is **in progress**. Finish A–E (continuity-proof) before 011. Do not tag
+`v0.1.1` until npm credentials are confirmed.

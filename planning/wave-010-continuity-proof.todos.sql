@@ -4,8 +4,8 @@
 -- Idempotent: re-syncing never downgrades `done`. Close with `whw close wave-010-continuity-proof`.
 
 INSERT INTO todos (ref, title, status, track, step, letter, adr, notes) VALUES
-  ('wave010-A', 'Wave 010 A — Plan: continuity-proof', 'pending', 'wave-010-continuity-proof', 1, 'A', '0009', 'Seed planning + branch per letter. PR A: this seed file.'),
-  ('wave010-B', 'Wave 010 B — Build: continuity-proof', 'pending', 'wave-010-continuity-proof', 2, 'B', '0009', 'Implement the wave scope. Small PRs only.'),
+  ('wave010-A', 'Wave 010 A — Plan: continuity-proof', 'pending', 'wave-010-continuity-proof', 1, 'A', '0009', 'Plan in progress: whw resume, live docs/handoff, hooks on_claim/on_done/on_gate_fail/on_close. ADR 0009.'),
+  ('wave010-B', 'Wave 010 B — Build: continuity-proof', 'pending', 'wave-010-continuity-proof', 2, 'B', '0009', 'Implement resume + hooks + committed handoff. Tests for each.'),
   ('wave010-C', 'Wave 010 C — Verify: continuity-proof', 'pending', 'wave-010-continuity-proof', 3, 'C', '0009', 'Tests + `whw gate run --tier pr` green.'),
   ('wave010-D', 'Wave 010 D — Decide: continuity-proof', 'pending', 'wave-010-continuity-proof', 4, 'D', '0009', 'Append the ADR addendum recording the decision. (ADR 0009)'),
   ('wave010-E', 'Wave 010 E — Close: continuity-proof', 'pending', 'wave-010-continuity-proof', 5, 'E', '0009', 'Run `whw close <wave>` (applies the .done.sql, runs sync gates).')
