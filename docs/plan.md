@@ -183,7 +183,7 @@ Sync: `whw sync wave-009-runner-proof` · Close: `whw close wave-009-runner-proo
 
 Sync: `whw sync wave-010-continuity-proof` · Close: `whw close wave-010-continuity-proof`
 
-## Wave 011 — program-close — **in progress**
+## Wave 011 — program-close — **done**
 
 `release-readiness` ops gate (local package hygiene — not npm publish),
 ADR 0012 Accepted, inventory GO, metrics snapshot, retrospective. npm
@@ -194,13 +194,13 @@ tag `v0.1.1` stays blocked on operator `NPM_TOKEN`. ADR:
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
 | A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-011-program-close.todos.sql` | 011 | solo | [#23](https://github.com/fabioeloi/WHW/pull/23) |
 | B | Inventory work | `release-readiness` + policy docs | close deliberately | `src/gates/`, `docs/` | 011 | solo | [#24](https://github.com/fabioeloi/WHW/pull/24) |
-| C | Verify | inventory GO, metrics snap | evidence of done | `.whw/` | 011 | solo | (Wave 011 C) |
-| D | Decide | ADR 0009 + 0012 retrospective | record outcome | `docs/adr/0009`, `0012` | 011 | solo | (Wave 011 D) |
-| E | Close | `whw close` + sync gates | canonical close | planning/ | 011 | solo | (Wave 011 E) |
+| C | Verify | inventory GO, metrics snap | evidence of done | `.whw/` | 011 | solo | [#25](https://github.com/fabioeloi/WHW/pull/25) |
+| D | Decide | ADR 0009 + 0012 retrospective | record outcome | `docs/adr/0009`, `0012` | 011 | solo | [#26](https://github.com/fabioeloi/WHW/pull/26) |
+| E | Close | `whw close` + sync gates | canonical close | planning/ | 011 | solo | `whw close 011` |
 
 Sync: `whw sync wave-011-program-close` · Close: `whw close wave-011-program-close`
 
 ## Next
 
-Wave 011 is **in progress**. Finish A–E (program-close) before any further
-wave. Do not tag `v0.1.1` until npm credentials are confirmed.
+Program 002 is **closed** (waves 007–011). There is no wave 012 without a new
+charter ADR. Do not tag `v0.1.1` until npm credentials are confirmed.
