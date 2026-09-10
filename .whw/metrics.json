@@ -1,35 +1,35 @@
 {
   "project": "WHW",
-  "at": "2026-09-10T19:34:21.781Z",
+  "at": "2026-09-10T20:36:43.371Z",
   "git": {
-    "commits": 18,
-    "head": "56f7217",
-    "branch": "feat/wave-008-state-hygiene-b",
+    "commits": 54,
+    "head": "f546538",
+    "branch": "test/wave-011-program-close-c",
     "firstCommit": "2026-09-10",
     "lastCommit": "2026-09-10",
     "calendarDays": 0,
-    "prRefsUnique": 4
+    "prRefsUnique": 19
   },
   "adrs": 12,
   "waves": {
     "total": 11,
-    "closed": 7
+    "closed": 10
   },
   "planning": {
     "seeds": 11,
     "todos": 55,
-    "done": 35,
+    "done": 52,
     "tracks": 11,
-    "doneRatio": 0.636
+    "doneRatio": 0.945
   },
   "gates": {
-    "builtin": 8,
+    "builtin": 9,
     "custom": 0,
-    "checkpointsGo": 7,
-    "checkpointsTotal": 7
+    "checkpointsGo": 9,
+    "checkpointsTotal": 9
   },
   "tests": {
-    "testFiles": 11,
-    "testCases": 38
+    "testFiles": 14,
+    "testCases": 57
   }
 }
