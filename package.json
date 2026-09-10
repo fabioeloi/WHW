@@ -4,7 +4,7 @@
   "description": "WHW (Why · How · What) — an LLM- and tool-agnostic harness for autonomous, evidence-gated software delivery: waves, ADRs, SQL planning, gates, and agent roles.",
   "type": "module",
   "license": "MIT",
-  "author": "Fabio Eloi <fabioeloi@github.com>",
+  "author": "Fabio Eloi <fabioeloi@gmail.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/fabioeloi/WHW.git"
