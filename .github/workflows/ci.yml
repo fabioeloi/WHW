@@ -1,0 +1,26 @@
+name: ci
+
+on:
+  pull_request: {}
+  push:
+    branches: [main]
+
+jobs:
+  whw:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22', '24']
+    name: whw (node ${{ matrix.node }})
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Tests
+        run: npm test
+      - name: Doctor
+        run: node ./bin/whw.js doctor
+      - name: PR gates
+        run: node ./bin/whw.js gate run --tier pr

@@ -1,0 +1,25 @@
+{
+  "phaseA": {
+    "status": "pass",
+    "checks": [
+      {
+        "command": "node --test \"tests/**/*.test.js\"",
+        "code": 0,
+        "pass": true,
+        "tail": [
+          "  ✔ rolls back a broken seed with filename in the error (4.900458ms)",
+          "✔ seed (14.552625ms)",
+          "ℹ tests 34",
+          "ℹ suites 10",
+          "ℹ pass 34",
+          "ℹ fail 0",
+          "ℹ cancelled 0",
+          "ℹ skipped 0",
+          "ℹ todo 0",
+          "ℹ duration_ms 272.552084"
+        ]
+      }
+    ],
+    "at": "2026-09-10T16:33:40.129Z"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "tools": [
+    "claude",
+    "gemini",
+    "copilot",
+    "cursor",
+    "windsurf"
+  ],
+  "files": [
+    "CLAUDE.md",
+    "GEMINI.md",
+    ".gemini/settings.json",
+    ".github/copilot-instructions.md",
+    ".cursor/rules/whw.mdc",
+    ".windsurfrules"
+  ],
+  "updatedAt": "2026-09-10T16:32:51.335Z"
+}

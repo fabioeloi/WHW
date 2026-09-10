@@ -1,0 +1,35 @@
+{
+  "project": "WHW",
+  "at": "2026-09-10T16:33:40.197Z",
+  "git": {
+    "commits": null,
+    "head": null,
+    "branch": null,
+    "firstCommit": null,
+    "lastCommit": null,
+    "calendarDays": null,
+    "prRefsUnique": null
+  },
+  "adrs": 8,
+  "waves": {
+    "total": 6,
+    "closed": 6
+  },
+  "planning": {
+    "seeds": 6,
+    "todos": 30,
+    "done": 30,
+    "tracks": 6,
+    "doneRatio": 1
+  },
+  "gates": {
+    "builtin": 7,
+    "custom": 0,
+    "checkpointsGo": 7,
+    "checkpointsTotal": 7
+  },
+  "tests": {
+    "testFiles": 10,
+    "testCases": 34
+  }
+}
