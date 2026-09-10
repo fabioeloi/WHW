@@ -192,8 +192,8 @@ tag `v0.1.1` stays blocked on operator `NPM_TOKEN`. ADR:
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-011-program-close.todos.sql` | 011 | solo | (Wave 011 A) |
-| B | Inventory work | `release-readiness` + policy docs | close deliberately | `src/gates/`, `docs/` | 011 | solo | (Wave 011 B) |
+| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-011-program-close.todos.sql` | 011 | solo | [#23](https://github.com/fabioeloi/WHW/pull/23) |
+| B | Inventory work | `release-readiness` + policy docs | close deliberately | `src/gates/`, `docs/` | 011 | solo | [#24](https://github.com/fabioeloi/WHW/pull/24) |
 | C | Verify | inventory GO, metrics snap | evidence of done | `.whw/` | 011 | solo | (Wave 011 C) |
 | D | Decide | ADR 0009 + 0012 retrospective | record outcome | `docs/adr/0009`, `0012` | 011 | solo | (Wave 011 D) |
 | E | Close | `whw close` + sync gates | canonical close | planning/ | 011 | solo | (Wave 011 E) |
