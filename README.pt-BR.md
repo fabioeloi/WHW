@@ -47,22 +47,16 @@ qualquer stack. O contrato são arquivos e SQL — ferramentas passam, evidênci
 Requisitos: Node.js ≥ 22.13 (usa `node:sqlite` embutido), git. Zero
 dependências — sem `npm install`.
 
-Até `@fabioeloi/whw` estar no npm (tag `v0.1.1` + `NPM_TOKEN`, ADR 0010), rode
-a partir de um clone. Depois da publicação, `npx @fabioeloi/whw` é o mesmo CLI.
-
 ```bash
-# 1. Experimente (clone até o publish no npm)
-git clone https://github.com/fabioeloi/WHW.git
-cd WHW
-node ./bin/whw.js doctor
-
-# Depois do publish:
-# npx @fabioeloi/whw doctor
+# 1. Experimente
+npx @fabioeloi/whw doctor
 
 # 2. Adote no seu repositório
 cd seu-projeto
-node /caminho/para/WHW/bin/whw.js init --tools claude,cursor,codex,copilot,gemini
-# Depois do publish: npx @fabioeloi/whw init --tools claude,cursor,codex,copilot,gemini
+npx @fabioeloi/whw init --tools claude,cursor,codex,copilot,gemini
+npx @fabioeloi/whw doctor
+# depois do init, o CLI local é o mesmo:
+# node ./bin/whw.js doctor
 
 # 3. Crie um programa e depois uma onda
 whw program new checkout-revamp --waves 4
@@ -182,11 +176,8 @@ depois do evento e não desfazem a transição.
 ## 🗺️ Roteiro
 
 - `v0.1.0` — Harness núcleo (Programa 001): CLI, planning SQL, gates, papéis, skills, docs.
-- `v0.1.1` — Publicação (Programa 002 onda 007): CI sincroniza seeds antes dos gates,
-  `release.yml` (GitHub Release + npm com provenance), início rápido via clone.
-- Em seguida (Programa 002 ondas 008–011) — higiene de checkpoints, evidência
-  reexecutável / WIP, prova real de `whw run`, `whw resume` + hooks, gate de
-  prontidão de release e política de manutenção.
+- `v0.1.1` — Programa 002 (ondas 007–011) publicado: GitHub Release +
+  `@fabioeloi/whw` no npm com provenance. `npx @fabioeloi/whw doctor`.
 - Depois — `whw serve`, adapter PostgreSQL ao vivo, `whw migrate`, `whw board`,
   traduções além de pt-BR.
 

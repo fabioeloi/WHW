@@ -202,5 +202,6 @@ Sync: `whw sync wave-011-program-close` · Close: `whw close wave-011-program-cl
 
 ## Next
 
-Program 002 is **closed** (waves 007–011). There is no wave 012 without a new
-charter ADR. Do not tag `v0.1.1` until npm credentials are confirmed.
+Program 002 is **closed** (waves 007–011). `@fabioeloi/whw@0.1.1` is on npm;
+GitHub Release [v0.1.1](https://github.com/fabioeloi/WHW/releases/tag/v0.1.1).
+There is no wave 012 without a new charter ADR.
