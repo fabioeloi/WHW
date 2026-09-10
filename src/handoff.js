@@ -66,7 +66,7 @@ git log --oneline -n 10
 ## Continuity checklist
 
 1. Baseline matches (branch @ SHA, clean/dirty as above).
-2. \`whw sync --all\` then \`whw queue\` — SQL is the source of truth.
+2. \`whw resume\` (or \`whw sync --all\` then \`whw queue\`) — SQL is the source of truth.
 3. \`whw gate run --tier pr\` green before new work.
 4. Resume the top queue item; report Status / Evidence / Next step.
 `;

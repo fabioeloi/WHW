@@ -34,7 +34,15 @@ Plan + seeds first (`whw adr new`, `whw program new`, `whw wave new`,
 
 ## Resume after interruption
 
-Revalidate, then continue from the nearest pending step; report only the delta:
+Revalidate with `whw resume` (git baseline, `whw sync --all`, queue, next
+step). It does **not** auto-claim. Then continue the nearest pending step and
+report only the delta:
+
+```bash
+whw resume
+```
+
+Equivalent by hand:
 
 ```bash
 git status --short --branch

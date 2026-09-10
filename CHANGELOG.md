@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (wave 010)
+
+- `whw resume [--no-sync]`: git baseline, optional `sync --all`, queue, next
+  step. Does not claim. AGENTS.md resume protocol as one command.
+- Config `hooks` (`on_claim`, `on_done`, `on_gate_fail`, `on_close`): post-event
+  shell commands. Non-zero exit is logged; the transition is not rolled back.
+- Live `docs/handoff/` package (`whw handoff --from cursor --to claude`).
+
 ### Added
 
 - `evidence-quality` ops gate: from wave 007 onward, `done` evidence must name

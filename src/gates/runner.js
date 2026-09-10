@@ -6,6 +6,7 @@
 
 import { join } from 'node:path';
 import { closeDb, get, openDb } from '../db/sqlite.js';
+import { runHook } from '../hooks.js';
 import { localDate, runShell, utcStamp, writeText } from '../util.js';
 import { listSeedFiles } from '../planning/seed.js';
 import * as planningCoverage from './builtin/planning-coverage.js';
@@ -126,6 +127,9 @@ export async function cmdGateRun(positionals, ctx, sub = null) {
     return 0;
   }
   const db = openDb(ctx.paths.state);
+  /** @type {string[]} */
+  let failedNames = [];
+  let code = 0;
   try {
     const seedFiles = listSeedFiles(ctx.paths.planning);
     const todoCount = Number(get(db, 'SELECT COUNT(*) AS n FROM todos;')?.n ?? 0);
@@ -142,30 +146,37 @@ export async function cmdGateRun(positionals, ctx, sub = null) {
         ctx.log.info(`NO_GO unsynced-state (${cp.latest})`);
         ctx.log.info(`      FAIL ${result.failures[0]}`);
       }
-      return 1;
-    }
-    const results = [];
-    for (const gateName of selected) {
-      let result;
-      try {
-        result = await runOne(ctx, { name: gateName }, db);
-      } catch (err) {
-        result = { status: 'NO_GO', failures: [err instanceof Error ? err.message : String(err)], details: [] };
+      failedNames = ['unsynced-state'];
+      code = 1;
+    } else {
+      const results = [];
+      for (const gateName of selected) {
+        let result;
+        try {
+          result = await runOne(ctx, { name: gateName }, db);
+        } catch (err) {
+          result = { status: 'NO_GO', failures: [err instanceof Error ? err.message : String(err)], details: [] };
+        }
+        const cp = writeCheckpoint(ctx, gateName, result);
+        results.push({ name: gateName, ...result, checkpoint: cp.latest });
       }
-      const cp = writeCheckpoint(ctx, gateName, result);
-      results.push({ name: gateName, ...result, checkpoint: cp.latest });
+      const failed = results.filter((r) => r.status !== 'GO');
+      failedNames = failed.map((r) => r.name);
+      code = failed.length ? 1 : 0;
+      if (ctx.json) {
+        ctx.log.data({ results });
+      } else {
+        for (const r of results) {
+          ctx.log.info(`${r.status === 'GO' ? 'GO  ' : 'NO_GO'} ${r.name} (${r.checkpoint})`);
+          for (const f of r.failures) ctx.log.info(`      FAIL ${f}`);
+        }
+      }
     }
-    const failed = results.filter((r) => r.status !== 'GO');
-    if (ctx.json) {
-      ctx.log.data({ results });
-      return failed.length ? 1 : 0;
-    }
-    for (const r of results) {
-      ctx.log.info(`${r.status === 'GO' ? 'GO  ' : 'NO_GO'} ${r.name} (${r.checkpoint})`);
-      for (const f of r.failures) ctx.log.info(`      FAIL ${f}`);
-    }
-    return failed.length ? 1 : 0;
   } finally {
     closeDb(db);
   }
+  if (failedNames.length) {
+    await runHook(ctx, 'on_gate_fail', { WHW_GATES: failedNames.join(',') });
+  }
+  return code;
 }
