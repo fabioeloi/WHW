@@ -28,7 +28,7 @@ Rebuild with `whw sync --all`.
 | Tier | Meaning | Members (default) |
 | ---- | ------- | ----------------- |
 | `pr` | Blocking, **lean**. Must be GO to merge. | planning-coverage, adr-link, wave-sync, readme-sync, agents-parity, no-secrets |
-| `ops` | On demand: closes, releases, drills. | program-inventory, evidence-quality |
+| `ops` | On demand: closes, releases, drills. | program-inventory, evidence-quality, release-readiness |
 
 The anti-philosophy is explicit: gate cascades as maturity theater are
 rejected. A new blocking gate must earn its place by catching real drift with
@@ -51,6 +51,10 @@ a failure message naming the smallest fix. When in doubt, it goes to `ops`.
   name a SHA, PR `#N`, a test/gate command (`npm test`, `node --test`,
   `whw gate`, `whw evaluate`, `whw close`), or a `.whw/checkpoints/` path.
   Program 001 rows are not rewritten (`done` is terminal).
+- **release-readiness** (`ops`) — when `package.json` exists: name, semver
+  version, license, `LICENSE`, `README.md`, a `CHANGELOG.md` heading
+  `## [version]`, and any `bin` paths. Skips unpackaged repos. Does **not**
+  publish npm or create tags (ADR 0010 — operator confirms `NPM_TOKEN`).
 
 ## Custom gates
 
