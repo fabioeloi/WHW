@@ -175,8 +175,8 @@ Sync: `whw sync wave-009-runner-proof` · Close: `whw close wave-009-runner-proo
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-010-continuity-proof.todos.sql` | 010 | solo | (Wave 010 A) |
-| B | Implementation | `resume` + hooks + live handoff | survive interruption for real | `src/`, `docs/handoff/` | 010 | solo | (Wave 010 B) |
+| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-010-continuity-proof.todos.sql` | 010 | solo | [#18](https://github.com/fabioeloi/WHW/pull/18) |
+| B | Implementation | `resume` + hooks + live handoff | survive interruption for real | `src/`, `docs/handoff/` | 010 | solo | [#19](https://github.com/fabioeloi/WHW/pull/19) |
 | C | Verification | tests + `pr` gates | proof | `tests/` | 010 | solo | (Wave 010 C) |
 | D | Decision record | ADR 0009 addendum | record continuity | `docs/adr/0009` | 010 | solo | (Wave 010 D) |
 | E | Canonical close | `whw close` + sync | close | planning/ | 010 | solo | (Wave 010 E) |
