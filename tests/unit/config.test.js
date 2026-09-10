@@ -10,7 +10,7 @@ describe('config', () => {
   it('defaults carry the pr tier and rubric', () => {
     const c = defaultConfig();
     assert.deepEqual(c.gates.tiers.pr, ['planning-coverage', 'adr-link', 'wave-sync', 'readme-sync', 'agents-parity', 'no-secrets']);
-    assert.deepEqual(c.gates.tiers.ops, ['program-inventory', 'evidence-quality']);
+    assert.deepEqual(c.gates.tiers.ops, ['program-inventory', 'evidence-quality', 'release-readiness']);
     assert.equal(c.evaluate.threshold, 3.5);
     assert.equal(c.evaluate.criteria.length, 4);
     assert.deepEqual(c.hooks, {});

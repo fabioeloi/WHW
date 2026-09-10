@@ -12,9 +12,9 @@ describe('gate runner', () => {
   it('lists builtins with tiers and resolves selections', () => {
     const ctx = makeCtx(makeTmp());
     const gates = listGates(ctx);
-    assert.equal(gates.filter((g) => g.builtin).length, 8);
+    assert.equal(gates.filter((g) => g.builtin).length, 9);
     assert.deepEqual(resolveSelection(ctx, [], {}), ctx.config.gates.tiers.pr);
-    assert.deepEqual(resolveSelection(ctx, [], { tier: 'ops' }), ['program-inventory', 'evidence-quality']);
+    assert.deepEqual(resolveSelection(ctx, [], { tier: 'ops' }), ['program-inventory', 'evidence-quality', 'release-readiness']);
     assert.deepEqual(resolveSelection(ctx, ['no-secrets'], {}), ['no-secrets']);
     assert.throws(() => resolveSelection(ctx, ['nope'], {}), /unknown gate/);
     assert.throws(() => resolveSelection(ctx, [], { tier: 'nope' }), /unknown tier/);
@@ -92,6 +92,27 @@ describe('gate runner', () => {
     assert.equal(gate.evidenceLooksDurable('abc1234'), true);
     assert.equal(gate.evidenceLooksDurable('fixed it'), false);
     assert.equal(gate.waveNumberOf({ ref: 'wave008-A', track: 'wave-008-x' }), 8);
+  });
+
+  it('release-readiness skips unpackaged roots and checks a packaged layout', async () => {
+    const gate = (await import('../../src/gates/builtin/release-readiness.js'));
+    const empty = makeTmp();
+    assert.equal((await gate.run(makeCtx(empty))).status, 'GO');
+    const root = makeTmp();
+    writeText(join(root, 'package.json'), JSON.stringify({ name: 'demo', version: '1.2.3' }));
+    const ctx = makeCtx(root);
+    const bad = await gate.run(ctx);
+    assert.equal(bad.status, 'NO_GO');
+    assert.ok(bad.failures.some((f) => /license/i.test(f)));
+    writeText(join(root, 'package.json'), JSON.stringify({
+      name: 'demo', version: '1.2.3', license: 'MIT', bin: { demo: './bin/demo.js' },
+    }));
+    writeText(join(root, 'LICENSE'), 'MIT');
+    writeText(join(root, 'README.md'), '# demo');
+    writeText(join(root, 'CHANGELOG.md'), '## [1.2.3] - 2026-09-10\n\nShipped.\n');
+    writeText(join(root, 'bin', 'demo.js'), '#!/usr/bin/env node\n');
+    const ok = await gate.run(makeCtx(root));
+    assert.equal(ok.status, 'GO');
   });
 
   it('NO_GO unsynced-state when seeds exist and todos are empty', async () => {

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (wave 011)
+
+- `release-readiness` ops gate: when `package.json` exists, name/semver/license,
+  `LICENSE`, `README.md`, CHANGELOG heading, and `bin` paths must agree. Does
+  not publish npm or create tags.
+
 ### Added (wave 010)
 
 - `whw resume [--no-sync]`: git baseline, optional `sync --all`, queue, next
