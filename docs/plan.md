@@ -159,8 +159,8 @@ open-model examples in escalation docs. ADR: `docs/adr/0009-program-002.md`.
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-009-runner-proof.todos.sql` | 009 | solo | (Wave 009 A) |
-| B | Implementation | real `whw run` + tests | "any model" must be proven | `src/run.js`, `tests/`, `.whw/runs/` | 009 | solo | (Wave 009 B) |
+| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-009-runner-proof.todos.sql` | 009 | solo | [#13](https://github.com/fabioeloi/WHW/pull/13) |
+| B | Implementation | real `whw run` + tests | "any model" must be proven | `src/run.js`, `tests/`, `.whw/runs/` | 009 | solo | [#14](https://github.com/fabioeloi/WHW/pull/14) |
 | C | Verification | tests + `pr` gates | proof | `tests/` | 009 | solo | (Wave 009 C) |
 | D | Decision record | ADR 0009 addendum | record runner evidence | `docs/adr/0009` | 009 | solo | (Wave 009 D) |
 | E | Canonical close | `whw close` + sync | close | planning/ | 009 | solo | (Wave 009 E) |
