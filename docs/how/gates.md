@@ -7,7 +7,8 @@ between "we follow the process" and "the process is enforced".
 
 ```bash
 whw gate list              # builtin + custom, with tiers
-whw gate run --tier pr     # blocking tier (CI runs this)
+whw sync --all             # rebuild .whw/state.db (gitignored) from planning/
+whw gate run --tier pr     # blocking tier (CI runs this after sync)
 whw gate run --tier ops    # on-demand tier
 whw gate run <name>        # one gate (also: whw gate <name>)
 whw gate run --all         # everything

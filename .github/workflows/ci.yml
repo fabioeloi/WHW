@@ -20,6 +20,8 @@ jobs:
           node-version: ${{ matrix.node }}
       - name: Tests
         run: npm test
+      - name: Sync planning
+        run: node ./bin/whw.js sync --all
       - name: Doctor
         run: node ./bin/whw.js doctor
       - name: PR gates
