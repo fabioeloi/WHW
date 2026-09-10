@@ -47,13 +47,22 @@ qualquer stack. O contrato são arquivos e SQL — ferramentas passam, evidênci
 Requisitos: Node.js ≥ 22.13 (usa `node:sqlite` embutido), git. Zero
 dependências — sem `npm install`.
 
+Até `@fabioeloi/whw` estar no npm (tag `v0.1.1` + `NPM_TOKEN`, ADR 0010), rode
+a partir de um clone. Depois da publicação, `npx @fabioeloi/whw` é o mesmo CLI.
+
 ```bash
-# 1. Experimente
-npx @fabioeloi/whw doctor
+# 1. Experimente (clone até o publish no npm)
+git clone https://github.com/fabioeloi/WHW.git
+cd WHW
+node ./bin/whw.js doctor
+
+# Depois do publish:
+# npx @fabioeloi/whw doctor
 
 # 2. Adote no seu repositório
 cd seu-projeto
-npx @fabioeloi/whw init --tools claude,cursor,codex,copilot,gemini
+node /caminho/para/WHW/bin/whw.js init --tools claude,cursor,codex,copilot,gemini
+# Depois do publish: npx @fabioeloi/whw init --tools claude,cursor,codex,copilot,gemini
 
 # 3. Crie um programa e depois uma onda
 whw program new checkout-revamp --waves 4
@@ -117,7 +126,8 @@ timestamp (`.whw/checkpoints/<gate>/latest.txt`). Dois níveis mantêm o CI hone
 
 - `pr` — bloqueante e **enxuto**: cobertura de planning, vínculo com ADR, sync
   de ondas, sync de README, paridade de adaptadores, varredura de segredos.
-- `ops` — sob demanda: inventário de programa, prontidão de release, simulados.
+- `ops` — sob demanda: inventário de programa. O gate `release-readiness` está
+  chartered na onda 011 (ADR 0009).
 
 **Avaliação** em duas fases: checagens determinísticas (lint/testes/build) a
 custo zero de IA; depois, um modelo pontua a rubrica ponderada
@@ -160,10 +170,21 @@ não de "onde estávamos?".
 | `docs/why/positioning.md`   | Taxonomia de seis dimensões; WHW vs. Spec Kit, OpenSpec, BMAD…  |
 | `docs/how/`                 | Ondas, programas, ADRs, todos.sql, gates, evidências, continuidade, papéis, escalação, avaliação, convenções |
 | `docs/what/`                | Referência CLI, schema, config, templates, adaptadores, métricas|
-| `docs/adr/`                 | Decisões do próprio WHW (0001–0008)                             |
+| `docs/adr/`                 | Decisões do próprio WHW (0001–)                             |
 | `docs/plan.md`              | Plano narrativo com ondas 5W2H (deste repositório, ao vivo)     |
 | `templates/`                | WHY, AGENTS, ADR, charter, SQL de onda, PR, handoff, …          |
 | `examples/hello-wave/`      | Exemplo mínimo de ponta a ponta                                 |
+
+## 🗺️ Roteiro
+
+- `v0.1.0` — Harness núcleo (Programa 001): CLI, planning SQL, gates, papéis, skills, docs.
+- `v0.1.1` — Publicação (Programa 002 onda 007): CI sincroniza seeds antes dos gates,
+  `release.yml` (GitHub Release + npm com provenance), início rápido via clone.
+- Em seguida (Programa 002 ondas 008–011) — higiene de checkpoints, evidência
+  reexecutável / WIP, prova real de `whw run`, `whw resume` + hooks, gate de
+  prontidão de release e política de manutenção.
+- Depois — `whw serve`, adapter PostgreSQL ao vivo, `whw migrate`, `whw board`,
+  traduções além de pt-BR.
 
 ## 🤝 Contribuindo
 

@@ -9,7 +9,7 @@
 [![Zero dependencies](https://img.shields.io/badge/dependencies-zero-blue)](package.json)
 [![AGENTS.md](https://img.shields.io/badge/AGENTS.md-canonical-blueviolet)](AGENTS.md)
 [![Agent Skills](https://img.shields.io/badge/skills-agentskills.io%20compatible-brightgreen)](https://agentskills.io/specification)
-[![Version](https://img.shields.io/badge/version-0.1.0-purple)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.1.1-purple)](CHANGELOG.md)
 
 [Manifesto](docs/why/manifesto.md) •
 [Quick Start](#-quick-start) •
@@ -73,14 +73,23 @@ files and SQL — tools come and go, evidence stays.
 Requirements: Node.js ≥ 22.13 (uses built-in `node:sqlite`), git. Zero
 dependencies — no `npm install` needed.
 
+Until `@fabioeloi/whw` is on npm (tag `v0.1.1` + `NPM_TOKEN`, ADR 0010), run
+from a clone. After publish, `npx @fabioeloi/whw` is the same CLI.
+
 ```bash
-# 1. Try it
-npx @fabioeloi/whw doctor
+# 1. Try it (clone until npm publish lands)
+git clone https://github.com/fabioeloi/WHW.git
+cd WHW
+node ./bin/whw.js doctor
+
+# After publish:
+# npx @fabioeloi/whw doctor
 
 # 2. Adopt it in your repo
 cd your-project
-npx @fabioeloi/whw init --tools claude,cursor,codex,copilot,gemini
-node ./node_modules/.bin/whw doctor   # or ./bin/whw.js if vendored
+node /path/to/WHW/bin/whw.js init --tools claude,cursor,codex,copilot,gemini
+# After publish: npx @fabioeloi/whw init --tools claude,cursor,codex,copilot,gemini
+node ./bin/whw.js doctor
 
 # 3. Charter a program, then a wave
 whw program new checkout-revamp --waves 4
@@ -152,7 +161,8 @@ checkpoints (`.whw/checkpoints/<gate>/latest.txt`). Two tiers keep CI honest:
 
 - `pr` — blocking and **lean**: planning coverage, ADR linkage, wave sync,
   README sync, agent-adapter parity, secret scan.
-- `ops` — on demand: program inventory, release readiness, drills.
+- `ops` — on demand: program inventory. A `release-readiness` gate is chartered
+  for wave 011 (ADR 0009).
 
 The anti-philosophy is explicit: no gate cascades as maturity theater
 (see `docs/why/principles.md`). Every gate failure names the smallest fix.
@@ -210,11 +220,13 @@ from "what were we doing?". See `docs/how/continuity.md`.
 
 ## 🗺️ Roadmap
 
-- `v0.1` — Core harness (this release): CLI, SQL planning, gates, roles, skills, docs.
-- Next — `whw serve` (local HTTP queue/claim API for remote agents), PostgreSQL
-  live adapter, CI plugins (GitHub Actions / other-CI snippets), metrics
-  dashboard template, `whw migrate` importers (Markdown checklists, GitHub issues).
-- Later — Multi-track dependency visualization, review-assignment hooks,
+- `v0.1.0` — Core harness (Program 001): CLI, SQL planning, gates, roles, skills, docs.
+- `v0.1.1` — Publish plumbing (Program 002 wave 007): CI syncs seeds before gates,
+  `release.yml` (GitHub Release + npm with provenance), clone-first quick start.
+- Next (Program 002 waves 008–011) — checkpoint hygiene, evidence-quality / WIP
+  guards, real `whw run` proof, `whw resume` + config hooks, `release-readiness`
+  gate and a maintenance policy.
+- Later — `whw serve`, live PostgreSQL adapter, `whw migrate` importers, `whw board`,
   translations beyond pt-BR.
 
 Ideas and PRs welcome — charter a wave and go.
