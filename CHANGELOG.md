@@ -25,6 +25,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Gitignore timestamped checkpoint copies; track `.whw/checkpoints/**/latest.txt`
   only. Scaffold `GITIGNORE_BLOCK` matches.
 
+### Added (wave 009)
+
+- `whw run` unit tests for `composePrompt`, escalation, and stub open-weight →
+  closed CLIs. Optional `model` / `costClass` on escalation tiers (logged with
+  `durationMs`). Open-model examples (Ollama, llama.cpp, Aider) in
+  `docs/how/escalation.md`. `.whw/runs/` is gitignored. `whw run` now reaches
+  the `human` tier immediately when the previous tier is exhausted.
+
 ## [0.1.1] - 2026-09-10
 
 ### Added

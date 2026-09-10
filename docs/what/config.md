@@ -65,7 +65,9 @@ Machine schema: [`config.schema.json`](config.schema.json).
   `.whw/adapters.json` manifest exists.
 - **runners.default** — shell command for `whw run` (env: `WHW_PROMPT_FILE`,
   `WHW_ROLE`, `WHW_REF`, `WHW_ROOT`, `WHW_ATTEMPT`, `WHW_TIER`).
-- **escalation** — ladder tiers `[{name, runner, maxFailures} | {name, human}]`.
+- **escalation** — ladder tiers `[{name, runner, maxFailures, model?, costClass?} | {name, human}]`.
+  `costClass` is documentary (`open-weight`, `closed`, `human`); `model` is
+  a free-form label written into `.whw/runs/*.log`.
 
 ## Environment overrides
 
