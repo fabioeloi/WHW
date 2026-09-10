@@ -119,7 +119,7 @@ metrics, retrospective. ADR: `docs/adr/0008-program-001.md`.
 
 Sync: `whw sync wave-006-program-close` · Close: `whw close wave-006-program-close`
 
-## Wave 007 — publish-release — **in progress**
+## Wave 007 — publish-release — **done**
 
 Release plumbing is in git (PRs #1 merged, #3 open). ADR 0010 Accepted. npm
 tag still waits on `NPM_TOKEN`. ADR: `docs/adr/0010-release-policy.md`.
@@ -130,7 +130,7 @@ tag still waits on `NPM_TOKEN`. ADR: `docs/adr/0010-release-policy.md`.
 | B | Release plumbing | `release.yml`, topics, protection, README/`pt-BR`, CHANGELOG | `npx` must resolve | `.github/`, README | 007 | solo | [#3](https://github.com/fabioeloi/WHW/pull/3) |
 | C | Verify | Ubuntu matrix + `ci` aggregator | stranger-followable | Actions | 007 | solo | [run 34518046761](https://github.com/fabioeloi/WHW/actions/runs/34518046761) |
 | D | Decide | ADR 0010 addendum | record publish decision | `docs/adr/0010` | 007 | solo | (Wave 007 D) |
-| E | Close | `whw close` + sync gates | canonical close | planning/ | 007 | solo | (Wave 007 E) |
+| E | Close | `whw close` + sync gates | canonical close | planning/ | 007 | solo | `whw close 007` |
 
 Sync: `whw sync wave-007-publish-release` · Close: `whw close wave-007-publish-release`
 
@@ -200,5 +200,5 @@ Sync: `whw sync wave-011-program-close` · Close: `whw close wave-011-program-cl
 
 ## Next
 
-Wave 007 D (ADR addendum) is the active letter. Merge PR #3, then close 007
-(`whw close 007`). **Do not tag `v0.1.1` until npm credentials are confirmed.**
+Wave 007 is **closed**. Next: wave 008 A (state-hygiene) after an explicit go.
+Do not tag `v0.1.1` until npm credentials are confirmed.
