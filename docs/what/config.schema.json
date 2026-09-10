@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/fabioeloi/WHW/blob/main/docs/what/config.schema.json",
+  "title": "WHW config (whw.config.json)",
+  "type": "object",
+  "properties": {
+    "project": { "type": "string" },
+    "dirs": {
+      "type": "object",
+      "properties": {
+        "planning": { "type": "string", "default": "planning" },
+        "adr": { "type": "string", "default": "docs/adr" },
+        "plan": { "type": "string", "default": "docs/plan.md" },
+        "checkpoints": { "type": "string", "default": ".whw/checkpoints" },
+        "state": { "type": "string", "default": ".whw/state.db" },
+        "roles": { "type": "string", "default": "roles" },
+        "templates": { "type": "string", "default": "templates" },
+        "skills": { "type": "string", "default": "skills" }
+      },
+      "additionalProperties": false
+    },
+    "gates": {
+      "type": "object",
+      "properties": {
+        "tiers": {
+          "type": "object",
+          "additionalProperties": { "type": "array", "items": { "type": "string" } }
+        },
+        "custom": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "command"],
+            "properties": {
+              "name": { "type": "string" },
+              "command": { "type": "string" },
+              "description": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "evaluate": {
+      "type": "object",
+      "properties": {
+        "phaseA": { "type": "array", "items": { "type": "string" } },
+        "threshold": { "type": "number", "default": 3.5 },
+        "criteria": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "weight"],
+            "properties": {
+              "id": { "type": "string" },
+              "weight": { "type": "number" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "conventions": {
+      "type": "object",
+      "properties": {
+        "branch": { "type": "string" },
+        "commit": { "type": "string" },
+        "waveLetters": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "adapters": {
+      "type": "object",
+      "properties": {
+        "tools": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "runners": {
+      "type": "object",
+      "properties": {
+        "default": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "escalation": {
+      "type": "object",
+      "properties": {
+        "maxFailuresDefault": { "type": "number", "default": 2 },
+        "tiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "runner": { "type": "string" },
+              "maxFailures": { "type": "number" },
+              "human": { "type": "boolean" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

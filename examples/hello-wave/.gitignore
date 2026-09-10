@@ -1,0 +1,7 @@
+# WHW derived state (rebuild with `whw sync --all`)
+.whw/state.db
+.whw/state.db-journal
+.whw/state.db-wal
+.whw/state.db-shm
+.whw/*.log
+.whw/runs/
