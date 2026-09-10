@@ -1,0 +1,63 @@
+{
+  "name": "@fabioeloi/whw",
+  "version": "0.1.0",
+  "description": "WHW (Why · How · What) — an LLM- and tool-agnostic harness for autonomous, evidence-gated software delivery: waves, ADRs, SQL planning, gates, and agent roles.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Fabio Eloi <fabioeloi@github.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fabioeloi/WHW.git"
+  },
+  "homepage": "https://github.com/fabioeloi/WHW#readme",
+  "bugs": {
+    "url": "https://github.com/fabioeloi/WHW/issues"
+  },
+  "keywords": [
+    "agent-harness",
+    "agentic-coding",
+    "ai-agents",
+    "llm-agnostic",
+    "spec-driven-development",
+    "adr",
+    "evidence-gates",
+    "sql-planning",
+    "code-review",
+    "autonomous-engineering",
+    "agents-md",
+    "agent-skills",
+    "sqlite"
+  ],
+  "bin": {
+    "whw": "./bin/whw.js"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "sql/",
+    "roles/",
+    "skills/",
+    "templates/",
+    "docs/",
+    "examples/",
+    "WHY.md",
+    "AGENTS.md",
+    "README.md",
+    "README.pt-BR.md",
+    "LICENSE",
+    "ACKNOWLEDGMENTS.md",
+    "CHANGELOG.md",
+    "whw.config.json"
+  ],
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "test": "node --test \"tests/**/*.test.js\"",
+    "test:unit": "node --test \"tests/unit/*.test.js\"",
+    "test:e2e": "node --test \"tests/e2e/*.test.js\"",
+    "doctor": "node ./bin/whw.js doctor",
+    "gates": "node ./bin/whw.js gate run --tier pr",
+    "example": "node ./bin/whw.js --help"
+  }
+}

@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# WHW derived state (rebuild with `whw sync --all`; seeds in planning/ are the source of truth)
+.whw/state.db
+.whw/state.db-journal
+.whw/state.db-wal
+.whw/state.db-shm
+.whw/*.log
+
+# OS / editors
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Test / coverage artifacts
+coverage/
+.nyc_output/
+*.lcov
+junit.xml
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Secrets — never commit
+.env
+.env.*
+*.pem
+*.key
+secrets/
