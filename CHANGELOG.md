@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - README quick start uses `npx @fabioeloi/whw` now that `0.1.1` is on npm
   ([#28](https://github.com/fabioeloi/WHW/issues/28)).
+- Consumer CI template (`templates/ci-whw.yml` and `whw init` fallback) pins
+  `actions/checkout@v7` and `actions/setup-node@v7`, matching this repo
+  ([#30](https://github.com/fabioeloi/WHW/issues/30)).
 
 ### Added (wave 011)
 
