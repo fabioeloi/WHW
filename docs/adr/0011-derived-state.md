@@ -1,6 +1,6 @@
 # ADR 0011 — Derived-state policy
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-10
 - **Wave:** 008
 - **Related:** WHY.md, [0002](0002-sqlite-default.md), [0006](0006-gate-tiers.md), [0009](0009-program-002.md)
