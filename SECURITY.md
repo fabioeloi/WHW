@@ -36,3 +36,6 @@ otherwise.
 - `.whw/state.db` is derived local state and is gitignored by default. Do not
   commit it: evidence belongs in versioned `planning/*.todos.sql`,
   checkpoint files, and commit messages.
+- npm publish (`release.yml`) uses `NPM_TOKEN` and `--provenance`. Do not
+  commit tokens. Tagging `v*` is irreversible toward the registry once the
+  secret is present — confirm at execution time (ADR 0010).

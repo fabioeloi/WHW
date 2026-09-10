@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-10
+
+### Added
+
+- Program 002 charter (ADR 0009) and waves 007–011 (publish, hygiene, runner
+  proof, continuity, close).
+- `.github/workflows/release.yml`: on `v*` tags, run tests + PR gates, create a
+  GitHub Release, then `npm publish --access public --provenance` (requires
+  `NPM_TOKEN`; confirm before tagging — ADR 0010).
+- Dependabot updates for GitHub Actions (weekly).
+
+### Fixed
+
+- CI now runs `whw sync --all` before doctor and PR gates so a fresh checkout
+  (no gitignored `state.db`) is not a false `planning-coverage` NO_GO.
+- `whw doctor` warns when planning seeds exist and the state DB has 0 todos.
+- README quick start: clone + `node ./bin/whw.js` until npm publish lands;
+  removed the `node_modules/.bin` line. `README.pt-BR.md` gains a Roadmap.
+
+### Changed
+
+- CI and the consumer template pin `actions/checkout@v5` and
+  `actions/setup-node@v5` (Node 24 runtime).
+- Package version 0.1.1.
+
 ## [0.1.0] - 2026-09-10
 
 ### Added
@@ -45,4 +70,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Worked example (`examples/hello-wave`) and `node:test` unit + end-to-end suites.
 - Portuguese translation: `README.pt-BR.md`.
 
+[0.1.1]: https://github.com/fabioeloi/WHW/releases/tag/v0.1.1
 [0.1.0]: https://github.com/fabioeloi/WHW/releases/tag/v0.1.0

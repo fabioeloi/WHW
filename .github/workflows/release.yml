@@ -1,0 +1,51 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  github-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - name: Tests
+        run: npm test
+      - name: Sync planning
+        run: node ./bin/whw.js sync --all
+      - name: Doctor
+        run: node ./bin/whw.js doctor
+      - name: PR gates
+        run: node ./bin/whw.js gate run --tier pr
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" --generate-notes --verify-tag
+
+  npm:
+    needs: github-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "${NODE_AUTH_TOKEN}" ]; then
+            echo "NPM_TOKEN is not configured. Skip publish (ADR 0010: confirm at execution time)."
+            echo "Set repo secret NPM_TOKEN (or npm trusted publishing) then re-run this job."
+            exit 1
+          fi
+          npm publish --access public --provenance
