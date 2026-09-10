@@ -153,9 +153,12 @@ com escada de escalação terminando em humano — ou traga seu próprio runner.
 
 ### Continuidade — sobreviva a interrupções e trocas de ferramenta
 
-`whw handoff --from cursor --to codex` emite um pacote com baseline git,
-snapshot da fila, resultados de gates e próxima ação. Sessões retomam do SQL,
-não de "onde estávamos?".
+`whw resume` revalida git + fila após reboot ou chat novo (não faz claim).
+`whw handoff --from cursor --to claude` emite um pacote com baseline git,
+snapshot da fila, resultados de gates e próxima ação. Há um pacote ao vivo em
+`docs/handoff/`. Sessões retomam do SQL, não de "onde estávamos?".
+Hooks opcionais (`on_claim`, `on_done`, `on_gate_fail`, `on_close`) disparam
+depois do evento e não desfazem a transição.
 
 ---
 
@@ -172,6 +175,7 @@ não de "onde estávamos?".
 | `docs/what/`                | Referência CLI, schema, config, templates, adaptadores, métricas|
 | `docs/adr/`                 | Decisões do próprio WHW (0001–)                             |
 | `docs/plan.md`              | Plano narrativo com ondas 5W2H (deste repositório, ao vivo)     |
+| `docs/handoff/`             | Pacotes vivos de migração de IDE/agente (`whw handoff`)         |
 | `templates/`                | WHY, AGENTS, ADR, charter, SQL de onda, PR, handoff, …          |
 | `examples/hello-wave/`      | Exemplo mínimo de ponta a ponta                                 |
 

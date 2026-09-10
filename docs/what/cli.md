@@ -52,10 +52,11 @@ escalation (`whw run` exhausted).
 
 | Command | Effect |
 | ------- | ------ |
+| `whw resume [--no-sync] [--track T]` | Revalidate after interruption: git baseline, sync (unless `--no-sync`), queue, next step. Does **not** claim. |
 | `whw handoff --from TOOL --to TOOL [--out FILE] [--task TEXT]` | Migration package (default `docs/handoff/handoff-<date>-<from>-to-<to>.md`). |
 
 ## JSON mode
 
 `--json` emits parsed structures for `queue`, `status`, `gate run`, `gate list`,
-`evaluate`, `close`, `metrics`, `doctor`, `handoff`, transitions, and scaffolds.
+`evaluate`, `close`, `metrics`, `doctor`, `handoff`, `resume`, transitions, and scaffolds.
 Secrets are redacted (`[REDACTED]`) in `--json` data output.

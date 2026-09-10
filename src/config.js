@@ -47,6 +47,7 @@ export function defaultConfig() {
     },
     runners: { default: null },
     escalation: { tiers: [], maxFailuresDefault: 2 },
+    hooks: {},
   };
 }
 

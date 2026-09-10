@@ -107,6 +107,7 @@ whw metrics                # reproducible numbers
 ## 7. Leave or migrate
 
 ```bash
+whw resume                 # git + sync + queue (does not claim)
 whw handoff --from <your-tool> --to <next-tool>   # resumable package
 ```
 

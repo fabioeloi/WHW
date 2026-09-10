@@ -50,12 +50,13 @@ execute immediately.
 
 ## Resume after interruption
 
-Reboot, restart, or context reset changes nothing: revalidate, then continue.
+Reboot, restart, or context reset changes nothing: `whw resume`, then continue.
+It does not claim.
 
-1. `git status --short --branch` and `git log --oneline -n 10`.
-2. `whw sync --all` and `whw queue`.
-3. `whw gate run --tier pr` (fast confidence check).
-4. Resume the nearest pending step; report only the delta (what was already
+1. `whw resume` (or by hand: `git status --short --branch`,
+   `git log --oneline -n 10`, `whw sync --all`, `whw queue`).
+2. `whw gate run --tier pr` (fast confidence check).
+3. Resume the nearest pending step; report only the delta (what was already
    done vs. what was missing). Do not re-ask the operator for context unless a
    blocking divergence appears after revalidation.
 

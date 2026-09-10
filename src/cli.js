@@ -8,6 +8,7 @@ import { closeDb, openDb } from './db/sqlite.js';
 import { createLogger } from './log.js';
 import { getQueue, listTodos } from './planning/queue.js';
 import { applySeedFile, listSeedFiles } from './planning/seed.js';
+import { runHook } from './hooks.js';
 import { appendNote, setStatus } from './planning/transitions.js';
 import { renderStatus, statusData } from './report.js';
 import { readJson } from './util.js';
@@ -127,6 +128,7 @@ Verify (WHAT)
   metrics [--out FILE]                             reproducible repo metrics
 
 Continuity
+  resume [--no-sync] [--track T]                   revalidate after interruption (no claim)
   handoff --from TOOL --to TOOL [--out FILE]       IDE/agent migration package
 
 Global flags: --root DIR  --config FILE  --json  --help  --version
@@ -142,6 +144,8 @@ const HELP_TOPICS = {
   gate: 'whw gate run [NAME|--tier pr|--all]\n\nRun gates → GO/NO_GO with checkpoints at .whw/checkpoints/<gate>/latest.txt.\nTier `pr` is blocking and lean; `ops` runs on demand. Exit 1 on NO_GO.',
   evaluate: 'whw evaluate --phase a|b [--scores JSON] [--report FILE]\n\nPhase A runs configured deterministic checks (lint/tests/build) at zero AI\ncost → evaluation-report.json. Phase B ingests rubric scores (JSON) for the\nweighted criteria (threshold 3.5) → APPROVE/REJECT + top-3 fixes.',
   run: 'whw run <role> [--ref REF] [--runner CMD] [--task TEXT]\n\nCompose role prompt + AGENTS.md + queue context and invoke a configured\nagent CLI (claude, codex, cursor-agent, gemini, aider, opencode, custom).\nHonors the escalation ladder in whw.config.json; final tier is human.',
+  resume: 'whw resume [--no-sync] [--track T]\n\nRevalidate after interruption: git baseline, `whw sync --all` (unless\n--no-sync), queue, and next step. Does not claim — SQL stays the source of\ntruth. Equivalent to the AGENTS.md resume protocol as one command.',
+  handoff: 'whw handoff --from TOOL --to TOOL [--out FILE] [--task TEXT]\n\nWrite an IDE/agent migration package (git baseline, queue, gates, checklist).\nRaw transcripts stay local; the package carries paths only.',
 };
 
 /**
@@ -221,6 +225,8 @@ export async function main(argv, opts = {}) {
       return (await import('./metrics.js')).cmdMetrics(positionals, ctx);
     case 'handoff':
       return (await import('./handoff.js')).cmdHandoff(positionals, ctx);
+    case 'resume':
+      return (await import('./resume.js')).cmdResume(positionals, ctx);
     default:
       throw new Error(`unknown command: ${command} (run \`whw help\`)`);
   }
@@ -286,8 +292,9 @@ export async function cmdTransition(positionals, ctx, kind) {
   const ref = positionals[0] ?? flags.ref;
   if (!ref) throw new Error(`usage: whw ${kind} <ref>${kind === 'done' ? ' --evidence E' : kind === 'block' ? ' --reason R' : ''}`);
   const db = openDb(paths.state);
+  /** @type {{ ref: string, from: string, to: string, changed?: boolean, actor?: string } | undefined} */
+  let res;
   try {
-    let res;
     if (kind === 'claim') res = setStatus(db, ref, 'in_progress', { actor: flags.actor, forceWip: Boolean(flags['force-wip']) });
     else if (kind === 'done') {
       if (!flags.evidence) throw new Error(`whw done requires --evidence (e.g. --evidence "PR #12, tests green")`);
@@ -301,10 +308,18 @@ export async function cmdTransition(positionals, ctx, kind) {
     }
     if (json) log.data(res);
     else log.info(`${res.ref}: ${res.from} → ${res.to}`);
-    return 0;
   } finally {
     closeDb(db);
   }
+  if (res?.changed && (kind === 'claim' || kind === 'done')) {
+    await runHook(ctx, kind === 'claim' ? 'on_claim' : 'on_done', {
+      WHW_REF: String(res.ref),
+      WHW_FROM: String(res.from),
+      WHW_TO: String(res.to),
+      WHW_ACTOR: String(res.actor ?? ''),
+    });
+  }
+  return 0;
 }
 
 /** @param {string[]} positionals @param {any} ctx @returns {Promise<number>} */

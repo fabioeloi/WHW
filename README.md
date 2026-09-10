@@ -194,9 +194,12 @@ requires a specific model.
 
 ### Continuity — survive interruptions and tool switches
 
-`whw handoff --from cursor --to codex` emits a package with the git baseline,
-queue snapshot, gate results, and next action. Sessions resume from SQL, not
-from "what were we doing?". See `docs/how/continuity.md`.
+`whw resume` revalidates git + queue after a reboot or new chat (it does not
+claim). `whw handoff --from cursor --to claude` emits a package with the git
+baseline, queue snapshot, gate results, and next action. A live package lives
+in `docs/handoff/`. Sessions resume from SQL, not from "what were we doing?".
+See `docs/how/continuity.md`. Optional config `hooks` (`on_claim`, `on_done`,
+`on_gate_fail`, `on_close`) fire after those events without rolling them back.
 
 ---
 
@@ -213,6 +216,7 @@ from "what were we doing?". See `docs/how/continuity.md`.
 | `docs/what/`                | CLI reference, schema, config, templates, adapters, metrics |
 | `docs/adr/`                 | WHW's own decisions (0001–0008)                             |
 | `docs/plan.md`              | Narrative plan with 5W2H wave entries (this repo, live)     |
+| `docs/handoff/`             | Live IDE/agent migration packages (`whw handoff`)           |
 | `templates/`                | WHY, AGENTS, ADR, charter, wave SQL, PR, handoff, …         |
 | `examples/hello-wave/`      | Minimal end-to-end worked example                           |
 

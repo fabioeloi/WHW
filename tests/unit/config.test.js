@@ -13,6 +13,7 @@ describe('config', () => {
     assert.deepEqual(c.gates.tiers.ops, ['program-inventory', 'evidence-quality']);
     assert.equal(c.evaluate.threshold, 3.5);
     assert.equal(c.evaluate.criteria.length, 4);
+    assert.deepEqual(c.hooks, {});
   });
 
   it('mergeDeep merges objects and replaces arrays', () => {

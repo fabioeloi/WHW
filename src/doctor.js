@@ -2,6 +2,7 @@
 /** `whw doctor` — verify toolchain, config, and repo wiring (read-only). */
 
 import { join } from 'node:path';
+import { HOOK_NAMES } from './hooks.js';
 import { fileExists, isDir, runCmd } from './util.js';
 
 /**
@@ -76,6 +77,11 @@ export async function cmdDoctor(positionals, ctx) {
   const customs = ctx.config?.gates?.custom ?? [];
   if (customs.length) ok('custom-gates', customs.map((c) => c?.name).filter(Boolean).join(', '));
   else ok('custom-gates', 'none configured');
+
+  const hooks = ctx.config?.hooks ?? {};
+  const named = HOOK_NAMES.filter((n) => typeof hooks[n] === 'string' && hooks[n].trim());
+  if (named.length) ok('hooks', named.join(', '));
+  else ok('hooks', 'none configured');
 
   const fails = checks.filter((c) => c.status === 'fail');
   if (ctx.json) {
