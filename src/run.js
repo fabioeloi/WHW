@@ -84,6 +84,8 @@ export function resolveTiers(ctx, runnerFlag) {
       runner: t.runner ?? ctx.config?.runners?.default,
       maxFailures: Number(t.maxFailures ?? fallback),
       human: Boolean(t.human),
+      model: t.model ?? null,
+      costClass: t.costClass ?? (t.human ? 'human' : null),
     }));
   }
   const dflt = ctx.config?.runners?.default;
@@ -129,6 +131,7 @@ export async function cmdRun(positionals, ctx) {
     const promptFile = join(runsDir, `${role}-${stamp}-attempt${attempt}.md`);
     writeText(promptFile, prompt);
     ctx.log.info(`run ${role}: attempt ${attempt} (tier ${tier.name}) → ${promptFile}`);
+    const started = Date.now();
     const res = await runShell(tier.runner, {
       cwd: ctx.root,
       timeoutMs: 3600000,
@@ -142,11 +145,27 @@ export async function cmdRun(positionals, ctx) {
         WHW_TIER: tier.name,
       },
     });
+    const durationMs = Date.now() - started;
     const tail = `${res.stdout}\n${res.stderr}`.trim().split('\n').slice(-5).join('\n');
-    writeText(join(runsDir, `${role}-${stamp}-attempt${attempt}.log`), `tier: ${tier.name}\nexit: ${res.code}\n$ ${tier.runner}\n\n${res.stdout}\n${res.stderr}`);
+    const meta = [
+      `tier: ${tier.name}`,
+      `model: ${tier.model ?? ''}`,
+      `costClass: ${tier.costClass ?? ''}`,
+      `durationMs: ${durationMs}`,
+      `exit: ${res.code}`,
+      `$ ${tier.runner}`,
+      '',
+      res.stdout,
+      res.stderr,
+    ].join('\n');
+    writeText(join(runsDir, `${role}-${stamp}-attempt${attempt}.log`), meta);
     if (res.code === 0) {
-      if (ctx.json) ctx.log.data({ role, attempts: attempt, tier: tier.name, status: 'complete' });
-      else ctx.log.info(`run ${role}: complete on attempt ${attempt} (tier ${tier.name})`);
+      const payload = {
+        role, attempts: attempt, tier: tier.name, status: 'complete',
+        model: tier.model ?? null, costClass: tier.costClass ?? null, durationMs,
+      };
+      if (ctx.json) ctx.log.data(payload);
+      else ctx.log.info(`run ${role}: complete on attempt ${attempt} (tier ${tier.name}${tier.costClass ? `, ${tier.costClass}` : ''})`);
       return 0;
     }
     const failure = `attempt ${attempt} (${tier.name}) exit ${res.code}: ${tail.split('\n').pop()}`;
@@ -157,6 +176,12 @@ export async function cmdRun(positionals, ctx) {
       tierIdx++;
       tierFailures = 0;
       ctx.log.info(`run ${role}: escalating to tier ${tiers[tierIdx].name}`);
+      if (tiers[tierIdx].human) {
+        const msg = `escalated to human after ${attempt} attempt(s): ${failures.at(-1) ?? 'see .whw/runs'}`;
+        if (ctx.json) ctx.log.data({ role, attempts: attempt, tier: tiers[tierIdx].name, human: true, failures });
+        else ctx.log.info(`HUMAN ${msg}`);
+        return 3;
+      }
     }
   }
   if (ctx.json) ctx.log.data({ role, attempts: attempt, status: 'exhausted', failures });

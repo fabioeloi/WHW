@@ -10,6 +10,7 @@ package-lock.json
 .whw/*.log
 .whw/checkpoints/**/*.txt
 !.whw/checkpoints/**/latest.txt
+.whw/runs/
 
 # OS / editors
 .DS_Store

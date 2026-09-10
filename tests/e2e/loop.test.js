@@ -28,6 +28,7 @@ describe('e2e full loop', () => {
 
     assert.equal(await run(['sync', '--all']), 0);
     assert.equal(await run(['queue']), 0);
+    assert.equal(await run(['run', 'planner', '--dry-run', '--json', '--task', 'pick next']), 0);
 
     for (const l of ['A', 'B', 'C', 'D']) {
       assert.equal(await run(['claim', `wave001-${l}`]), 0);

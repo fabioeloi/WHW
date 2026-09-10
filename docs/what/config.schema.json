@@ -97,7 +97,9 @@
               "name": { "type": "string" },
               "runner": { "type": "string" },
               "maxFailures": { "type": "number" },
-              "human": { "type": "boolean" }
+              "human": { "type": "boolean" },
+              "model": { "type": "string" },
+              "costClass": { "type": "string", "description": "open-weight | closed | human (documentary)" }
             },
             "additionalProperties": false
           }

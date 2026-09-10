@@ -20,8 +20,8 @@ Configure it in `whw.config.json`:
   "escalation": {
     "maxFailuresDefault": 2,
     "tiers": [
-      { "name": "fast", "runner": "fast-agent < \"$WHW_PROMPT_FILE\"", "maxFailures": 3 },
-      { "name": "strong", "runner": "strong-agent < \"$WHW_PROMPT_FILE\"", "maxFailures": 2 },
+      { "name": "fast", "runner": "fast-agent < \"$WHW_PROMPT_FILE\"", "maxFailures": 3, "costClass": "open-weight", "model": "llama3.1" },
+      { "name": "strong", "runner": "strong-agent < \"$WHW_PROMPT_FILE\"", "maxFailures": 2, "costClass": "closed", "model": "claude" },
       { "name": "human", "human": true }
     ]
   }
@@ -45,12 +45,33 @@ The `human` tier stops with a handoff summary (exit 3) — a person decides.
 Examples per CLI (flags vary by version — adapt to your installed one):
 
 ```bash
-# Claude Code (print mode, permissions pre-approved by you)
+# Open-weight — Ollama
+ollama run llama3.1 < "$WHW_PROMPT_FILE"
+# Open-weight — llama.cpp
+llama-cli -m /models/llama.gguf -f "$WHW_PROMPT_FILE" -n 2048
+# Open-weight — Aider + local Ollama
+aider --model ollama_chat/llama3.1 --message-file "$WHW_PROMPT_FILE" --yes-always
+
+# Closed — Claude Code (print mode, permissions pre-approved by you)
 claude -p --dangerously-skip-permissions "$(cat \"$WHW_PROMPT_FILE\")"
-# Codex (non-interactive)
+# Closed — Codex (non-interactive)
 codex exec --skip-git-repo-check - < "$WHW_PROMPT_FILE"
-# Gemini CLI
+# Closed — Gemini CLI
 gemini --prompt "$(cat \"$WHW_PROMPT_FILE\")"
+```
+
+A ladder that tries a local model first, then a hosted CLI:
+
+```json
+{
+  "escalation": {
+    "tiers": [
+      { "name": "local", "runner": "ollama run llama3.1 < \"$WHW_PROMPT_FILE\"", "maxFailures": 2, "costClass": "open-weight", "model": "llama3.1" },
+      { "name": "hosted", "runner": "claude -p --dangerously-skip-permissions \"$(cat \\\"$WHW_PROMPT_FILE\\\")\"", "maxFailures": 1, "costClass": "closed", "model": "claude" },
+      { "name": "human", "human": true }
+    ]
+  }
+}
 ```
 
 Only configure runners you trust with shell execution — `whw run` is power
