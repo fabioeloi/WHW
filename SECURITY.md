@@ -36,8 +36,13 @@ otherwise.
 - `.whw/state.db` is derived local state and is gitignored by default. Do not
   commit it: evidence belongs in versioned `planning/*.todos.sql`,
   checkpoint files, and commit messages.
-- npm publish (`release.yml`) currently authenticates with the GitHub Actions
-  `NPM_TOKEN` secret and `--provenance`. Do not commit tokens. Wave 013
-  switches publish to npm trusted publishing (OIDC); until then, tagging `v*`
-  is irreversible toward the registry once the secret is present — confirm at
-  execution time (ADR 0010). `@fabioeloi/whw@0.1.1` is already on npm.
+- npm publish (`release.yml`) authenticates with GitHub Actions OIDC
+  (`permissions.id-token: write`) and `npm publish --access public
+  --provenance`. The workflow does **not** set `NODE_AUTH_TOKEN`. Do not
+  commit tokens. The GitHub `NPM_TOKEN` secret remains until the first OIDC
+  publish succeeds (wave 016 / `v0.2.0`); do not revoke it and do not set
+  npm "require 2FA and disallow tokens" before that (ADR 0010 / 0014).
+  Configure the npmjs.com trusted-publisher row (`fabioeloi` / `WHW` /
+  `release.yml`, empty environment, allow **`npm publish`**) before any
+  `v*` tag. Tagging is irreversible toward the registry — confirm at
+  execution time. `@fabioeloi/whw@0.1.1` is already on npm.
