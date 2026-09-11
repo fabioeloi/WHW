@@ -229,7 +229,7 @@ revoke `NPM_TOKEN` in this wave. ADR: `docs/adr/0014-trusted-publish.md`.
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Confirm publisher fields | npm form values in ADR 0014; sharpen seeds | filename must match or tag fails | `docs/adr/0014`, `planning/` | 013 | solo | |
+| A | Confirm publisher fields | npm form values in ADR 0014; sharpen seeds | filename must match or tag fails | `docs/adr/0014`, `planning/` | 013 | solo | [#37](https://github.com/fabioeloi/WHW/pull/37) |
 | B | Implementation | drop `NODE_AUTH_TOKEN`; SECURITY.md; `maint-audit`; 0012 draft | token path is deprecated | `.github/workflows/release.yml`, `src/gates/` | 013 | solo | |
 | C | Verification | tests + `pr` gates; `maint-audit` fixture | proof | `tests/` | 013 | solo | |
 | D | Decision record | Accept ADR 0014; 0012 Dependabot addendum | record identity | `docs/adr/0014`, `0012` | 013 | solo | |
