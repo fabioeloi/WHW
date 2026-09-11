@@ -23,7 +23,8 @@ See `WHY.md`.
 ## Programs
 
 - Program 001 — WHW v0.1.0 (`docs/adr/0008-program-001.md`): waves 001–006 — **closed**.
-- Program 002 — Hardening & Publication (`docs/adr/0009-program-002.md`): waves 007–011.
+- Program 002 — Hardening & Publication (`docs/adr/0009-program-002.md`): waves 007–011 — **closed**.
+- Program 003 — Trust & Adoption (`docs/adr/0013-program-trust-adoption.md`): waves 012–016.
 
 ## Wave log
 
@@ -200,8 +201,90 @@ tag `v0.1.1` stays blocked on operator `NPM_TOKEN`. ADR:
 
 Sync: `whw sync wave-011-program-close` · Close: `whw close wave-011-program-close`
 
+## Wave 012 — release-truth — **in progress**
+
+CHANGELOG fold under `[0.1.1]`, tighter `release-readiness`, notes from
+CHANGELOG, deterministic checkpoints, stale-doc sweep. No re-tag, no 0.1.2.
+ADR addenda: `docs/adr/0010-release-policy.md`, `docs/adr/0011-derived-state.md`.
+Charter: `docs/adr/0013-program-trust-adoption.md`.
+
+| #   | What | How | Why | Where | When | Who | How much |
+| --- | ---- | --- | --- | ----- | ---- | --- | -------- |
+| A | Charter + seeds | ADR 0013–0014, `whw wave new` × 5, plan stubs, note on wave007-B | no wave without an ADR | `docs/adr/`, `planning/` | 012 | solo | [#32](https://github.com/fabioeloi/WHW/pull/32) |
+| B | Release truth | CHANGELOG fold, gate rules, `release.yml` notes, checkpoint churn, stale docs | tarball must match docs | `CHANGELOG.md`, `src/gates/`, `.github/` | 012 | solo | |
+| C | Verify | tests + `pr` gates; GO run leaves tree clean | proof | `tests/` | 012 | solo | |
+| D | Decide | ADR 0010 + 0011 addenda | record the contract | `docs/adr/0010`, `0011` | 012 | solo | |
+| E | Close | `whw close` + sync | canonical close | planning/ | 012 | solo | |
+
+Sync: `whw sync wave-012-release-truth` · Close: `whw close wave-012-release-truth`
+
+## Wave 013 — trusted-publish — **pending**
+
+npm OIDC trusted publisher; drop `NODE_AUTH_TOKEN`; Dependabot inside ADR
+0012; `maint-audit` ops gate. OIDC proof waits for 016 / `v0.2.0`. Do not
+revoke `NPM_TOKEN` in this wave. ADR: `docs/adr/0014-trusted-publish.md`.
+
+| #   | What | How | Why | Where | When | Who | How much |
+| --- | ---- | --- | --- | ----- | ---- | --- | -------- |
+| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-013-trusted-publish.todos.sql` | 013 | solo | |
+| B | Implementation | OIDC job, SECURITY.md, maint-audit, 0012 addendum | token path is deprecated | `.github/workflows/release.yml`, `src/gates/` | 013 | solo | |
+| C | Verification | tests + `pr` gates | proof | `tests/` | 013 | solo | |
+| D | Decision record | Accept ADR 0014 | record identity | `docs/adr/0014` | 013 | solo | |
+| E | Canonical close | `whw close` + sync | close | planning/ | 013 | solo | |
+
+Sync: `whw sync wave-013-trusted-publish` · Close: `whw close wave-013-trusted-publish`
+
+## Wave 014 — runner-proof-real — **pending**
+
+Real `whw run builder --ref wave014-B` on an installed CLI; unit tests for
+untested modules; `costClass` in `whw metrics`. Confirm CLI at 014 A.
+ADR: `docs/adr/0013-program-trust-adoption.md`.
+
+| #   | What | How | Why | Where | When | Who | How much |
+| --- | ---- | --- | --- | ----- | ---- | --- | -------- |
+| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-014-runner-proof-real.todos.sql` | 014 | solo | |
+| B | Implementation | real `whw run` + tests | stubs are not proof | `src/run.js`, `tests/` | 014 | solo | |
+| C | Verification | tests + `pr` gates | proof | `tests/` | 014 | solo | |
+| D | Decision record | ADR 0013 addendum + run log tail | record the CLI | `docs/adr/0013` | 014 | solo | |
+| E | Canonical close | `whw close` + sync | close | planning/ | 014 | solo | |
+
+Sync: `whw sync wave-014-runner-proof-real` · Close: `whw close wave-014-runner-proof-real`
+
+## Wave 015 — consumer-proof — **pending**
+
+Fresh-repo `init` + `templates/ci-whw.yml` e2e; handoff round-trip; `whw resume`
+runs `gate run --tier pr`. Reproduce or close the versioned-npx bin miss.
+ADR: `docs/adr/0013-program-trust-adoption.md`.
+
+| #   | What | How | Why | Where | When | Who | How much |
+| --- | ---- | --- | --- | ----- | ---- | --- | -------- |
+| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-015-consumer-proof.todos.sql` | 015 | solo | |
+| B | Implementation | e2e consumer + resume gate step | `npx` path must work | `tests/e2e/`, `src/resume.js` | 015 | solo | |
+| C | Verification | tests + `pr` gates | proof | `tests/` | 015 | solo | |
+| D | Decision record | ADR 0013 addendum | record consumer proof | `docs/adr/0013` | 015 | solo | |
+| E | Canonical close | `whw close` + sync | close | planning/ | 015 | solo | |
+
+Sync: `whw sync wave-015-consumer-proof` · Close: `whw close wave-015-consumer-proof`
+
+## Wave 016 — program-close — **pending**
+
+`v0.2.0` via OIDC (operator tag after E); inventory; metrics; ADR 0012
+close-hygiene maint SHAs; retrospective. Do not tag in B.
+ADR: `docs/adr/0013-program-trust-adoption.md`.
+
+| #   | What | How | Why | Where | When | Who | How much |
+| --- | ---- | --- | --- | ----- | ---- | --- | -------- |
+| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-016-program-close.todos.sql` | 016 | solo | |
+| B | Inventory work | 0.2.0 version + CHANGELOG; SHA list | close deliberately | `package.json`, `CHANGELOG.md` | 016 | solo | |
+| C | Verify | inventory GO, metrics snap, ops GO | evidence of done | `.whw/` | 016 | solo | |
+| D | Decide | ADR 0013 Accepted + retro | record outcome | `docs/adr/0013` | 016 | solo | |
+| E | Close | `whw close` + operator `v0.2.0` tag | canonical close | planning/ | 016 | solo | |
+
+Sync: `whw sync wave-016-program-close` · Close: `whw close wave-016-program-close`
+
 ## Next
 
-Program 002 is **closed** (waves 007–011). `@fabioeloi/whw@0.1.1` is on npm;
-GitHub Release [v0.1.1](https://github.com/fabioeloi/WHW/releases/tag/v0.1.1).
-There is no wave 012 without a new charter ADR.
+Program 003 is **in progress** (waves 012–016). Wave 012 A is the charter PR.
+Do not start 012 B until an explicit operator go. `@fabioeloi/whw@0.1.1` is
+on npm; next tag is **v0.2.0** at 016 E (OIDC). There is no wave 017 without
+a new charter ADR.
