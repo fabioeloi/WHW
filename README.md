@@ -207,7 +207,7 @@ See `docs/how/continuity.md`. Optional config `hooks` (`on_claim`, `on_done`,
 | `docs/why/positioning.md`   | Six-dimension taxonomy; WHW vs. Spec Kit, OpenSpec, BMAD…   |
 | `docs/how/`                 | Waves, programs, ADRs, todos.sql, gates, evidence, continuity, roles, escalation, evaluation, conventions |
 | `docs/what/`                | CLI reference, schema, config, templates, adapters, metrics |
-| `docs/adr/`                 | WHW's own decisions (0001–0008)                             |
+| `docs/adr/`                 | WHW's own decisions (0001–0014)                             |
 | `docs/plan.md`              | Narrative plan with 5W2H wave entries (this repo, live)     |
 | `docs/handoff/`             | Live IDE/agent migration packages (`whw handoff`)           |
 | `templates/`                | WHY, AGENTS, ADR, charter, wave SQL, PR, handoff, …         |

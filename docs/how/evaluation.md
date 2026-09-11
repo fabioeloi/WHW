@@ -11,8 +11,9 @@ whw evaluate --phase a
 
 Runs `evaluate.phaseA` commands from `whw.config.json` (lint, tests, build —
 e.g. `["node --test \"tests/**/*.test.js\""]`) and records pass/fail per command with tails in
-`.whw/evaluation-report.json`. Any failure → the change is REJECTED with the
-exact command and output. Never score Phase B on a red Phase A.
+`.whw/evaluation-report.json` (gitignored; derived). Any failure → the change is REJECTED with the
+exact command and output. Never score Phase B on a red Phase A. Cite
+`whw evaluate --phase a` in todo evidence rather than committing the report.
 
 ## Phase B — rubric
 
@@ -48,8 +49,8 @@ placeholder-laden work fails even when tests pass.
 
 REJECT returns to the builder with failures only — the evaluator never
 rewrites the code in the same pass. The verdict is recorded as evidence on
-the wave's C todo, and the report stays in `.whw/evaluation-report.json` for
-audit.
+the wave's C todo. The report is local (`.whw/evaluation-report.json`,
+gitignored); the command is the durable evidence.
 
 ## Tuning
 

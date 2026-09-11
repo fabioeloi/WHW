@@ -16,8 +16,9 @@ whw gate run --all         # everything
 
 Exit 0 = all GO; exit 1 = any NO_GO. Every run writes a checkpoint:
 `.whw/checkpoints/<gate>/<gate>-<stamp>.txt` (local, gitignored) plus a
-`latest.txt` copy (tracked) with `PASS` lines, `FAIL` lines, and a final
-`status=GO|NO_GO failures=N`.
+deterministic `latest.txt` (tracked, **no timestamp**) with `PASS` lines,
+`FAIL` lines, and a final `status=GO|NO_GO failures=N`. Re-running a GO gate
+with the same details leaves the tree clean.
 
 If `planning/*.todos.sql` seeds exist and `todos` is empty, the runner writes
 an `unsynced-state` NO_GO and stops before individual gates can GO vacuously.
@@ -53,8 +54,10 @@ a failure message naming the smallest fix. When in doubt, it goes to `ops`.
   Program 001 rows are not rewritten (`done` is terminal).
 - **release-readiness** (`ops`) — when `package.json` exists: name, semver
   version, license, `LICENSE`, `README.md`, a `CHANGELOG.md` heading
-  `## [version]`, and any `bin` paths. Skips unpackaged repos. Does **not**
-  publish npm or create tags (ADR 0010 — operator confirms `NPM_TOKEN`).
+  `## [version]`, `bin` paths without a leading `./`, and `repository.url` in
+  `git+https://` / `git+ssh://` form. When `HEAD` is tagged `v<version>`,
+  `[Unreleased]` must have no list items. Skips unpackaged repos. Does **not**
+  publish npm or create tags (ADR 0010 — operator confirms the publish path).
 
 ## Custom gates
 

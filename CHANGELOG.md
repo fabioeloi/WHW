@@ -14,48 +14,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Consumer CI template (`templates/ci-whw.yml` and `whw init` fallback) pins
   `actions/checkout@v7` and `actions/setup-node@v7`, matching this repo
   ([#30](https://github.com/fabioeloi/WHW/issues/30)).
-
-### Added (wave 011)
-
-- `release-readiness` ops gate: when `package.json` exists, name/semver/license,
-  `LICENSE`, `README.md`, CHANGELOG heading, and `bin` paths must agree. Does
-  not publish npm or create tags.
-
-### Added (wave 010)
-
-- `whw resume [--no-sync]`: git baseline, optional `sync --all`, queue, next
-  step. Does not claim. AGENTS.md resume protocol as one command.
-- Config `hooks` (`on_claim`, `on_done`, `on_gate_fail`, `on_close`): post-event
-  shell commands. Non-zero exit is logged; the transition is not rolled back.
-- Live `docs/handoff/` package (`whw handoff --from cursor --to claude`).
-
-### Added
-
-- `evidence-quality` ops gate: from wave 007 onward, `done` evidence must name
-  a SHA, PR `#N`, test/gate command, or checkpoint path (ADR 0011).
-- `whw claim --force-wip` to override the one-claim-per-actor guard.
-
-### Fixed
-
-- Gate runner NO_GO `unsynced-state` when planning seeds exist and `todos` is
-  empty, before individual gates can GO vacuously.
-- `whw sync` preserves `in_progress`, `blocked`, and `cancelled` (not only
-  `done`), so re-applying seeds cannot unclaim work.
-
-### Changed
-
-- Gitignore timestamped checkpoint copies; track `.whw/checkpoints/**/latest.txt`
-  only. Scaffold `GITIGNORE_BLOCK` matches.
-
-### Added (wave 009)
-
-- `whw run` unit tests for `composePrompt`, escalation, and stub open-weight →
-  closed CLIs. Optional `model` / `costClass` on escalation tiers (logged with
-  `durationMs`). Open-model examples (Ollama, llama.cpp, Aider) in
-  `docs/how/escalation.md`. `.whw/runs/` is gitignored. `whw run` now reaches
-  the `human` tier immediately when the previous tier is exhausted.
+- `release-readiness` requires an empty `[Unreleased]` when `HEAD` is tagged
+  `v<version>`, `package.json` `bin` paths without `./`, and `repository.url`
+  in `git+https://` form.
+- GitHub Release notes come from the matching CHANGELOG section
+  (`--notes-file`); `release.yml` runs `release-readiness` before `gh release
+  create`.
+- Gate `latest.txt` is deterministic (no timestamps) so a GO run leaves the
+  tree clean. `.whw/evaluation-report.json` is gitignored (derived). `ops`
+  `latest.txt` files are tracked consistently with `pr`.
 
 ## [0.1.1] - 2026-09-10
+
+The 0.1.1 tarball already included waves 008–011 (`resume`, hooks,
+`evidence-quality`, `release-readiness`). This section lagged the tarball
+and was folded here in wave 012.
 
 ### Added
 
@@ -65,6 +38,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   GitHub Release, then `npm publish --access public --provenance` (requires
   `NPM_TOKEN`; confirm before tagging — ADR 0010).
 - Dependabot updates for GitHub Actions (weekly).
+- `release-readiness` ops gate: when `package.json` exists, name/semver/license,
+  `LICENSE`, `README.md`, CHANGELOG heading, and `bin` paths must agree. Does
+  not publish npm or create tags.
+- `whw resume [--no-sync]`: git baseline, optional `sync --all`, queue, next
+  step. Does not claim. AGENTS.md resume protocol as one command.
+- Config `hooks` (`on_claim`, `on_done`, `on_gate_fail`, `on_close`): post-event
+  shell commands. Non-zero exit is logged; the transition is not rolled back.
+- Live `docs/handoff/` package (`whw handoff --from cursor --to claude`).
+- `evidence-quality` ops gate: from wave 007 onward, `done` evidence must name
+  a SHA, PR `#N`, test/gate command, or checkpoint path (ADR 0011).
+- `whw claim --force-wip` to override the one-claim-per-actor guard.
+- `whw run` unit tests for `composePrompt`, escalation, and stub open-weight →
+  closed CLIs. Optional `model` / `costClass` on escalation tiers (logged with
+  `durationMs`). Open-model examples (Ollama, llama.cpp, Aider) in
+  `docs/how/escalation.md`. `.whw/runs/` is gitignored. `whw run` now reaches
+  the `human` tier immediately when the previous tier is exhausted.
 
 ### Fixed
 
@@ -73,12 +62,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `whw doctor` warns when planning seeds exist and the state DB has 0 todos.
 - README quick start: clone + `node ./bin/whw.js` until npm publish lands;
   removed the `node_modules/.bin` line. `README.pt-BR.md` gains a Roadmap.
+- Gate runner NO_GO `unsynced-state` when planning seeds exist and `todos` is
+  empty, before individual gates can GO vacuously.
+- `whw sync` preserves `in_progress`, `blocked`, and `cancelled` (not only
+  `done`), so re-applying seeds cannot unclaim work.
 
 ### Changed
 
 - CI and the consumer template pin `actions/checkout@v5` and
   `actions/setup-node@v5` (Node 24 runtime).
 - Package version 0.1.1.
+- Gitignore timestamped checkpoint copies; track `.whw/checkpoints/**/latest.txt`
+  only. Scaffold `GITIGNORE_BLOCK` matches.
 
 ## [0.1.0] - 2026-09-10
 

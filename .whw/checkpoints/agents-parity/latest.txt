@@ -1,8 +1,8 @@
-# whw gate agents-parity — 2026-09-10T221703Z (20260910T221703Z)
-[221703Z] PASS AGENTS.md present (canonical)
-[221703Z] PASS CLAUDE.md → AGENTS.md
-[221703Z] PASS GEMINI.md → AGENTS.md
-[221703Z] PASS .github/copilot-instructions.md → AGENTS.md
-[221703Z] PASS .cursor/rules/whw.mdc → AGENTS.md
-[221703Z] PASS .windsurfrules → AGENTS.md
+# whw gate agents-parity
+PASS AGENTS.md present (canonical)
+PASS CLAUDE.md → AGENTS.md
+PASS GEMINI.md → AGENTS.md
+PASS .github/copilot-instructions.md → AGENTS.md
+PASS .cursor/rules/whw.mdc → AGENTS.md
+PASS .windsurfrules → AGENTS.md
 status=GO failures=0

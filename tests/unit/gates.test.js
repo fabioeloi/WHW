@@ -37,11 +37,19 @@ describe('gate runner', () => {
     await assert.rejects(runOne(ctx, { name: 'ghost' }, db), /unknown gate/);
   });
 
-  it('writes stamp + latest checkpoints with status line', () => {
+  it('writes stamp files plus a deterministic latest.txt', () => {
     const ctx = makeCtx(makeTmp());
-    const cp = writeCheckpoint(ctx, 'demo', { status: 'GO', failures: [], details: ['all good'] });
+    const payload = { status: 'GO', failures: [], details: ['all good'] };
+    const cp = writeCheckpoint(ctx, 'demo', payload);
     assert.ok(cp.file.endsWith('.txt') && cp.latest.endsWith('latest.txt'));
-    assert.match(readText(cp.latest), /status=GO failures=0/);
+    const latest = readText(cp.latest);
+    assert.match(latest, /status=GO failures=0/);
+    assert.match(latest, /^# whw gate demo$/m);
+    assert.match(latest, /^PASS all good$/m);
+    assert.doesNotMatch(latest, /T\d{6}Z/);
+    assert.match(readText(cp.file), /T\d{6}Z/);
+    const again = writeCheckpoint(ctx, 'demo', payload);
+    assert.equal(readText(again.latest), latest);
   });
 
   it('planning-coverage fails on unsynced seeds, passes after sync', async (t) => {
@@ -105,7 +113,11 @@ describe('gate runner', () => {
     assert.equal(bad.status, 'NO_GO');
     assert.ok(bad.failures.some((f) => /license/i.test(f)));
     writeText(join(root, 'package.json'), JSON.stringify({
-      name: 'demo', version: '1.2.3', license: 'MIT', bin: { demo: './bin/demo.js' },
+      name: 'demo',
+      version: '1.2.3',
+      license: 'MIT',
+      repository: { type: 'git', url: 'git+https://example.com/demo.git' },
+      bin: { demo: 'bin/demo.js' },
     }));
     writeText(join(root, 'LICENSE'), 'MIT');
     writeText(join(root, 'README.md'), '# demo');
@@ -113,6 +125,51 @@ describe('gate runner', () => {
     writeText(join(root, 'bin', 'demo.js'), '#!/usr/bin/env node\n');
     const ok = await gate.run(makeCtx(root));
     assert.equal(ok.status, 'GO');
+  });
+
+  it('release-readiness rejects ./ bin, non-git+ url, and Unreleased at tag', async () => {
+    const gate = (await import('../../src/gates/builtin/release-readiness.js'));
+    const { runCmd } = await import('../../src/util.js');
+    const root = makeTmp();
+    writeText(join(root, 'package.json'), JSON.stringify({
+      name: 'demo',
+      version: '1.2.3',
+      license: 'MIT',
+      repository: { type: 'git', url: 'https://example.com/demo.git' },
+      bin: { demo: './bin/demo.js' },
+    }));
+    writeText(join(root, 'LICENSE'), 'MIT');
+    writeText(join(root, 'README.md'), '# demo');
+    writeText(join(root, 'CHANGELOG.md'), '## [Unreleased]\n\n- leftover\n\n## [1.2.3] - 2026-09-10\n\nShipped.\n');
+    writeText(join(root, 'bin', 'demo.js'), '#!/usr/bin/env node\n');
+    const dirty = await gate.run(makeCtx(root));
+    assert.equal(dirty.status, 'NO_GO');
+    assert.ok(dirty.failures.some((f) => /must not start with \.\//.test(f)));
+    assert.ok(dirty.failures.some((f) => /git\+https/.test(f)));
+    assert.equal(dirty.failures.some((f) => /Unreleased/.test(f)), false);
+
+    writeText(join(root, 'package.json'), JSON.stringify({
+      name: 'demo',
+      version: '1.2.3',
+      license: 'MIT',
+      repository: { type: 'git', url: 'git+https://example.com/demo.git' },
+      bin: { demo: 'bin/demo.js' },
+    }));
+    assert.equal((await runCmd('git', ['init'], { cwd: root })).code, 0);
+    assert.equal((await runCmd('git', ['add', '.'], { cwd: root })).code, 0);
+    assert.equal((await runCmd('git', [
+      '-c', 'user.email=whw@example.test',
+      '-c', 'user.name=WHW Test',
+      '-c', 'commit.gpgsign=false',
+      'commit', '-m', 'init',
+    ], { cwd: root })).code, 0);
+    assert.equal((await runCmd('git', ['tag', 'v1.2.3'], { cwd: root })).code, 0);
+    const tagged = await gate.run(makeCtx(root));
+    assert.equal(tagged.status, 'NO_GO');
+    assert.ok(tagged.failures.some((f) => /Unreleased/.test(f)));
+    writeText(join(root, 'CHANGELOG.md'), '## [Unreleased]\n\n## [1.2.3] - 2026-09-10\n\nShipped.\n');
+    const clean = await gate.run(makeCtx(root));
+    assert.equal(clean.status, 'GO');
   });
 
   it('NO_GO unsynced-state when seeds exist and todos are empty', async () => {

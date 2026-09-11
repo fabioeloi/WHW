@@ -5,12 +5,25 @@
  */
 
 import { join } from 'node:path';
-import { fileExists, readJson, readText } from '../../util.js';
+import { unreleasedHasEntries } from '../../changelog.js';
+import { fileExists, git, isGitRepo, readJson, readText } from '../../util.js';
 
 export const name = 'release-readiness';
-export const description = 'Package metadata, LICENSE, README, and CHANGELOG agree on a version (does not publish).';
+export const description = 'Package metadata, LICENSE, README, CHANGELOG, bin, and repository.url agree (does not publish).';
 
 const SEMVER = /^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/;
+const GIT_PLUS = /^git\+(https|ssh):\/\//;
+
+/**
+ * @param {string} root
+ * @param {string} version
+ */
+export async function headIsTaggedVersion(root, version) {
+  if (!(await isGitRepo(root))) return false;
+  const tags = await git(['tag', '--points-at', 'HEAD'], root);
+  const want = `v${version}`;
+  return tags.split('\n').map((t) => t.trim()).includes(want);
+}
 
 /**
  * @param {any} ctx
@@ -56,6 +69,23 @@ export async function run(ctx) {
     const heading = new RegExp(`^## \\[${version.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\]`, 'm');
     if (!heading.test(text)) failures.push(`CHANGELOG.md has no \`## [${version}]\` heading`);
     else details.push(`CHANGELOG.md has ## [${version}]`);
+    if (await headIsTaggedVersion(ctx.root, version)) {
+      if (unreleasedHasEntries(text)) {
+        failures.push(`CHANGELOG.md [Unreleased] must be empty when HEAD is tagged v${version}`);
+      } else {
+        details.push(`[Unreleased] empty at tag v${version}`);
+      }
+    }
+  }
+
+  const repo = pkg.repository;
+  const repoUrl = typeof repo === 'string' ? repo : (repo && typeof repo === 'object' ? repo.url : '');
+  if (typeof repoUrl === 'string' && repoUrl.trim()) {
+    if (!GIT_PLUS.test(repoUrl.trim())) {
+      failures.push(`package.json repository.url must use git+https:// or git+ssh:// form (got ${JSON.stringify(repoUrl)})`);
+    } else {
+      details.push(`repository.url ${repoUrl.trim()}`);
+    }
   }
 
   const bin = pkg.bin && typeof pkg.bin === 'object' ? pkg.bin : null;
@@ -63,6 +93,10 @@ export async function run(ctx) {
     for (const [cli, rel] of Object.entries(bin)) {
       if (typeof rel !== 'string' || !rel.trim()) {
         failures.push(`package.json bin.${cli} is empty`);
+        continue;
+      }
+      if (rel.startsWith('./') || rel.startsWith('.\\')) {
+        failures.push(`package.json bin.${cli} must not start with ./ (npm strips it; use ${rel.replace(/^\.[/\\]/, '')})`);
         continue;
       }
       const abs = join(ctx.root, rel);

@@ -167,7 +167,7 @@ depois do evento e não desfazem a transição.
 | `docs/why/positioning.md`   | Taxonomia de seis dimensões; WHW vs. Spec Kit, OpenSpec, BMAD…  |
 | `docs/how/`                 | Ondas, programas, ADRs, todos.sql, gates, evidências, continuidade, papéis, escalação, avaliação, convenções |
 | `docs/what/`                | Referência CLI, schema, config, templates, adaptadores, métricas|
-| `docs/adr/`                 | Decisões do próprio WHW (0001–)                             |
+| `docs/adr/`                 | Decisões do próprio WHW (0001–0014)                         |
 | `docs/plan.md`              | Plano narrativo com ondas 5W2H (deste repositório, ao vivo)     |
 | `docs/handoff/`             | Pacotes vivos de migração de IDE/agente (`whw handoff`)         |
 | `templates/`                | WHY, AGENTS, ADR, charter, SQL de onda, PR, handoff, …          |

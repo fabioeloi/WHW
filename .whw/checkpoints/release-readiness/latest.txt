@@ -1,10 +1,11 @@
-# whw gate release-readiness — 2026-09-10T203556Z (20260910T203556Z)
-[203556Z] PASS name @fabioeloi/whw
-[203556Z] PASS version 0.1.1
-[203556Z] PASS license MIT
-[203556Z] PASS LICENSE present
-[203556Z] PASS README.md present
-[203556Z] PASS CHANGELOG.md has ## [0.1.1]
-[203556Z] PASS bin whw → ./bin/whw.js
-[203556Z] PASS npm publish / git tag are operator steps (not this gate)
+# whw gate release-readiness
+PASS name @fabioeloi/whw
+PASS version 0.1.1
+PASS license MIT
+PASS LICENSE present
+PASS README.md present
+PASS CHANGELOG.md has ## [0.1.1]
+PASS repository.url git+https://github.com/fabioeloi/WHW.git
+PASS bin whw → bin/whw.js
+PASS npm publish / git tag are operator steps (not this gate)
 status=GO failures=0

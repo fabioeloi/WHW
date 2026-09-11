@@ -9,7 +9,7 @@ rendered on demand — never vibes in a transcript.
 | -------- | -------- | ---------- |
 | Todo evidence | `todos.evidence` + `transitions` rows | `whw done --evidence`, `whw close` |
 | Gate verdicts | `.whw/checkpoints/<gate>/latest.txt` | `whw gate run` |
-| Evaluation | `.whw/evaluation-report.json` | `whw evaluate` |
+| Evaluation | `.whw/evaluation-report.json` (gitignored) | `whw evaluate` |
 | Metrics | `.whw/metrics.json` (via `--out`) | `whw metrics` |
 | Commits/PRs | git history with `(Wave NNN L)` trailers | humans/agents |
 | Narrative | `docs/plan.md` entries + ADR addenda | wave D/E letters |
@@ -52,8 +52,10 @@ instead of hand-counting.
   checkpoint paths, exact commands) — never "fixed" or "tested".
 - PR numbers flow back into todo evidence, the plan entry, and the ADR
   addendum. Three pointers, zero archaeology.
-- Track `latest.txt` as proof; timestamped checkpoint copies stay on disk and
-  are gitignored. `state.db` is derived — rebuild with `whw sync --all`.
+- Track `latest.txt` as proof (deterministic: no clock in the body);
+  timestamped checkpoint copies stay on disk and are gitignored. `state.db`
+  and `.whw/evaluation-report.json` are derived — rebuild with `whw sync --all`
+  / `whw evaluate --phase a`.
 - From wave 007 onward, `whw gate run evidence-quality` (`ops`) fails `done`
   rows whose evidence is not re-runnable. Historic Program 001 strings stay
   as written.

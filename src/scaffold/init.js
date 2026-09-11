@@ -129,6 +129,7 @@ const GITIGNORE_BLOCK = `# WHW derived state (rebuild with \`whw sync --all\`; s
 .whw/checkpoints/**/*.txt
 !.whw/checkpoints/**/latest.txt
 .whw/runs/
+.whw/evaluation-report.json
 `;
 
 /** @param {string[]} positionals @param {any} ctx @returns {Promise<number>} */
