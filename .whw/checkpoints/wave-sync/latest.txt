@@ -10,4 +10,5 @@ PASS wave-008-state-hygiene: synced (.done.sql + plan + addendum)
 PASS wave-009-runner-proof: synced (.done.sql + plan + addendum)
 PASS wave-010-continuity-proof: synced (.done.sql + plan + addendum)
 PASS wave-011-program-close: synced (.done.sql + plan + addendum)
+PASS wave-012-release-truth: synced (.done.sql + plan + addendum)
 status=GO failures=0
