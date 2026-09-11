@@ -28,7 +28,7 @@ Proposed (Accepted at wave 013 D):
 
 | Rule | Detail |
 | ---- | ------ |
-| Identity | GitHub Actions OIDC is the only publish identity. Configure npm trusted publisher for `fabioeloi/WHW` / `release.yml`. Drop `NODE_AUTH_TOKEN` from the npm job |
+| Identity | GitHub Actions OIDC is the only publish identity. Configure npm trusted publisher with the 013 A field table below. Drop `NODE_AUTH_TOKEN` from the npm job |
 | Tokens | After the first successful OIDC publish (wave 016 / `v0.2.0`), revoke the automation token and set the package to require 2FA and disallow tokens |
 | Provenance | Keep `--provenance` (or npm's default under trusted publishing) |
 | Maint / Dependabot | `chore(deps)` from Dependabot is maint when the PR carries label `maint`, one dependency per PR, and the matrix is green. An `ops` `maint-audit` gate lists non-trailer commits since the last program close |
@@ -40,7 +40,7 @@ Proposed (Accepted at wave 013 D):
 | ------ | ------ | -------- |
 | Keep bypass-2FA token | Already works | Deprecated path; stolen token publishes forever |
 | Staged publish + human 2FA | Extra review | Blocks unattended tag→npm, fights ADR 0010's CI publish |
-| Trusted publishing / OIDC (chosen) | Short-lived, workflow-bound, provenance | First OIDC publish waits on 016; npm UI must match filename `release.yml` exactly |
+| Trusted publishing / OIDC (chosen) | Short-lived, workflow-bound, provenance | First OIDC publish waits on 016; npm UI must match filename `release.yml` exactly; new publishers after 2026-09-03 default to stage-only |
 
 ## Consequences
 
@@ -55,6 +55,31 @@ Proposed (Accepted at wave 013 D):
 - Two-step proof (013 config, 016 publish) means `NPM_TOKEN` stays until 016 E.
 - npm does not verify the trusted-publisher form at save time; a typo only
   fails at tag.
+
+## Confirmed at Wave 013 A
+
+npm trusted publisher form for `@fabioeloi/whw` (Settings → Trusted
+publishing → GitHub Actions). All fields are case-sensitive; npm does **not**
+validate them until publish. Filename is **not** a path.
+
+| Field | Value |
+| ----- | ----- |
+| Organization or user | `fabioeloi` |
+| Repository | `WHW` |
+| Workflow filename | `release.yml` |
+| Environment name | *(leave empty — `release.yml` has no `environment:`)* |
+| Allowed actions | Must include **`npm publish` (direct)**. After 2026-09-03 new publishers default to `npm stage publish` only; this workflow runs `npm publish`, not `npm stage publish` |
+
+Also confirmed:
+
+- `permissions.id-token: write` is already set on `release.yml`.
+- `package.json` `repository.url` is `git+https://github.com/fabioeloi/WHW.git` (must match the GitHub repo).
+- Publish job uses GitHub-hosted `ubuntu-latest` + Node **24** (npm CLI ≥ 11.5.1; trusted publishing also wants Node ≥ 22.14 — the job is 24, not the package `engines` floor of 22.13).
+- Self-hosted runners are unsupported.
+- Operator UI on npmjs.com is required before the first OIDC tag (016). Git cannot create the trusted-publisher row.
+- Do **not** set "Require two-factor authentication and disallow tokens" and do **not** revoke `NPM_TOKEN` until 016's OIDC publish succeeds.
+
+`maint-audit` (013 B): `ops` builtin. `git log` since the last **program** close (011 E merge `3e1563c`, then 016 E). NO_GO when a commit subject lacks `(Wave NNN L)` unless it is `chore(deps)` (Dependabot, one dep, `maint` label) or `chore(maint)`.
 
 ## References
 

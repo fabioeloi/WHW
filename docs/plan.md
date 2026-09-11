@@ -219,18 +219,20 @@ Charter: `docs/adr/0013-program-trust-adoption.md`.
 
 Sync: `whw sync wave-012-release-truth` · Close: `whw close wave-012-release-truth`
 
-## Wave 013 — trusted-publish — **pending**
+## Wave 013 — trusted-publish — **in progress**
 
-npm OIDC trusted publisher; drop `NODE_AUTH_TOKEN`; Dependabot inside ADR
+npm OIDC trusted publisher (`fabioeloi` / `WHW` / `release.yml`, empty
+environment, **allow `npm publish`** — new npm publishers default to
+stage-only after 2026-09-03); drop `NODE_AUTH_TOKEN`; Dependabot inside ADR
 0012; `maint-audit` ops gate. OIDC proof waits for 016 / `v0.2.0`. Do not
 revoke `NPM_TOKEN` in this wave. ADR: `docs/adr/0014-trusted-publish.md`.
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-013-trusted-publish.todos.sql` | 013 | solo | |
-| B | Implementation | OIDC job, SECURITY.md, maint-audit, 0012 addendum | token path is deprecated | `.github/workflows/release.yml`, `src/gates/` | 013 | solo | |
-| C | Verification | tests + `pr` gates | proof | `tests/` | 013 | solo | |
-| D | Decision record | Accept ADR 0014 | record identity | `docs/adr/0014` | 013 | solo | |
+| A | Confirm publisher fields | npm form values in ADR 0014; sharpen seeds | filename must match or tag fails | `docs/adr/0014`, `planning/` | 013 | solo | |
+| B | Implementation | drop `NODE_AUTH_TOKEN`; SECURITY.md; `maint-audit`; 0012 draft | token path is deprecated | `.github/workflows/release.yml`, `src/gates/` | 013 | solo | |
+| C | Verification | tests + `pr` gates; `maint-audit` fixture | proof | `tests/` | 013 | solo | |
+| D | Decision record | Accept ADR 0014; 0012 Dependabot addendum | record identity | `docs/adr/0014`, `0012` | 013 | solo | |
 | E | Canonical close | `whw close` + sync | close | planning/ | 013 | solo | |
 
 Sync: `whw sync wave-013-trusted-publish` · Close: `whw close wave-013-trusted-publish`
@@ -286,6 +288,7 @@ Sync: `whw sync wave-016-program-close` · Close: `whw close wave-016-program-cl
 ## Next
 
 Program 003 is **in progress** (waves 012–016). Wave 012 is **closed**.
-Next is 013 A (trusted-publish). Do not start 013 until `main` is green.
-`@fabioeloi/whw@0.1.1` is on npm; next tag is **v0.2.0** at 016 E (OIDC).
+Wave 013 A confirms npm trusted-publisher fields. Do not start 013 B until
+an explicit operator go (and ideally the npmjs.com trusted-publisher row
+exists). Do not revoke `NPM_TOKEN`. Next tag is **v0.2.0** at 016 E (OIDC).
 There is no wave 017 without a new charter ADR.
