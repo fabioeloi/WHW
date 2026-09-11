@@ -213,7 +213,7 @@ Charter: `docs/adr/0013-program-trust-adoption.md`.
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
 | A | Charter + seeds | ADR 0013–0014, `whw wave new` × 5, plan stubs, note on wave007-B | no wave without an ADR | `docs/adr/`, `planning/` | 012 | solo | [#32](https://github.com/fabioeloi/WHW/pull/32) |
 | B | Release truth | CHANGELOG fold, gate rules, `release.yml` notes, checkpoint churn, stale docs | tarball must match docs | `CHANGELOG.md`, `src/gates/`, `.github/` | 012 | solo | [#33](https://github.com/fabioeloi/WHW/pull/33) |
-| C | Verify | tests + `pr` gates; GO run leaves tree clean | proof | `tests/` | 012 | solo | |
+| C | Verify | tests + `pr` gates; GO run leaves tree clean | proof | `tests/` | 012 | solo | [#34](https://github.com/fabioeloi/WHW/pull/34) |
 | D | Decide | ADR 0010 + 0011 addenda | record the contract | `docs/adr/0010`, `0011` | 012 | solo | |
 | E | Close | `whw close` + sync | canonical close | planning/ | 012 | solo | |
 
