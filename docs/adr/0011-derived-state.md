@@ -3,7 +3,7 @@
 - **Status:** Accepted
 - **Date:** 2026-09-10
 - **Wave:** 008
-- **Related:** WHY.md, [0002](0002-sqlite-default.md), [0006](0006-gate-tiers.md), [0009](0009-program-002.md)
+- **Related:** WHY.md, [0002](0002-sqlite-default.md), [0006](0006-gate-tiers.md), [0009](0009-program-002.md), [0013](0013-program-trust-adoption.md)
 
 ## Context
 
@@ -67,5 +67,18 @@ checkboxes filled. Evidence: PRs
 `evidence-quality` is `ops` so `wave007-A`'s seed-style string does not block
 PRs. Follow-ups: wave 009 runner-proof; do not tag `v0.1.1` until `NPM_TOKEN`
 is confirmed.
+
+## Addendum Wave 012 — release-truth
+
+`latest.txt` is deterministic (no clock in the body). Timestamped
+`<gate>-<stamp>.txt` copies stay local and gitignored. A second GO
+`whw gate run` must leave tracked checkpoints unchanged (unit test in
+`tests/unit/gates.test.js`). `.whw/evaluation-report.json` is gitignored
+(derived); cite `whw evaluate --phase a` in evidence. `ops` `latest.txt`
+files (including `evidence-quality`) are tracked consistently with `pr`.
+Evidence: PRs [#32](https://github.com/fabioeloi/WHW/pull/32),
+[#33](https://github.com/fabioeloi/WHW/pull/33),
+[#34](https://github.com/fabioeloi/WHW/pull/34); `npm test` 60/60;
+`whw gate run --tier pr` GO. Follow-up: wave 013 trusted publishing.
 
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->

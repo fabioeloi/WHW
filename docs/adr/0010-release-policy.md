@@ -3,7 +3,7 @@
 - **Status:** Accepted
 - **Date:** 2026-09-10
 - **Wave:** 007
-- **Related:** WHY.md, [0009](0009-program-002.md)
+- **Related:** WHY.md, [0009](0009-program-002.md), [0013](0013-program-trust-adoption.md)
 
 ## Context
 
@@ -63,5 +63,20 @@ checks, no force-push). Evidence: PR #1 (A, merged), PR #3 (B, reopened after
 https://github.com/fabioeloi/WHW/actions/runs/34518046761 green. **npm publish
 and tag `v0.1.1` are still blocked on operator confirmation of `NPM_TOKEN`.**
 Follow-ups: wave 008 hygiene; tag only after that confirmation.
+
+## Addendum Wave 012 — release-truth
+
+GitHub Release notes now match CHANGELOG: `release.yml` runs
+`release-readiness`, then `src/changelog.js` extracts the `## [version]`
+section and `gh release create --notes-file` (no `--generate-notes`).
+`release-readiness` additionally requires `[Unreleased]` empty when `HEAD`
+is tagged `v<version>`, `package.json` `bin` paths without `./`, and
+`repository.url` in `git+https://` / `git+ssh://` form. Waves 008–011 were
+folded under `[0.1.1]` with a lag note; no re-tag, no 0.1.2; next tag is
+**v0.2.0** (016 E). `@fabioeloi/whw@0.1.1` is already on npm. Evidence: PRs
+[#32](https://github.com/fabioeloi/WHW/pull/32),
+[#33](https://github.com/fabioeloi/WHW/pull/33),
+[#34](https://github.com/fabioeloi/WHW/pull/34); `npm test` 60/60;
+`whw gate run --tier pr` GO. Follow-up: wave 013 trusted publishing (OIDC).
 
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->
