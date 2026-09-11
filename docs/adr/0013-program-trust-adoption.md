@@ -100,4 +100,14 @@ addenda land on 0010 and 0011.
 - npm: https://www.npmjs.com/package/@fabioeloi/whw
 - Release: https://github.com/fabioeloi/WHW/releases/tag/v0.1.1
 
+## Addendum Wave 012 — release-truth
+
+Thematic decisions landed on [0010](0010-release-policy.md) (CHANGELOG notes,
+`release-readiness` rules) and [0011](0011-derived-state.md) (deterministic
+`latest.txt`, gitignored evaluation report). Wave 012 A–C: PRs
+[#32](https://github.com/fabioeloi/WHW/pull/32),
+[#33](https://github.com/fabioeloi/WHW/pull/33),
+[#34](https://github.com/fabioeloi/WHW/pull/34). This letter records the
+contract; close is 012 E. Next: 013 trusted-publish.
+
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->
