@@ -202,7 +202,7 @@ on npm. ADR:
 
 Sync: `whw sync wave-011-program-close` · Close: `whw close wave-011-program-close`
 
-## Wave 012 — release-truth — **in progress**
+## Wave 012 — release-truth — **done**
 
 CHANGELOG fold under `[0.1.1]`, tighter `release-readiness`, notes from
 CHANGELOG, deterministic checkpoints, stale-doc sweep. No re-tag, no 0.1.2.
@@ -215,7 +215,7 @@ Charter: `docs/adr/0013-program-trust-adoption.md`.
 | B | Release truth | CHANGELOG fold, gate rules, `release.yml` notes, checkpoint churn, stale docs | tarball must match docs | `CHANGELOG.md`, `src/gates/`, `.github/` | 012 | solo | [#33](https://github.com/fabioeloi/WHW/pull/33) |
 | C | Verify | tests + `pr` gates; GO run leaves tree clean | proof | `tests/` | 012 | solo | [#34](https://github.com/fabioeloi/WHW/pull/34) |
 | D | Decide | ADR 0010 + 0011 addenda | record the contract | `docs/adr/0010`, `0011` | 012 | solo | [#35](https://github.com/fabioeloi/WHW/pull/35) |
-| E | Close | `whw close` + sync | canonical close | planning/ | 012 | solo | |
+| E | Close | `whw close` + sync | canonical close | planning/ | 012 | solo | `whw close 012` |
 
 Sync: `whw sync wave-012-release-truth` · Close: `whw close wave-012-release-truth`
 
@@ -285,6 +285,7 @@ Sync: `whw sync wave-016-program-close` · Close: `whw close wave-016-program-cl
 
 ## Next
 
-Program 003 is **in progress** (waves 012–016). Wave 012 B implements
-release-truth. `@fabioeloi/whw@0.1.1` is on npm; next tag is **v0.2.0** at
-016 E (OIDC). There is no wave 017 without a new charter ADR.
+Program 003 is **in progress** (waves 012–016). Wave 012 is **closed**.
+Next is 013 A (trusted-publish). Do not start 013 until `main` is green.
+`@fabioeloi/whw@0.1.1` is on npm; next tag is **v0.2.0** at 016 E (OIDC).
+There is no wave 017 without a new charter ADR.
