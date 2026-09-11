@@ -187,4 +187,30 @@ describe('gate runner', () => {
     assert.equal(captured[0].results[0].status, 'NO_GO');
     assert.match(captured[0].results[0].failures[0], /whw sync --all/);
   });
+
+  it('a second GO run leaves tracked latest.txt unchanged', async () => {
+    const { runCmd } = await import('../../src/util.js');
+    const { cmdGateRun } = await import('../../src/gates/runner.js');
+    const root = makeTmp();
+    writeText(join(root, 'whw.config.json'), JSON.stringify({
+      gates: { tiers: { pr: ['ok'] }, custom: [{ name: 'ok', command: 'true' }] },
+    }));
+    const ctx = makeCtx(root);
+    assert.equal(await cmdGateRun([], ctx), 0);
+    const latestPath = join(root, '.whw', 'checkpoints', 'ok', 'latest.txt');
+    const latest = readText(latestPath);
+    assert.doesNotMatch(latest, /T\d{6}Z/);
+    assert.equal((await runCmd('git', ['init'], { cwd: root })).code, 0);
+    assert.equal((await runCmd('git', ['add', '.whw/checkpoints/ok/latest.txt'], { cwd: root })).code, 0);
+    assert.equal((await runCmd('git', [
+      '-c', 'user.email=whw@example.test',
+      '-c', 'user.name=WHW Test',
+      '-c', 'commit.gpgsign=false',
+      'commit', '-m', 'checkpoint',
+    ], { cwd: root })).code, 0);
+    assert.equal(await cmdGateRun([], ctx), 0);
+    assert.equal(readText(latestPath), latest);
+    const st = await runCmd('git', ['status', '--porcelain', '--', '.whw/checkpoints/ok/latest.txt'], { cwd: root });
+    assert.equal(st.stdout.trim(), '');
+  });
 });
