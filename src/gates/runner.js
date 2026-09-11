@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 /**
  * Gate runner: selection by name/tier, GO/NO_GO checkpoints, custom shell gates.
- * Checkpoints: .whw/checkpoints/<gate>/<gate>-<stamp>.txt + latest.txt (copy).
+ * Checkpoints: timestamped .whw/checkpoints/<gate>/<gate>-<stamp>.txt (local)
+ * plus a deterministic latest.txt (tracked; no clock in the body).
  */
 
 import { join } from 'node:path';
@@ -40,6 +41,20 @@ export function listGates(ctx) {
 }
 
 /**
+ * Deterministic latest.txt body (no clock). Re-running a GO gate with the
+ * same details must not dirty git.
+ * @param {string} gateName
+ * @param {{ status: string, failures: string[], details: string[] }} result
+ */
+export function formatCheckpointLatest(gateName, result) {
+  const lines = [`# whw gate ${gateName}`];
+  for (const d of result.details) lines.push(`PASS ${d}`);
+  for (const f of result.failures) lines.push(`FAIL ${f}`);
+  lines.push(`status=${result.status} failures=${result.failures.length}`);
+  return `${lines.join('\n')}\n`;
+}
+
+/**
  * @param {any} ctx
  * @param {string} gateName
  * @param {{ status: string, failures: string[], details: string[] }} result
@@ -48,15 +63,16 @@ export function listGates(ctx) {
 export function writeCheckpoint(ctx, gateName, result) {
   const dir = join(ctx.paths.checkpoints, gateName);
   const stamp = utcStamp();
-  const lines = [`# whw gate ${gateName} — ${localDate()}T${stamp.slice(9)} (${stamp})`];
-  for (const d of result.details) lines.push(`[${stamp.slice(9)}] PASS ${d}`);
-  for (const f of result.failures) lines.push(`[${stamp.slice(9)}] FAIL ${f}`);
-  lines.push(`status=${result.status} failures=${result.failures.length}`);
-  const content = `${lines.join('\n')}\n`;
+  const stamped = [
+    `# whw gate ${gateName} — ${localDate()}T${stamp.slice(9)} (${stamp})`,
+    ...result.details.map((d) => `[${stamp.slice(9)}] PASS ${d}`),
+    ...result.failures.map((f) => `[${stamp.slice(9)}] FAIL ${f}`),
+    `status=${result.status} failures=${result.failures.length}`,
+  ];
   const file = join(dir, `${gateName}-${stamp}.txt`);
   const latest = join(dir, 'latest.txt');
-  writeText(file, content);
-  writeText(latest, content);
+  writeText(file, `${stamped.join('\n')}\n`);
+  writeText(latest, formatCheckpointLatest(gateName, result));
   return { file, latest };
 }
 

@@ -25,10 +25,14 @@ jobs:
         run: node ./bin/whw.js doctor
       - name: PR gates
         run: node ./bin/whw.js gate run --tier pr
+      - name: Release readiness
+        run: node ./bin/whw.js gate run release-readiness
+      - name: Notes from CHANGELOG
+        run: node src/changelog.js --version "${GITHUB_REF_NAME#v}" --out "${RUNNER_TEMP}/release-notes.md"
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" --generate-notes --verify-tag
+        run: gh release create "$GITHUB_REF_NAME" --notes-file "${RUNNER_TEMP}/release-notes.md" --verify-tag
 
   npm:
     needs: github-release

@@ -7,7 +7,7 @@
 | AGENTS.md | Canonical agent instructions at repo root (open convention) |
 | Builder | Role: implements one claimed todo minimally, with evidence |
 | Charter | Program ADR: outcome, exclusions, wave map, close criteria |
-| Checkpoint | Timestamped gate verdict (`.whw/checkpoints/<gate>/latest.txt`) |
+| Checkpoint | Deterministic gate verdict (`.whw/checkpoints/<gate>/latest.txt`); timestamped copies are local |
 | Claim | `pending`/`blocked` → `in_progress` reservation by one agent |
 | Closer | Role: lands waves canonically (checklist + `whw close`) |
 | Custom gate | User shell command registered in `whw.config.json` (exit 0 = GO) |

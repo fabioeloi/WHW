@@ -11,6 +11,7 @@ package-lock.json
 .whw/checkpoints/**/*.txt
 !.whw/checkpoints/**/latest.txt
 .whw/runs/
+.whw/evaluation-report.json
 
 # OS / editors
 .DS_Store

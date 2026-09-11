@@ -122,8 +122,9 @@ Sync: `whw sync wave-006-program-close` · Close: `whw close wave-006-program-cl
 
 ## Wave 007 — publish-release — **done**
 
-Release plumbing is in git (PRs #1 merged, #3 open). ADR 0010 Accepted. npm
-tag still waits on `NPM_TOKEN`. ADR: `docs/adr/0010-release-policy.md`.
+Release plumbing is in git (PRs #1 merged, #3 merged). ADR 0010 Accepted.
+`@fabioeloi/whw@0.1.1` and GitHub Release `v0.1.1` shipped 2026-09-10. ADR:
+`docs/adr/0010-release-policy.md`.
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
@@ -187,8 +188,8 @@ Sync: `whw sync wave-010-continuity-proof` · Close: `whw close wave-010-continu
 ## Wave 011 — program-close — **done**
 
 `release-readiness` ops gate (local package hygiene — not npm publish),
-ADR 0012 Accepted, inventory GO, metrics snapshot, retrospective. npm
-tag `v0.1.1` stays blocked on operator `NPM_TOKEN`. ADR:
+ADR 0012 Accepted, inventory GO, metrics snapshot, retrospective. `v0.1.1` is
+on npm. ADR:
 `docs/adr/0012-maintenance-policy.md`.
 
 | #   | What | How | Why | Where | When | Who | How much |
@@ -284,7 +285,6 @@ Sync: `whw sync wave-016-program-close` · Close: `whw close wave-016-program-cl
 
 ## Next
 
-Program 003 is **in progress** (waves 012–016). Wave 012 A is the charter PR.
-Do not start 012 B until an explicit operator go. `@fabioeloi/whw@0.1.1` is
-on npm; next tag is **v0.2.0** at 016 E (OIDC). There is no wave 017 without
-a new charter ADR.
+Program 003 is **in progress** (waves 012–016). Wave 012 B implements
+release-truth. `@fabioeloi/whw@0.1.1` is on npm; next tag is **v0.2.0** at
+016 E (OIDC). There is no wave 017 without a new charter ADR.

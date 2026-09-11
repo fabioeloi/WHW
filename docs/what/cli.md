@@ -43,7 +43,7 @@ escalation (`whw run` exhausted).
 | ------- | ------ |
 | `whw gate list` | Builtin + custom gates with tiers. |
 | `whw gate run [NAME…\|--tier pr\|--all]` | Run gates → checkpoints + GO/NO_GO (bare = `pr` tier). `whw gate <name>` also works. |
-| `whw evaluate --phase a` | Run deterministic checks → `.whw/evaluation-report.json`. |
+| `whw evaluate --phase a` | Run deterministic checks → `.whw/evaluation-report.json` (gitignored). |
 | `whw evaluate --phase b [--scores JSON\|@file]` | Print scoring prompt, or ingest scores → APPROVE/REJECT. |
 | `whw close <wave>` | Canonical close: A–D terminal + addendum + sync gates GO → apply `.done.sql`. Accepts `001`, `wave-001`, or full track. |
 | `whw metrics [--out FILE]` | Reproducible repo metrics (JSON with `--json` or file). |
