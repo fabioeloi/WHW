@@ -58,4 +58,22 @@ PRs [#23](https://github.com/fabioeloi/WHW/pull/23),
 [#25](https://github.com/fabioeloi/WHW/pull/25); `npm test` 56/56;
 `whw gate run --tier pr` GO; `whw gate run --tier ops` GO.
 
+## Addendum Wave 013 — Dependabot as maint (draft)
+
+Drafted at 013 B; Accepted at 013 D.
+
+`chore(deps)` from Dependabot is maint when the PR carries label `maint`,
+the diff is one dependency, and the CI matrix is green. A `maint` *issue*
+is not required for Dependabot — the PR label is the link (config:
+`.github/dependabot.yml` already applies `maint`). Human hotfixes stay
+`chore(maint)` with an open `maint` issue, one concern, and `pr` GO, as
+in the Wave 011 addendum (unchanged).
+
+`maint-audit` (`ops`) lists non-merge commits since the last **program**
+close (highest `program-close` wave whose E is `done`). A subject is
+allowed when it contains `(Wave NNN L)`, or starts with `chore(deps)` or
+`chore(maint)`. The gate does not fetch GitHub labels; one-dep / `maint`
+label remain merge discipline. Forbidden-as-maint (features, schema, new
+gates, README repositioning, npm publishes) is unchanged.
+
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->

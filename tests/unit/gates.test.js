@@ -12,9 +12,9 @@ describe('gate runner', () => {
   it('lists builtins with tiers and resolves selections', () => {
     const ctx = makeCtx(makeTmp());
     const gates = listGates(ctx);
-    assert.equal(gates.filter((g) => g.builtin).length, 9);
+    assert.equal(gates.filter((g) => g.builtin).length, 10);
     assert.deepEqual(resolveSelection(ctx, [], {}), ctx.config.gates.tiers.pr);
-    assert.deepEqual(resolveSelection(ctx, [], { tier: 'ops' }), ['program-inventory', 'evidence-quality', 'release-readiness']);
+    assert.deepEqual(resolveSelection(ctx, [], { tier: 'ops' }), ['program-inventory', 'evidence-quality', 'release-readiness', 'maint-audit']);
     assert.deepEqual(resolveSelection(ctx, ['no-secrets'], {}), ['no-secrets']);
     assert.throws(() => resolveSelection(ctx, ['nope'], {}), /unknown gate/);
     assert.throws(() => resolveSelection(ctx, [], { tier: 'nope' }), /unknown tier/);
@@ -212,5 +212,63 @@ describe('gate runner', () => {
     assert.equal(readText(latestPath), latest);
     const st = await runCmd('git', ['status', '--porcelain', '--', '.whw/checkpoints/ok/latest.txt'], { cwd: root });
     assert.equal(st.stdout.trim(), '');
+  });
+
+  it('maint-audit allows trailers and chore prefixes, rejects a naked subject', async (t) => {
+    const gate = (await import('../../src/gates/builtin/maint-audit.js'));
+    const { runCmd } = await import('../../src/util.js');
+    assert.equal(gate.subjectIsAllowed('feat(x): ok (Wave 012 B)'), true);
+    assert.equal(gate.subjectIsAllowed('chore(deps): bump actions/checkout from 6 to 7'), true);
+    assert.equal(gate.subjectIsAllowed('chore(maint): pin ci'), true);
+    assert.equal(gate.subjectIsAllowed('fix: sneaky'), false);
+
+    const empty = makeTmp();
+    const emptyCtx = makeCtx(empty);
+    const emptyDb = openDb(emptyCtx.paths.state);
+    t.after(() => closeDb(emptyDb));
+    const skipGit = await gate.run(emptyCtx, emptyDb);
+    assert.equal(skipGit.status, 'GO');
+    assert.match(skipGit.details[0], /not a git repo/);
+
+    const root = makeTmp();
+    writeText(join(root, 'planning', 'wave-011-program-close.todos.sql'), '-- fixture\n');
+    const ctx = makeCtx(root);
+    const db = openDb(ctx.paths.state);
+    t.after(() => closeDb(db));
+    const gitFlags = [
+      '-c', 'user.email=whw@example.test',
+      '-c', 'user.name=WHW Test',
+      '-c', 'commit.gpgsign=false',
+    ];
+    const commit = async (message) => {
+      assert.equal((await runCmd('git', ['add', '.'], { cwd: root })).code, 0);
+      assert.equal((await runCmd('git', [...gitFlags, 'commit', '--allow-empty', '-m', message], { cwd: root })).code, 0);
+    };
+    assert.equal((await runCmd('git', ['init'], { cwd: root })).code, 0);
+    const skipClose = await gate.run(ctx, db);
+    assert.equal(skipClose.status, 'GO');
+    assert.match(skipClose.details[0], /no closed program-close/);
+
+    await commit('docs(close): program 011 (Wave 011 E)');
+    const missingE = await gate.run(ctx, db);
+    assert.equal(missingE.status, 'GO');
+    assert.match(missingE.details[0], /no closed program-close/);
+
+    db.exec(`INSERT INTO todos (ref, title, status, track, step, letter) VALUES
+      ('wave011-E', 'close', 'done', 'wave-011-program-close', 5, 'E');`);
+    const emptyRange = await gate.run(ctx, db);
+    assert.equal(emptyRange.status, 'GO');
+    assert.match(emptyRange.details.join('\n'), /no non-merge commits/);
+
+    await commit('feat(x): trailer (Wave 012 B)');
+    await commit('chore(deps): bump actions/checkout from 6 to 7');
+    await commit('chore(maint): pin ci');
+    const ok = await gate.run(ctx, db);
+    assert.equal(ok.status, 'GO');
+
+    await commit('fix: sneaky hotfix');
+    const bad = await gate.run(ctx, db);
+    assert.equal(bad.status, 'NO_GO');
+    assert.ok(bad.failures.some((f) => /sneaky hotfix/.test(f)));
   });
 });
