@@ -79,4 +79,15 @@ folded under `[0.1.1]` with a lag note; no re-tag, no 0.1.2; next tag is
 [#34](https://github.com/fabioeloi/WHW/pull/34); `npm test` 60/60;
 `whw gate run --tier pr` GO. Follow-up: wave 013 trusted publishing (OIDC).
 
+## Addendum Wave 013 — trusted-publish
+
+npm publish identity is GitHub Actions OIDC (`release.yml`, trusted publisher
+row from ADR 0014 § Confirmed at Wave 013 A). The workflow no longer sets
+`NODE_AUTH_TOKEN`; the repo secret stays until the first successful OIDC
+publish at wave 016 / `v0.2.0`. Operator must save the npmjs.com
+trusted-publisher row before tagging. Evidence: ADR
+[0014](0014-trusted-publish.md) Addendum Wave 013; PRs
+[#38](https://github.com/fabioeloi/WHW/pull/38),
+[#39](https://github.com/fabioeloi/WHW/pull/39).
+
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->
