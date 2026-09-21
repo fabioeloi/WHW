@@ -23,20 +23,28 @@ const GIT_FLAGS = [
   '-c', 'commit.gpgsign=false',
 ];
 
+/** @param {string} root @param {string[]} args */
+async function git(root, args) {
+  const res = await runCmd('git', [...GIT_FLAGS, ...args], { cwd: root });
+  // #region agent log
+  if (res.code !== 0) {
+    fetch('http://127.0.0.1:7892/ingest/727eb0df-9977-4d31-8e3b-1d2627d5e80b', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '55c0dd' }, body: JSON.stringify({ sessionId: '55c0dd', runId: 'pre-fix', hypothesisId: 'H2', location: 'maint-audit.test.js:git', message: 'git command failed', data: { args, code: res.code, stderr: res.stderr.trim().slice(0, 200) }, timestamp: Date.now() }) }).catch(() => {});
+  }
+  // #endregion
+  return res;
+}
+
 /** @param {string} root @param {string} message */
 async function gitCommit(root, message) {
-  assert.equal((await runCmd('git', ['add', '.'], { cwd: root })).code, 0);
-  assert.equal(
-    (await runCmd('git', [...GIT_FLAGS, 'commit', '--allow-empty', '-m', message], { cwd: root })).code,
-    0,
-  );
+  assert.equal((await git(root, ['add', '.'])).code, 0);
+  assert.equal((await git(root, ['commit', '--allow-empty', '-m', message])).code, 0);
 }
 
 /** @returns {Promise<{ root: string, ctx: ReturnType<typeof makeCtx>, db: import('node:sqlite').DatabaseSync }>} */
 async function openFixture(t) {
   const root = mkdtempSync(join(tmpdir(), 'whw-maint-audit-'));
   cpSync(join(FIXTURE_ROOT, 'planning'), join(root, 'planning'), { recursive: true });
-  assert.equal((await runCmd('git', ['init'], { cwd: root })).code, 0);
+  assert.equal((await git(root, ['init', '-b', 'main'])).code, 0);
   await gitCommit(root, 'docs(close): program 011 (Wave 011 E)');
   const ctx = makeCtx(root);
   const db = openDb(ctx.paths.state);
@@ -88,11 +96,12 @@ describe('maint-audit fixture', () => {
   it('skips merge commits when scanning the range', async (t) => {
     const { root, ctx, db } = await openFixture(t);
     await gitCommit(root, 'feat(x): branch work (Wave 013 B)');
-    assert.equal((await runCmd('git', ['checkout', '-b', 'side'], { cwd: root })).code, 0);
+    const base = (await git(root, ['branch', '--show-current'])).stdout.trim();
+    assert.equal((await git(root, ['checkout', '-b', 'side'])).code, 0);
     await gitCommit(root, 'feat(y): side work (Wave 013 C)');
-    assert.equal((await runCmd('git', ['checkout', '-'], { cwd: root })).code, 0);
+    assert.equal((await git(root, ['checkout', base])).code, 0);
     assert.equal(
-      (await runCmd('git', ['merge', '--no-ff', '-m', 'Merge pull request #99 without trailer', 'side'], { cwd: root })).code,
+      (await git(root, ['merge', '--no-ff', '-m', 'Merge pull request #99 without trailer', 'side'])).code,
       0,
     );
     const res = await gate.run(ctx, db);
@@ -102,7 +111,7 @@ describe('maint-audit fixture', () => {
   it('NO_GO when E is done but the close commit cannot be found in git', async (t) => {
     const root = mkdtempSync(join(tmpdir(), 'whw-maint-audit-'));
     cpSync(join(FIXTURE_ROOT, 'planning'), join(root, 'planning'), { recursive: true });
-    assert.equal((await runCmd('git', ['init'], { cwd: root })).code, 0);
+    assert.equal((await git(root, ['init', '-b', 'main'])).code, 0);
     await gitCommit(root, 'init without wave trailer');
     const ctx = makeCtx(root);
     const db = openDb(ctx.paths.state);
