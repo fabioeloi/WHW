@@ -25,13 +25,7 @@ const GIT_FLAGS = [
 
 /** @param {string} root @param {string[]} args */
 async function git(root, args) {
-  const res = await runCmd('git', [...GIT_FLAGS, ...args], { cwd: root });
-  // #region agent log
-  if (res.code !== 0) {
-    fetch('http://127.0.0.1:7892/ingest/727eb0df-9977-4d31-8e3b-1d2627d5e80b', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '55c0dd' }, body: JSON.stringify({ sessionId: '55c0dd', runId: 'pre-fix', hypothesisId: 'H2', location: 'maint-audit.test.js:git', message: 'git command failed', data: { args, code: res.code, stderr: res.stderr.trim().slice(0, 200) }, timestamp: Date.now() }) }).catch(() => {});
-  }
-  // #endregion
-  return res;
+  return runCmd('git', [...GIT_FLAGS, ...args], { cwd: root });
 }
 
 /** @param {string} root @param {string} message */
