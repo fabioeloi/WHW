@@ -19,9 +19,10 @@ import * as agentsParity from './builtin/agents-parity.js';
 import * as noSecrets from './builtin/no-secrets.js';
 import * as evidenceQuality from './builtin/evidence-quality.js';
 import * as releaseReadiness from './builtin/release-readiness.js';
+import * as maintAudit from './builtin/maint-audit.js';
 
 export const BUILTINS = [
-  planningCoverage, adrLink, programInventory, waveSync, readmeSync, agentsParity, noSecrets, evidenceQuality, releaseReadiness,
+  planningCoverage, adrLink, programInventory, waveSync, readmeSync, agentsParity, noSecrets, evidenceQuality, releaseReadiness, maintAudit,
 ];
 
 /**

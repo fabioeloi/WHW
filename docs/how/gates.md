@@ -29,7 +29,7 @@ Rebuild with `whw sync --all`.
 | Tier | Meaning | Members (default) |
 | ---- | ------- | ----------------- |
 | `pr` | Blocking, **lean**. Must be GO to merge. | planning-coverage, adr-link, wave-sync, readme-sync, agents-parity, no-secrets |
-| `ops` | On demand: closes, releases, drills. | program-inventory, evidence-quality, release-readiness |
+| `ops` | On demand: closes, releases, drills. | program-inventory, evidence-quality, release-readiness, maint-audit |
 
 The anti-philosophy is explicit: gate cascades as maturity theater are
 rejected. A new blocking gate must earn its place by catching real drift with
@@ -58,6 +58,13 @@ a failure message naming the smallest fix. When in doubt, it goes to `ops`.
   `git+https://` / `git+ssh://` form. When `HEAD` is tagged `v<version>`,
   `[Unreleased]` must have no list items. Skips unpackaged repos. Does **not**
   publish npm or create tags (ADR 0010 — operator confirms the publish path).
+- **maint-audit** (`ops`) — `git log --no-merges` since the last closed
+  `program-close` wave (highest NNN whose E is `done`; baseline is the
+  newest commit whose message contains `(Wave NNN E)`). NO_GO when a
+  subject lacks `(Wave NNN L)` unless it starts with `chore(deps)` or
+  `chore(maint)` (ADR 0012). Skips non-git repos and projects with no
+  closed program-close wave. Empty range is GO. Does **not** check GitHub
+  PR labels.
 
 ## Custom gates
 

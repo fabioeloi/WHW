@@ -9,7 +9,10 @@ strangers (and models) navigate any WHW repo on day one.
   `docs/wave-003-checkout-e`. Types: `feat`, `fix`, `docs`, `chore`, `test`,
   `refactor`, `ci`.
 - Commits: `<type>(<scope>): <summary> (Wave NNN L)` — e.g.
-  `feat(gates): add no-secrets gate (Wave 002 C)`.
+  `feat(gates): add no-secrets gate (Wave 002 C)`. Maint exceptions
+  (ADR 0012): `chore(maint): …` (linked `maint` issue) and Dependabot
+  `chore(deps): …` (PR label `maint`, one dependency). `maint-audit`
+  (`ops`) lists other non-trailer commits since the last program close.
 - One wave letter per PR. Large PRs are asked to split into waves.
 - Every merge to `main` via PR with the Validation Evidence checklist
   (`.github/pull_request_template.md`).

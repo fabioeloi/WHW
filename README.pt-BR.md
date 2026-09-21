@@ -121,7 +121,9 @@ timestamp (`.whw/checkpoints/<gate>/latest.txt`). Dois níveis mantêm o CI hone
 - `pr` — bloqueante e **enxuto**: cobertura de planning, vínculo com ADR, sync
   de ondas, sync de README, paridade de adaptadores, varredura de segredos.
 - `ops` — sob demanda: inventário de programa, qualidade de evidência,
-  `release-readiness` (higiene do pacote; não publica npm — ADR 0010).
+  `release-readiness` (higiene do pacote; não publica npm — ADR 0010),
+  `maint-audit` (commits desde o último fechamento de programa com trailer
+  de onda ou `chore(deps|maint)`).
 
 **Avaliação** em duas fases: checagens determinísticas (lint/testes/build) a
 custo zero de IA; depois, um modelo pontua a rubrica ponderada

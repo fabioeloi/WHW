@@ -7,8 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `maint-audit` ops gate: after the last closed `program-close` wave, every
+  non-merge commit subject must carry `(Wave NNN L)`, or start with
+  `chore(deps)` / `chore(maint)` (ADR 0012 / 0014).
+
 ### Changed
 
+- `release.yml` npm job publishes with GitHub Actions OIDC (`id-token:
+  write`) and no longer sets `NODE_AUTH_TOKEN`. The `NPM_TOKEN` secret
+  stays until the first OIDC publish (wave 016 / `v0.2.0`). Configure the
+  npm trusted-publisher row before tagging. SECURITY.md documents the path.
 - README quick start uses `npx @fabioeloi/whw` now that `0.1.1` is on npm
   ([#28](https://github.com/fabioeloi/WHW/issues/28)).
 - Consumer CI template (`templates/ci-whw.yml` and `whw init` fallback) pins
