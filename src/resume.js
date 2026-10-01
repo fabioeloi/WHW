@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 /**
  * `whw resume` — revalidate after interruption: git baseline, optional sync,
- * queue, next action. Does not claim. SQL remains the source of truth.
+ * PR gates, queue, next action. Does not claim. SQL remains the source of truth.
  */
 
 import { closeDb, openDb } from './db/sqlite.js';
+import { cmdGateRun } from './gates/runner.js';
 import { getQueue } from './planning/queue.js';
 import { syncAll } from './planning/seed.js';
 import { statusData } from './report.js';
@@ -48,9 +49,15 @@ export async function collectResume(ctx) {
 /** @param {string[]} positionals @param {any} ctx @returns {Promise<number>} */
 export async function cmdResume(positionals, ctx) {
   const data = await collectResume(ctx);
+  let gates = { results: [] };
+  const gateCode = await cmdGateRun([], {
+    ...ctx, json: true, flags: { tier: 'pr' },
+    log: { ...ctx.log, data(value) { gates = value; } },
+  });
+  data.gates = gates.results;
   if (ctx.json) {
     ctx.log.data(data);
-    return 0;
+    return gateCode;
   }
   const g = data.git;
   ctx.log.info('## Resume');
@@ -68,6 +75,12 @@ export async function cmdResume(positionals, ctx) {
   if (data.synced) ctx.log.info('- synced planning seeds → state.db');
   else ctx.log.info('- sync skipped (--no-sync)');
   ctx.log.info('');
+  ctx.log.info('## PR gates');
+  for (const gate of data.gates) {
+    ctx.log.info(`- ${gate.status} ${gate.name} (${gate.checkpoint})`);
+    for (const failure of gate.failures) ctx.log.info(`  FAIL ${failure}`);
+  }
+  ctx.log.info('');
   ctx.log.info('## Queue');
   const lines = [
     ...data.queue.inProgress.map((t) => `- [in_progress] ${t.ref} — ${t.title}`),
@@ -81,5 +94,5 @@ export async function cmdResume(positionals, ctx) {
   else if (data.blocked.length) ctx.log.info(`- Unblock ${data.blocked[0].ref}`);
   else ctx.log.info('- Queue is empty. Charter the next wave (`whw wave new <slug> --adr NNNN`).');
   ctx.log.info('- `whw resume` does not claim; `whw claim <ref>` when you start work.');
-  return 0;
+  return gateCode;
 }

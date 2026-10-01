@@ -270,7 +270,7 @@ checkout on 2026-10-01; the historical bin miss was not reproduced.
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
 | A | Planning seed | isolated package probe + consumer protocol + refined notes | charter first | `planning/`, `docs/how/consumer-proof.md` | 015 | solo | [#47](https://github.com/fabioeloi/WHW/pull/47) |
-| B | Implementation | e2e consumer + resume gate step | `npx` path must work | `tests/e2e/`, `src/resume.js` | 015 | solo | |
+| B | Implementation | e2e consumer + resume gate step | `npx` path must work | `tests/e2e/`, `src/resume.js` | 015 | solo | [#48](https://github.com/fabioeloi/WHW/pull/48) |
 | C | Verification | tests + `pr` gates | proof | `tests/` | 015 | solo | |
 | D | Decision record | ADR 0013 addendum | record consumer proof | `docs/adr/0013` | 015 | solo | |
 | E | Canonical close | `whw close` + sync | close | planning/ | 015 | solo | |
