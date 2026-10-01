@@ -257,7 +257,7 @@ ADR: `docs/adr/0013-program-trust-adoption.md`.
 
 Sync: `whw sync wave-014-runner-proof-real` · Close: `whw close wave-014-runner-proof-real`
 
-## Wave 015 — consumer-proof — **in progress**
+## Wave 015 — consumer-proof — **closed**
 
 Fresh-repo `init` + `templates/ci-whw.yml` e2e; handoff round-trip; `whw resume`
 runs `gate run --tier pr`. Reproduce or close the versioned-npx bin miss.
@@ -295,8 +295,8 @@ Sync: `whw sync wave-016-program-close` · Close: `whw close wave-016-program-cl
 
 ## Next
 
-Program 003 is **in progress** (waves 012–016). Waves 012–014 are **closed**.
-Next: Wave 015 A — plan the fresh-repository consumer proof.
+Program 003 is **in progress** (waves 012–016). Waves 012–015 are **closed**.
+Next: Wave 016 A — plan program inventory and release readiness.
 Wave 014 closed on 2026-10-01 after D merged in PR #45 and main CI
 36845270017 passed; `whw close wave-014-runner-proof-real` verified the
 sync gates. Its real runner proof remains explicitly operator-assisted.
