@@ -120,4 +120,18 @@ Wave 013 A–C: PRs
 [#39](https://github.com/fabioeloi/WHW/pull/39). ADR 0014 Accepted at D.
 OIDC proof and token revocation at 016 / `v0.2.0`. Next: 014 runner-proof-real.
 
+## Wave 014 planning contract (A)
+
+On 2026-10-01, Codex CLI 0.156.0 was observed on PATH with ChatGPT login;
+Node 24.5.0 and builtin SQLite passed doctor. The proof selects the
+operator-requested `gpt-6.1-sol` with `low` reasoning. Authentication is
+not inference proof. [Protocol](../how/runner-proof-real.md) defines an
+isolated fresh-session run at B, one attempt, external 20-minute deadline,
+read-only runner discovery, additive costClass metrics and module tests.
+Success requires independent SQL/evidence, diff, tests and gates, beyond
+process exit zero. B waits for A merge, green main and implementation go.
+No new dependencies, CLM benchmark or persistence-policy changes are
+included. Acceptance and the sanitized real-run outcome belong at D.
+Planning delivery: [#42](https://github.com/fabioeloi/WHW/pull/42).
+
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->
