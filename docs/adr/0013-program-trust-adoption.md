@@ -180,5 +180,6 @@ Evidence: A [#42](https://github.com/fabioeloi/WHW/pull/42),
 B [#43](https://github.com/fabioeloi/WHW/pull/43) (implementation `4763c85`,
 merged `5437284`), C [#44](https://github.com/fabioeloi/WHW/pull/44)
 (verification `8da5191`, merged `cdd2cf4`; main CI 36843465872 green).
+D delivery: [#45](https://github.com/fabioeloi/WHW/pull/45).
 The program charter remains Proposed until Wave 016 D. Next: canonical
 Wave 014 E close after this addendum merges and main is green.
