@@ -1,0 +1,7 @@
+{
+  "qualification": "Sanitized metadata from the two real Wave 014 B attempts; body is an abridged outcome, not a full transcript.",
+  "attempts": [
+    {"stamp":"20261001T034213Z","tier":"codex-proof","model":"gpt-6.1-sol","costClass":"closed","durationMs":7375,"exit":1,"taskComplete":false,"body":"HTTP 400: requested model rejected by CLI 0.156.0; no implementation."},
+    {"stamp":"20261001T043214Z","tier":"codex-proof","model":"gpt-6.1-sol","costClass":"closed","durationMs":308271,"exit":0,"taskComplete":false,"body":"CLI 0.159.3 produced code; Git write blocked by sandbox. No builder commit or done evidence; operator-assisted finalization required."}
+  ]
+}
