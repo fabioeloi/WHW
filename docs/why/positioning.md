@@ -1,63 +1,53 @@
-# Positioning
+# Positioning — September 2026
 
-How WHW relates to the agentic software-development landscape, using the
-six-dimension taxonomy from "From Prompt to Process" (arXiv 2606.04967):
-**specification, context, roles, execution, validation, portability** — plus
-the dimension WHW adds: **purpose**.
+WHW organizes work for humans and coding agents through purpose, decisions,
+SQL execution state and rerunnable evidence. The audience is developers and
+technical leaders who need continuity and reviewable delivery.
 
-## The taxonomy in one table
+## External context (publication cutoff: 2026-09-30)
 
-| Dimension      | What it asks                              | WHW's answer                                          |
-| -------------- | ----------------------------------------- | ----------------------------------------------------- |
-| Specification  | Is intent a durable artifact?             | `WHY.md` + ADRs + versioned `planning/*.todos.sql`    |
-| Context        | Does state survive sessions?              | SQLite execution graph + `docs/plan.md` narrative     |
-| Roles          | Are responsibilities separated?           | Planner / builder / evaluator / closer / autonomous-engineer |
-| Execution      | Is the loop defined and resumable?        | Waves A–E, claim/done/block, `whw run` + escalation   |
-| Validation     | Is "done" checked, not claimed?           | GO/NO_GO gates + two-phase evaluation + sync gates    |
-| Portability    | Does it work across agents?               | Files + SQL + `AGENTS.md` + adapters; any model       |
-| Purpose (WHW+) | Does work trace to a why?                 | No todo without a wave, wave without ADR, ADR without WHY |
+| Primary source | Date | Relevant observation | Boundary |
+| --- | --- | --- | --- |
+| [Atlassian: The Agentic Pivot](https://www.atlassian.com/blog/company-news/the-agentic-pivot) | 2026-09-03 | Delivery needs context, a system of record and accountability around code | Vendor research; its survey results are not WHW outcomes |
+| [Gartner: Build the AI Coding Harness](https://www.gartner.com/en/documents/8399181) | 2026-09-18 | Public abstract emphasizes context, controls and verification | Only the public abstract was consulted; no claim about the full paid report |
+| [Beyond the Model](https://arxiv.org/abs/2609.32459v1) | 2026-09-26 | Harness effects depend on model and task; components can help or hurt | External empirical study; WHW was not evaluated |
 
-The paper's central finding is a structural trade-off between process depth
-and portability: no surveyed framework covers all six dimensions strongly.
-WHW is designed to cover all six by keeping the contract primitive — files,
-SQL, exit codes — instead of building on any vendor's agent API.
+Our inference from these sources: durable context and explicit verification
+are useful adoption messages. They motivate evaluation of WHW; they do not
+prove a performance improvement. No external percentages are transferred to
+WHW, and no endorsement by these organizations is implied.
 
-## Peers (what WHW borrows, what it differs on)
+## Concrete adoption cases
 
-- **GitHub Spec Kit** — spec-driven development with an excellent CLI. Greenfield-
-  optimized; specs are change-scoped rather than long-lived capability contracts.
-  WHW's ADRs + programs are the long-lived counterpart, and waves carry the
-  change scope.
-- **OpenSpec** — lightweight, brownfield-first, ADDED/MODIFIED/REMOVED delta
-  discipline. WHW agrees on deltas (addenda, never rewrites) and adds the
-  execution graph plus gates.
-- **BMAD-Method** — multi-persona Agent-as-Code with deep process. WHW's five
-  roles are the minimal viable separation (plan / build / review / land /
-  own-the-loop) with file handoffs instead of persona orchestration.
-- **GSD / Ralph loops** — autonomous iteration until done. WHW's `whw run` +
-  escalation ladder is the same instinct with an explicit human terminal tier
-  and SQL-backed resume.
-- **sdd-harness / cc-sdd** — runtime-agnostic harnesses with `AGENTS.md` as the
-  "README for robots" and skill packs per tool. WHW shares the philosophy
-  (canonical `AGENTS.md`, thin adapters, Agent Skills) and adds waves,
-  programs, gates, and the WHY traceability rule.
+| Need | WHW mechanism | Implementation / proof |
+| --- | --- | --- |
+| Resume interrupted work | Git baseline, SQL queue and PR gates | [Resume implementation](../../src/resume.js), [consumer proof](../how/consumer-proof-verification.md) |
+| Change tools | Canonical instruction files and handoff package | [Adapters](../what/adapters.md), [handoff implementation](../../src/handoff.js) |
+| Trace a decision | WHY → charter ADR → wave → evidence | [Programs](../how/programs.md), [this project's ADRs](../adr/) |
+| Review delivery | Independent checks, gate checkpoints and recorded evidence | [Gates](../how/gates.md), [evidence](../how/evidence.md) |
 
-## What WHW uniquely combines
+The SQL database is local execution state, not a hosted multi-user coordination
+service. Files carry process context, not private conversations or a model's
+hidden state. Tool pointers do not prove successful inference with every tool.
 
-1. **Purpose traceability** as a load-bearing rule, not a suggestion.
-2. **Programs with exclusion charters** and inventory-gated close (scope creep
-   requires a new ADR).
-3. **SQL execution graph** (DAG deps, audited transitions) as the agent's
-   working memory, with zero infrastructure (SQLite).
-4. **Cross-document sync gates** so narrative (README/plan/ADRs) cannot drift
-   from execution state.
-5. **Zero-dependency, zero-vendor** operation: Node.js builtins + files + SQL.
+## Presentation reference
 
-## Non-goals (deliberate)
+[FORGE](https://github.com/fabioeloi/FORGE) supplies the author's reference
+for centered headings, badges, navigation, Mermaid and tables. WHW adopts
+that presentation vocabulary with claims grounded in its own implementation.
+This is not a runtime integration, feature comparison or superiority claim.
+No unsupported rankings of peer projects are retained.
 
-- WHW is not a model router, not an IDE, and not a CI provider. It shells out
-  to your runners, editors, and pipelines.
-- WHW does not generate code from specs by itself. It organizes whoever does —
-  human or model — into a verifiable loop.
-- WHW does not prescribe your stack. Gates assert *your* contracts; the harness
-  only ensures you follow them.
+## Proof and proposals
+
+The [operator-assisted runner proof](../how/runner-proof-real.md) demonstrates
+reviewed implementation with human Git/SQL finalization after a sandbox block.
+The [staged-release proof](../how/staged-release-verification.md) records
+publication on 2026-10-01, outside the market-source cutoff: OIDC staging and
+human approval, with the dispatch provenance limitation stated explicitly.
+
+Stronger context persistence, generic runner postconditions and additional
+platform/model proofs require new charters and acceptance criteria. WHW does
+not claim complete autonomy, financial savings, enterprise compliance or
+measured benchmark gains. It provides process contracts whose effectiveness
+must be assessed against the adopting project's requirements.

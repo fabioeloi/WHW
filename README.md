@@ -2,243 +2,225 @@
 
 # WHW — Why · How · What
 
-### An LLM- and tool-agnostic harness for autonomous, evidence-gated software delivery
+### Portable, resumable, verifiable work for humans and coding agents
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Node](https://img.shields.io/badge/Node-%3E%3D22.13-339933?logo=node.js&logoColor=white)](package.json)
-[![Zero dependencies](https://img.shields.io/badge/dependencies-zero-blue)](package.json)
-[![AGENTS.md](https://img.shields.io/badge/AGENTS.md-canonical-blueviolet)](AGENTS.md)
-[![Agent Skills](https://img.shields.io/badge/skills-agentskills.io%20compatible-brightgreen)](https://agentskills.io/specification)
-[![Version](https://img.shields.io/badge/version-0.2.0-purple)](CHANGELOG.md)
+[![CI](https://github.com/fabioeloi/WHW/actions/workflows/ci.yml/badge.svg)](https://github.com/fabioeloi/WHW/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/@fabioeloi/whw)](https://www.npmjs.com/package/@fabioeloi/whw)
+[![Node](https://img.shields.io/badge/Node-%3E%3D22.13-339933)](package.json)
+[![Runtime dependencies](https://img.shields.io/badge/runtime_dependencies-0-blue)](package.json)
+[![MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-[Manifesto](docs/why/manifesto.md) •
-[Quick Start](#-quick-start) •
-[How It Works](#-how-it-works) •
-[CLI](docs/what/cli.md) •
-[Docs](#-documentation) •
-[Contributing](CONTRIBUTING.md)
-
-[🇧🇷 Leia em português](README.pt-BR.md)
+[Leia em português brasileiro](README.pt-BR.md)
 
 </div>
 
----
+WHW organizes work around **purpose, decisions, SQL state and evidence**.
+Keep the delivery contract in your repository, resume after interruptions,
+and review what changed with artifacts you can rerun.
 
-Source candidate: **0.2.0**. Publication follows the Program 003 close and
-operator-confirmed tag. The npm quick start uses the currently published
-package; see [CHANGELOG](CHANGELOG.md) for candidate features.
+**0.2.0 is published** on [npm](https://www.npmjs.com/package/@fabioeloi/whw)
+and [GitHub](https://github.com/fabioeloi/WHW/releases/tag/v0.2.0).
+This repository's documentation evolves independently of that immutable package.
 
-## 💡 The problem
+## Contents
 
-Autonomous coding agents are fast but forgetful. Work lives in chat transcripts:
-decisions are unrecorded, "done" is subjective, context evaporates between
-sessions, and switching tools means starting over. The result at scale is
-familiar — lost context, unrecorded decisions, difficult review.
+[Value](#value) · [Audience](#audience) · [Quick start](#quick-start) ·
+[Architecture](#architecture) · [Delivery loop](#delivery-loop) ·
+[Continuity](#continuity) · [Compatibility](#compatibility) ·
+[Evidence and limits](#evidence-and-limits) · [Documentation](#documentation) ·
+[Roadmap](#roadmap) · [Contributing](#contributing)
 
-```text
-💬 Chat transcript ──── ❌ GAP ──── ✅ Shipped, proven, reviewable
-        │                                            │
-        │  • intent not tied to code                 │
-        │  • status only conversational              │
-        │  • no portable execution state             │
-        │  • gates as theater, not evidence          │
-        └────────────────────────────────────────────┘
-```
+## Value
 
-## ✅ The answer
+| Situation | WHW practice | Reviewable artifact |
+| --- | --- | --- |
+| Resume after an interruption | Revalidate Git, queue and gates with `resume` | Baseline, SQL status and gate checkpoints |
+| Change tools | Carry the contract with `handoff` and canonical `AGENTS.md` | Migration document and repository files |
+| Explain a decision | Link a wave to an ADR and WHY | Versioned decision record |
+| Review delivery | Require evidence and GO/NO_GO checks | Commits, test commands and PRs |
 
-WHW (Why · How · What) is a harness that sits *over* any frontier model or
-coding agent and turns isolated prompts into a **process with state, roles,
-artifacts, and validation**:
+Durable context, governance and verification are the positioning priorities.
+[September 2026 research and market context](docs/why/positioning.md) informs
+these priorities; it does not establish WHW performance results.
 
-```text
-WHY.md ──→ 📜 ADRs ──→ 🌊 Waves (A–E) ──→ 🗄️ SQL todos ──→ 🤖 Roles ──→ ✅ Gates ──→ 📦 Evidence
-  │              │              │                  │              │            │            │
-  │  purpose     │  decisions   │  small PRs       │  source of   │  planner / │  GO/NO_GO  │  audit trail
-  │  first       │  + charter   │  plan→close      │  truth       │  builder / │  + proof   │  + metrics
-  │              │              │                  │              │  evaluator │            │
-  └──────────────┴──────────────┴──────────────────┴──────────────┴────────────┴────────────┘
-                              traceability: no todo without a wave,
-                              no wave without an ADR, no ADR without a WHY
-```
+## Audience
 
-WHW is **agnostic by design**: any model (open or closed), any tool (Claude
-Code, Cursor, Copilot, Codex, Gemini CLI, Aider, …), any stack. The contract is
-files and SQL — tools come and go, evidence stays.
+For developers and technical leaders who want explicit scope, continuity
+and evidence while using humans or coding agents. Start with one small wave.
+WHW supplies a process CLI and file contracts; your team supplies the code,
+project-specific checks, reviewers and approval policy.
 
-> **Inspiration note.** The Why → How → What ordering is inspired by Simon
-> Sinek's *Start With Why* (2009). WHW is an independent project, not
-> affiliated with or endorsed by Simon Sinek. See [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md).
+## Quick start
 
----
-
-## 🚀 Quick start
-
-Requirements: Node.js ≥ 22.13 (uses built-in `node:sqlite`), git. Zero
-dependencies — no `npm install` needed.
+Requires Node.js **≥22.13**, npm and Git. WHW has **zero runtime dependencies**;
+`npx` still downloads the package on first use. Review generated files before
+adopting them in an existing repository; this example starts with an empty one.
 
 ```bash
-# 1. Try it
-npx @fabioeloi/whw doctor
-
-# 2. Adopt it in your repo
-cd your-project
-npx @fabioeloi/whw init --tools claude,cursor,codex,copilot,gemini
-npx @fabioeloi/whw doctor
-# after init, the local CLI is the same:
-# node ./bin/whw.js doctor
-
-# 3. Charter a program, then a wave
-whw program new checkout-revamp --waves 4
-whw wave new guest-checkout --adr 0009
-
-# 4. Work the loop (human or agent — same commands)
-whw sync --all        # planning/*.todos.sql → .whw/state.db
-whw queue             # what is actionable right now?
-whw claim wave001-A   # mark in_progress
-# ... implement ...
-whw done wave001-A --evidence "commit abc123, tests green"
-whw gate run --tier pr
-whw close wave-001-guest-checkout
-whw status            # Status / Evidence / Next step
+mkdir whw-demo
+cd whw-demo
+git init
+npx @fabioeloi/whw@0.2.0 init --tools claude,cursor,codex,copilot,gemini
+npx @fabioeloi/whw@0.2.0 doctor
+npx @fabioeloi/whw@0.2.0 program new adoption --waves 1
+npx @fabioeloi/whw@0.2.0 wave new first-change --adr 0001
 ```
-
-Prefer a guided tour? Walk through [`examples/hello-wave/`](examples/hello-wave/)
-— a minimal repo that runs the whole loop in minutes.
-
----
-
-## 🎯 How it works
-
-### WHY — purpose first
-
-Every repository starts with [`WHY.md`](WHY.md): the purpose, the non-goals,
-and the principles. Architecture Decision Records ([`docs/adr/`](docs/adr/))
-capture each significant decision with context, options, and consequences.
-Programs are chartered by an ADR that maps waves, names explicit exclusions,
-and defines the close criteria.
-
-**Traceability rule: no todo without a wave, no wave without an ADR, no ADR
-without a WHY.** Verification runs outside-in: evidence (WHAT) proves the gates
-(HOW) satisfied the ADR's acceptance (WHY).
-
-### HOW — the wave rhythm
-
-Work ships in **waves**. Each wave is five small steps, each a PR (or an atomic
-commit when solo):
-
-| Letter | Name   | Delivers                                              |
-| ------ | ------ | ----------------------------------------------------- |
-| **A**  | Plan   | `planning/wave-NNN-<slug>.todos.sql` seed + deps      |
-| **B**  | Build  | The implementation                                    |
-| **C**  | Check  | Tests + gates green                                   |
-| **D**  | Decide | ADR addendum recording what was decided and shipped   |
-| **E**  | End    | Canonical close: `.done.sql`, sync gates, docs update |
-
-A wave is `done` only when **E** merges. Waves group into **programs**; a
-program's close wave runs an **inventory gate** proving every artifact exists —
-and that **no wave N+1 exists without a new charter ADR**. Scope creep needs a
-decision, not a shrug.
-
-Execution state lives in SQL: `planning/*.todos.sql` seeds are versioned, and
-`whw sync` loads them into `.whw/state.db` (SQLite, derived, gitignored).
-Agents claim work from a dependency-aware queue — never from chat memory:
+In this new repository, the generated program ADR is `0001` and the wave is
+`001`. Existing repositories allocate the next available numbers: use the
+actual generated identifiers. Edit `WHY.md`, the program charter (scope,
+exclusions, wave map and close criteria), and `docs/plan.md` before executing.
 
 ```bash
-whw queue                  # actionable: in_progress first, then ready
-whw claim wave002-B        # pending → in_progress
-whw done wave002-B --evidence "PR #48, e2e green"
-whw block wave002-C --reason "waiting on API key"
+npx @fabioeloi/whw@0.2.0 sync --all
+npx @fabioeloi/whw@0.2.0 queue
+npx @fabioeloi/whw@0.2.0 claim wave001-A
 ```
+Finish A's planning artifacts and review them before recording completion:
 
-### WHAT — evidence, not claims
+```bash
+npx @fabioeloi/whw@0.2.0 gate run --tier pr
+npx @fabioeloi/whw@0.2.0 done wave001-A --evidence "planning/wave-001-first-change.todos.sql; docs/adr/0001-program-adoption.md; npx @fabioeloi/whw@0.2.0 gate run --tier pr"
+npx @fabioeloi/whw@0.2.0 status
+```
+This completes **A only**. B–E remain pending. Repeat the contract per letter;
+`close` requires A–D done, the ADR addendum and green sync gates. Never close
+immediately after A. See [waves](docs/how/waves.md) and the
+[worked example](examples/hello-wave/).
 
-**Gates** are executable checks with GO/NO_GO verdicts and timestamped
-checkpoints (`.whw/checkpoints/<gate>/latest.txt`). Two tiers keep CI honest:
+The installed package runs through `npx @fabioeloi/whw@0.2.0` (or `whw` after
+explicit installation). `init` scaffolds process files; it does **not** copy
+`bin/` or `src/`. Only inside a WHW source checkout use `node ./bin/whw.js`.
 
-- `pr` — blocking and **lean**: planning coverage, ADR linkage, wave sync,
-  README sync, agent-adapter parity, secret scan.
-- `ops` — on demand: program inventory, evidence quality, `release-readiness`
-  (package hygiene; does not publish npm — ADR 0010), `maint-audit` (commits
-  since the last program close carry a wave trailer or `chore(deps|maint)`).
+## Architecture
 
-The anti-philosophy is explicit: no gate cascades as maturity theater
-(see `docs/why/principles.md`). Every gate failure names the smallest fix.
+```mermaid
+flowchart LR
+  WHY["WHY.md: purpose"] --> ADR["ADR: decisions"]
+  ADR --> W["Wave A–E: scope"]
+  W --> SQL["SQL: execution state"]
+  SQL --> EX["Human or agent execution"]
+  EX --> EV["Tests, gates, commits and PRs"]
+  EV --> ADR
+```
+`planning/*.todos.sql` is versioned input. `sync` loads local SQLite state
+in `.whw/state.db`; the dependency-aware queue drives execution. The database
+is ignored by Git: retain evidence in versioned artifacts and regenerate
+state through WHW commands. File handoffs preserve process context, not a
+model's hidden memory or private chat history.
 
-**Evaluation** is two-phase: deterministic checks (lint/tests/build) run first
-at zero AI cost; only then does a model score the weighted rubric
-(technical-quality 1.3, originality 1.3, craft 1.0, functionality 1.0 — 0–5,
-threshold 3.5). Rejections return the top-3 fixes, not vibes.
+## Delivery loop
 
-**Reporting** closes the loop: every milestone ends with Status / Evidence /
-Next step (`whw status`), and `whw metrics` snapshots reproducible numbers
-(commits, PRs, ADRs, waves, gates, tests, calendar days).
+| Letter | Responsibility | Delivery |
+| --- | --- | --- |
+| A | Plan | Charter, SQL seeds, dependencies and acceptance |
+| B | Build | Scoped implementation |
+| C | Verify | Independent checks and rerunnable evidence |
+| D | Decide | ADR addendum with outcome and limits |
+| E | Close | Canonical SQL close, metrics and integration |
 
-### Roles — one loop, many models
+```mermaid
+flowchart TD
+  R["resume / sync / queue"] --> C["claim"]
+  C --> X["Human or agent work"]
+  X --> Q{"Blocked?"}
+  Q -->|yes| B["block --reason"]
+  B --> R
+  Q -->|no| G["Tests and PR/ops gates"]
+  G --> V{"GO?"}
+  V -->|NO_GO| X
+  V -->|GO| E["done --evidence"]
+  E --> H["Human review and approval"]
+  H --> M["Merge; main green"]
+  M --> N{"A–D integrated?"}
+  N -->|no| R
+  N -->|yes| CL["close"]
+```
+A wave is terminal only when E merges. PR gates cover planning, ADR linkage,
+wave sync, README sync, adapter parity and secret scanning. Ops gates add
+program inventory, evidence quality, release readiness and maintenance audit.
+They check defined contracts; passing them does not certify software security
+or every documentation link.
 
-| Role                  | Context strategy | Handoff files                        |
-| --------------------- | ---------------- | ------------------------------------ |
-| `planner`             | compaction       | spec, ADRs, wave plan                |
-| `builder`             | reset per wave   | `todos.sql`, spec                    |
-| `evaluator`           | reset, stateless | contract, evaluation report, rubric  |
-| `closer`              | reset            | wave SQL, gates, ADR                 |
-| `autonomous-engineer` | SQL is memory    | queue + `plan.md` narrative          |
+Roles (`planner`, `builder`, `evaluator`, `closer`, `autonomous-engineer`)
+are Markdown instructions. Evaluation Phase A runs configured deterministic
+checks; Phase B ingests rubric scores. These mechanisms need project-specific
+acceptance and independent review; a runner exit zero alone is insufficient.
 
-Roles are tool-neutral Markdown prompts (`roles/`) plus compliant Agent Skills
-(`skills/`). `whw run <role>` can invoke your configured CLIs
-(`claude`, `codex`, `cursor-agent`, `gemini`, `aider`, …) through an escalation
-ladder ending in a human — use it, or bring your own runner. The harness never
-requires a specific model.
+## Continuity
 
-### Continuity — survive interruptions and tool switches
+```bash
+npx @fabioeloi/whw@0.2.0 resume
+npx @fabioeloi/whw@0.2.0 handoff --from codex --to claude
+```
+`resume` checks the Git baseline, syncs SQL, reports the queue and runs PR
+gates; it does not auto-claim. `handoff` records a baseline, queue snapshot,
+gate results and next action. Review that package before changing tools.
+Keep private transcripts and credentials out of public artifacts.
+See [continuity](docs/how/continuity.md).
 
-`whw resume` revalidates git + queue after a reboot or new chat (it does not
-claim). `whw handoff --from cursor --to claude` emits a package with the git
-baseline, queue snapshot, gate results, and next action. A live package lives
-in `docs/handoff/`. Sessions resume from SQL, not from "what were we doing?".
-See `docs/how/continuity.md`. Optional config `hooks` (`on_claim`, `on_done`,
-`on_gate_fail`, `on_close`) fire after those events without rolling them back.
+## Compatibility
 
----
+| Layer | Available contract | What this establishes |
+| --- | --- | --- |
+| Managed adapters | Claude, Cursor, Copilot, Gemini, Windsurf | Generated pointers to canonical `AGENTS.md` |
+| Native/file readers | Codex, OpenCode; Aider with `--read AGENTS.md` | Instruction-file integration; see [adapter reference](docs/what/adapters.md) |
+| Configurable runners | External CLI command via `whw run`; escalation can end with a human | Requires separately installed/authenticated CLI; no default runner is configured here |
+| Verified scenarios | Consumer init, SQL loop, handoff/resume; supervised Codex run | Specific proof boundaries below, not universal model/tool certification |
 
-## 📚 Documentation
+WHW requires no model API or vendor SDK. Tool instruction support and runner
+availability are separate. `doctor` discovers executables without proving
+login, entitlement or backend health. See [config](docs/what/config.md).
 
-| Path                        | Contents                                                    |
-| --------------------------- | ----------------------------------------------------------- |
-| `WHY.md`                    | This project's purpose, non-goals, principles               |
-| `AGENTS.md`                 | Canonical agent instructions (+ thin per-tool adapters)     |
-| `docs/why/manifesto.md`     | The WHY/HOW/WHAT mapping                                    |
-| `docs/why/principles.md`    | Purpose-first, evidence over chat, lean gates, …            |
-| `docs/why/positioning.md`   | Six-dimension taxonomy; WHW vs. Spec Kit, OpenSpec, BMAD…   |
-| `docs/how/`                 | Waves, programs, ADRs, todos.sql, gates, evidence, continuity, roles, escalation, evaluation, conventions |
-| `docs/what/`                | CLI reference, schema, config, templates, adapters, metrics |
-| `docs/adr/`                 | WHW's own decisions (0001–0014)                             |
-| `docs/plan.md`              | Narrative plan with 5W2H wave entries (this repo, live)     |
-| `docs/handoff/`             | Live IDE/agent migration packages (`whw handoff`)           |
-| `templates/`                | WHY, AGENTS, ADR, charter, wave SQL, PR, handoff, …         |
-| `examples/hello-wave/`      | Minimal end-to-end worked example                           |
+## Evidence and limits
 
----
+| Capability or practice | Public evidence | Limit |
+| --- | --- | --- |
+| Consumer adoption and continuity | [Consumer verification](docs/how/consumer-proof-verification.md), [e2e test](tests/e2e/consumer.test.js) | Local replay; no model conversation migration or Windows certification |
+| Real runner | [Codex runner proof](docs/how/runner-proof-real.md) | Operator-assisted: sandbox blocked Git commit; operator finalized Git/SQL; requested model metadata is not backend attestation |
+| Secure release | [Staged release verification](docs/how/staged-release-verification.md), [workflow](.github/workflows/release.yml) | Observed dispatch recovery; future tag-triggered publication is not proved by that run |
 
-## 🗺️ Roadmap
+This repository published 0.2.0 with GitHub Actions OIDC, staging-only npm
+permissions and human passkey approval. The recovery attestation identifies
+the workflow's main commit, not the tag checkout; a separate byte comparison
+established the tag's package contents. These are repository practices, not
+automatic guarantees for repositories adopting WHW. See [security](SECURITY.md).
 
-- `v0.1.0` — Core harness (Program 001): CLI, SQL planning, gates, roles, skills, docs.
-- `v0.1.1` — Program 002 (waves 007–011) published: GitHub Release +
-  `@fabioeloi/whw` on npm with provenance. `npx @fabioeloi/whw doctor`.
-- Later — `whw serve`, live PostgreSQL adapter, `whw migrate` importers, `whw board`,
-  translations beyond pt-BR.
+No measured WHW benchmark gain, financial saving, complete autonomy or
+enterprise compliance claim is made. Custom shell checks and runners execute
+code you configure: review them before use.
 
-Ideas and PRs welcome — charter a wave and go.
+## Documentation
 
----
+Start at the [documentation index](docs/README.md) or the
+[complete pt-BR adoption journey](docs/pt-BR/README.md).
 
-## 🤝 Contributing
+| Need | Reference |
+| --- | --- |
+| Purpose and principles | [WHY](WHY.md), [manifesto](docs/why/manifesto.md), [principles](docs/why/principles.md) |
+| Process | [Waves](docs/how/waves.md), [gates](docs/how/gates.md), [evidence](docs/how/evidence.md) |
+| Technical reference | [CLI](docs/what/cli.md), [schema](docs/what/schema.md), [adapters](docs/what/adapters.md) |
+| Decisions and current work | [ADRs](docs/adr/), [plan](docs/plan.md), [canonical agent contract](AGENTS.md) |
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md): claim from `whw queue`, work in
-waves, keep PRs small, end milestones with Status / Evidence / Next step.
-Security issues: see [SECURITY.md](SECURITY.md) — do not open public issues.
+## Roadmap
 
-## 📄 License
+| State | Scope |
+| --- | --- |
+| Published 0.1.0 / 0.1.1 | Core CLI, SQL, gates, roles and initial distribution |
+| Published 0.2.0 | Runner discovery, continuity verification, run metrics and consumer proof; [changelog](CHANGELOG.md) |
+| Wave 018 | Bilingual adoption documentation on GitHub; npm documentation updates with the next release |
+| Proposals requiring new charters | Runner postcondition hardening, stronger context persistence, additional platform proofs; no delivery date promised |
 
-[MIT](LICENSE) © 2026 Fabio Eloi. See [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md)
-for lineage and attributions.
+Historical ADRs remain in English. See [positioning](docs/why/positioning.md)
+for dated sources and [ADR 0016](docs/adr/0016-program-documentation-adoption.md)
+for this documentation scope.
+
+## Contributing
+
+Follow [CONTRIBUTING.md](CONTRIBUTING.md): sync, queue, claim one task,
+implement a wave letter, record evidence and pass gates before merge.
+Report vulnerabilities privately under [SECURITY.md](SECURITY.md).
+Every milestone ends with **Status / Evidence / Next step**.
+
+[MIT](LICENSE) © 2026 Fabio Eloi. The WHY/HOW/WHAT ordering draws inspiration
+from Simon Sinek's *Start With Why* (2009), without affiliation or endorsement;
+see [acknowledgments](ACKNOWLEDGMENTS.md).

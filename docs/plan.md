@@ -295,17 +295,14 @@ ADR: `docs/adr/0013-program-trust-adoption.md`.
 
 Sync: `whw sync wave-016-program-close` · Close: `whw close wave-016-program-close`
 
-## Next
+## Publication status
 
-Program 003 engineering is **closed** (waves 012–016); publication is pending.
-Next: confirm the exact v0.2.0 tag target after E merge and green main.
-Wave 014 closed on 2026-10-01 after D merged in PR #45 and main CI
-36845270017 passed; `whw close wave-014-runner-proof-real` verified the
-sync gates. Its real runner proof remains explicitly operator-assisted.
-Do not revoke `NPM_TOKEN`. Next tag is **v0.2.0** at 016 E (OIDC).
-There is no wave 017 without a new charter ADR.
+Program 003 engineering is closed. Version 0.2.0 is published; the recovery
+and subsequent credential disposition are recorded in wave 017. The tag
+remains immutable. See [release verification](how/staged-release-verification.md).
+The historical wave 014 runner result remains operator-assisted.
 
-## Wave 017 — staged-release
+## Wave 017 — staged-release — **closed**
 
 ADR [0015](adr/0015-program-secure-release.md) charters a single-wave program
 to require operator presence for npm publication while recovering immutable
