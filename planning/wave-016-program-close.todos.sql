@@ -5,8 +5,8 @@
 -- in_progress/blocked/cancelled). Close with `whw close wave-016-program-close`.
 
 INSERT INTO todos (ref, title, status, track, step, letter, adr, notes) VALUES
-  ('wave016-A', 'Wave 016 A — Plan: program-close', 'pending', 'wave-016-program-close', 1, 'A', '0013', 'Bump package.json to 0.2.0 + CHANGELOG heading in B, not here. Operator go required before tagging. Do not revoke NPM_TOKEN until OIDC publish succeeds.'),
-  ('wave016-B', 'Wave 016 B — Build: program-close', 'pending', 'wave-016-program-close', 2, 'B', '0013', 'package.json 0.2.0, CHANGELOG, README. Maint SHA list for ADR 0012 close-hygiene. No tag in this letter.'),
+  ('wave016-A', 'Wave 016 A — Plan: program-close', 'pending', 'wave-016-program-close', 1, 'A', '0013', 'Follow docs/how/program-close-016.md. Plan version/changelog/readme and narrow evidence-quality source-CLI recognition fix at B; no historical evidence rewrites. Exact tag target needs operator confirmation after E; token removal waits for proven OIDC publish.'),
+  ('wave016-B', 'Wave 016 B — Build: program-close', 'pending', 'wave-016-program-close', 2, 'B', '0013', 'package.json 0.2.0, dated CHANGELOG with empty Unreleased, README candidate context; evidence-quality recognizes documented node ./bin/whw.js gate/evaluate/close commands with negative tests. Verify maint SHA list for ADR 0012. No tag or publish.'),
   ('wave016-C', 'Wave 016 C — Verify: program-close', 'pending', 'wave-016-program-close', 3, 'C', '0013', '`whw gate run --tier pr` GO; `whw gate run --tier ops` GO; `whw metrics --out .whw/metrics.json`.'),
   ('wave016-D', 'Wave 016 D — Decide: program-close', 'pending', 'wave-016-program-close', 4, 'D', '0013', 'Accept ADR 0013; list maint SHAs 2d6387a, 769dda9, 18f6e5c, 348a3fc, 0eaeca7. Retrospective. (ADR 0013)'),
   ('wave016-E', 'Wave 016 E — Close: program-close', 'pending', 'wave-016-program-close', 5, 'E', '0013', '`whw close`; operator tags v0.2.0 after E merges (OIDC publish is the 013 proof); then revoke NPM_TOKEN.')

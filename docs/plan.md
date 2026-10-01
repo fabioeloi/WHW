@@ -277,10 +277,12 @@ checkout on 2026-10-01; the historical bin miss was not reproduced.
 
 Sync: `whw sync wave-015-consumer-proof` · Close: `whw close wave-015-consumer-proof`
 
-## Wave 016 — program-close — **pending**
+## Wave 016 — program-close — **in progress**
 
 `v0.2.0` via OIDC (operator tag after E); inventory; metrics; ADR 0012
 close-hygiene maint SHAs; retrospective. Do not tag in B.
+Protocol: [program-close-016](how/program-close-016.md), including the
+documented source-CLI evidence recognition fix and release audit boundaries.
 ADR: `docs/adr/0013-program-trust-adoption.md`.
 
 | #   | What | How | Why | Where | When | Who | How much |
