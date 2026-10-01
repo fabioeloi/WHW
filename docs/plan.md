@@ -304,3 +304,17 @@ Wave 014 closed on 2026-10-01 after D merged in PR #45 and main CI
 sync gates. Its real runner proof remains explicitly operator-assisted.
 Do not revoke `NPM_TOKEN`. Next tag is **v0.2.0** at 016 E (OIDC).
 There is no wave 017 without a new charter ADR.
+
+## Wave 017 — staged-release
+
+ADR [0015](adr/0015-program-secure-release.md) charters a single-wave program
+to require operator presence for npm publication while recovering immutable
+`v0.2.0`. GitHub Release success and npm publication are separate outcomes.
+
+| # | What | How | Why | Where | When | Who | How much |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| A | Charter + seeds | ADR 0015 and SQL | Preserve terminal history | docs, planning | 017 A | planner | PR pending |
+| B | Stage-only workflow | OIDC + guarded dispatch | Human approval before publication | release.yml, runbook | after A | builder | PR pending |
+| C | Verify | Negative cases, gates, live staging and registry proof | Prove both security and delivery | tests, verification | after B | evaluator | PR pending |
+| D | Decide | Evidence-based ADR addendum | Record limits honestly | ADR 0015 | after C | closer | PR pending |
+| E | Close | Inventory, metrics, whw close | Canonical completion | planning, docs | after D | closer | PR pending |
