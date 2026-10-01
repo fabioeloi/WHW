@@ -71,3 +71,42 @@ E uses `whw close` only after A–D merge, main is green, plan links and addendu
 ## Explicit exclusions
 
 CLM context editing, note/history persistence fixes, aggregate evaluation policy changes, generic runner postcondition enforcement, additional models/tiers, benchmarks and new runtime dependencies are outside this charter. The CLM assessment informs evidence checks but does not authorize extending program 003 beyond waves 012–016.
+
+## B implementation evidence in the isolated checkout
+
+The B builder adds read-only PATH discovery and additive run aggregates; it
+preserves `src/run.js`. Focused module fixtures cover doctor, metrics, handoff,
+close and adapters. Rerun from the checkout:
+
+```sh
+node --test tests/unit/doctor.test.js tests/unit/metrics.test.js tests/unit/handoff.test.js tests/unit/close.test.js tests/unit/adapters.test.js
+npm test
+node ./bin/whw.js doctor
+node ./bin/whw.js gate run --tier pr
+node ./bin/whw.js --json metrics --out .whw/runs/wave014-metrics.json
+node ./bin/whw.js --json status --track wave-014-runner-proof-real
+```
+
+The first supervised request was rejected with HTTP 400 for the requested
+`gpt-6.1-sol` before implementation (child exit 1, WHW human escalation exit
+3). Its ignored `.whw/runs/builder-20261001T034213Z-attempt1.log` is retained.
+This builder session observes Codex CLI `0.159.3` and ChatGPT login on
+2026-10-01, differing from the A observation of `0.156.0`. Login does not
+attest model entitlement or backend identity. The builder launches no nested
+runner, changes no credentials, and performs no model substitution. Its own
+process exit, duration and final supervised outcome are recorded externally
+by the operator after this session finishes; they are not inferred here.
+The operator/evaluator must independently check the real commit, SQL evidence
+and tests before transfer. C/D retain responsibility for independent proof
+verification and the final sanitized addendum.
+
+Observed outcome: the updated CLI `0.159.3` generated the implementation
+in 308271 ms with requested `gpt-6.1-sol` / `low` and process exit zero.
+It passed 77 tests and the PR gates, but could not write `.git/index.lock`
+under the managed sandbox. It recorded B as blocked, without a commit or
+done evidence. Thus the runner's `complete` status was not task completion.
+The external operator reviewed the files, tightened rejection of truncated
+metric logs, and finalized the Git/SQL steps separately. This is an
+operator-assisted runner proof; it does not demonstrate autonomous commit
+and completion under this sandbox. Raw failure and success-process logs
+remain local, and C/D must retain this limitation in their assessment.
