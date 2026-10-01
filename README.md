@@ -79,7 +79,8 @@ Finish A's planning artifacts and review them before recording completion:
 
 ```bash
 npx @fabioeloi/whw@0.2.0 gate run --tier pr
-npx @fabioeloi/whw@0.2.0 done wave001-A --evidence "planning/wave-001-first-change.todos.sql; docs/adr/0001-program-adoption.md; npx @fabioeloi/whw@0.2.0 gate run --tier pr"
+npx @fabioeloi/whw@0.2.0 done \
+  wave001-A --evidence "planning/wave-001-first-change.todos.sql; docs/adr/0001-program-adoption.md; npx @fabioeloi/whw@0.2.0 gate run --tier pr"
 npx @fabioeloi/whw@0.2.0 status
 ```
 This completes **A only**. B–E remain pending. Repeat the contract per letter;
