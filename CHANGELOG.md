@@ -7,13 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-01
+
 ### Added
+
+- Read-only PATH runner discovery in doctor and additive attempt metrics by
+  costClass, with explicit unknown/malformed log counts.
+- Fresh-repository consumer CI-command replay and Codex/Claude handoff
+  round-trip verification; real runner evidence remains operator-assisted.
 
 - `maint-audit` ops gate: after the last closed `program-close` wave, every
   non-merge commit subject must carry `(Wave NNN L)`, or start with
   `chore(deps)` / `chore(maint)` (ADR 0012 / 0014).
 
 ### Changed
+
+- `resume` verifies PR gates after optional sync, reports outcomes in text/JSON
+  and returns nonzero on NO_GO while preserving the queue and SQL statuses.
+- Evidence-quality recognizes documented source CLI gate/evaluate/close commands
+  as well as the installed `whw` command, preserving historical evidence.
 
 - `release.yml` npm job publishes with GitHub Actions OIDC (`id-token:
   write`) and no longer sets `NODE_AUTH_TOKEN`. The `NPM_TOKEN` secret
@@ -125,3 +137,5 @@ and was folded here in wave 012.
 
 [0.1.1]: https://github.com/fabioeloi/WHW/releases/tag/v0.1.1
 [0.1.0]: https://github.com/fabioeloi/WHW/releases/tag/v0.1.0
+
+[0.2.0]: https://github.com/fabioeloi/WHW/releases/tag/v0.2.0

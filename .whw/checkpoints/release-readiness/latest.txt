@@ -1,10 +1,10 @@
 # whw gate release-readiness
 PASS name @fabioeloi/whw
-PASS version 0.1.1
+PASS version 0.2.0
 PASS license MIT
 PASS LICENSE present
 PASS README.md present
-PASS CHANGELOG.md has ## [0.1.1]
+PASS CHANGELOG.md has ## [0.2.0]
 PASS repository.url git+https://github.com/fabioeloi/WHW.git
 PASS bin whw → bin/whw.js
 PASS npm publish / git tag are operator steps (not this gate)

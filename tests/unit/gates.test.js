@@ -99,6 +99,11 @@ describe('gate runner', () => {
     assert.equal(ok.status, 'GO');
     assert.equal(gate.evidenceLooksDurable('abc1234'), true);
     assert.equal(gate.evidenceLooksDurable('fixed it'), false);
+    assert.equal(gate.evidenceLooksDurable('node ./bin/whw.js gate run --tier pr GO'), true);
+    assert.equal(gate.evidenceLooksDurable('node bin/whw.js evaluate --phase a'), true);
+    assert.equal(gate.evidenceLooksDurable('node ./bin/whw.js close wave-014-runner-proof-real'), true);
+    assert.equal(gate.evidenceLooksDurable('node ./bin/whw.js queue'), false);
+    assert.equal(gate.evidenceLooksDurable('node ./bin/other.js gate run'), false);
     assert.equal(gate.waveNumberOf({ ref: 'wave008-A', track: 'wave-008-x' }), 8);
   });
 

@@ -1,7 +1,7 @@
 {
   "name": "@fabioeloi/whw",
-  "version": "0.1.1",
-  "description": "WHW (Why · How · What) — an LLM- and tool-agnostic harness for autonomous, evidence-gated software delivery: waves, ADRs, SQL planning, gates, and agent roles.",
+  "version": "0.2.0",
+  "description": "WHW (Why \u00b7 How \u00b7 What) \u2014 an LLM- and tool-agnostic harness for autonomous, evidence-gated software delivery: waves, ADRs, SQL planning, gates, and agent roles.",
   "type": "module",
   "license": "MIT",
   "author": "Fabio Eloi <fabioeloi@gmail.com>",

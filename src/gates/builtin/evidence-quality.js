@@ -19,6 +19,7 @@ export function evidenceLooksDurable(evidence) {
   if (/#\d+|\/pull\/\d+/i.test(evidence)) return true;
   if (/\.whw\/checkpoints\//.test(evidence)) return true;
   if (/\b(npm test|node --test|whw gate|whw evaluate|whw close)\b/.test(evidence)) return true;
+  if (/\bnode\s+(?:\.\/)?bin\/whw\.js\s+(?:gate|evaluate|close)\b/.test(evidence)) return true;
   return false;
 }
 
