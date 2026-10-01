@@ -273,7 +273,7 @@ checkout on 2026-10-01; the historical bin miss was not reproduced.
 | B | Implementation | e2e consumer + resume gate step | `npx` path must work | `tests/e2e/`, `src/resume.js` | 015 | solo | [#48](https://github.com/fabioeloi/WHW/pull/48) |
 | C | Verification | Phase A/B + independent consumer replay + `pr` gates | proof | `tests/`, `docs/how/consumer-proof-verification.md` | 015 | solo | [#49](https://github.com/fabioeloi/WHW/pull/49) |
 | D | Decision record | ADR 0013 addendum | record consumer proof | `docs/adr/0013` | 015 | solo | [#50](https://github.com/fabioeloi/WHW/pull/50) |
-| E | Canonical close | `whw close` + sync | close | planning/ | 015 | solo | |
+| E | Canonical close | `whw close` + sync | close | planning/ | 015 | solo | [#51](https://github.com/fabioeloi/WHW/pull/51) |
 
 Sync: `whw sync wave-015-consumer-proof` · Close: `whw close wave-015-consumer-proof`
 

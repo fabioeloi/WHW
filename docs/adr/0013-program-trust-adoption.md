@@ -236,3 +236,4 @@ Wave 015 E close (2026-10-01): D merged as `c7f49e3`; main CI
 36855940358 passed. `whw close wave-015-consumer-proof` verified terminal
 A–D, the addendum and four sync gates, then marked E done without force.
 Next: Wave 016 A. The local-consumer qualifications remain unchanged.
+Close delivery: [#51](https://github.com/fabioeloi/WHW/pull/51), `241c8eb`.
