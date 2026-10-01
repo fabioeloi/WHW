@@ -237,16 +237,20 @@ revoke `NPM_TOKEN` in this wave. ADR: `docs/adr/0014-trusted-publish.md`.
 
 Sync: `whw sync wave-013-trusted-publish` · Close: `whw close wave-013-trusted-publish`
 
-## Wave 014 — runner-proof-real — **pending**
+## Wave 014 — runner-proof-real — **in progress**
 
 Real `whw run builder --ref wave014-B` on an installed CLI; unit tests for
-untested modules; `costClass` in `whw metrics`. Confirm CLI at 014 A.
+untested modules; `costClass` in `whw metrics`. At 014 A, Codex CLI 0.156.0
+and ChatGPT login were observed; selected model/effort: `gpt-6.1-sol` / `low`.
+The bounded, isolated run and independent evidence checks are specified in
+[runner-proof-real](how/runner-proof-real.md). A performs no inference;
+B waits for A merge, green main, and operator implementation go.
 ADR: `docs/adr/0013-program-trust-adoption.md`.
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-014-runner-proof-real.todos.sql` | 014 | solo | |
-| B | Implementation | real `whw run` + tests | stubs are not proof | `src/run.js`, `tests/` | 014 | solo | |
+| A | Confirm CLI and plan proof | installed CLI/auth checks + protocol + refined seeds | charter first | `planning/`, `docs/how/runner-proof-real.md` | 014 | solo | |
+| B | Implementation | real bounded Codex run + discovery + costClass metrics + tests | stubs are not proof | `src/doctor.js`, `src/metrics.js`, `tests/` | 014 | solo | |
 | C | Verification | tests + `pr` gates | proof | `tests/` | 014 | solo | |
 | D | Decision record | ADR 0013 addendum + run log tail | record the CLI | `docs/adr/0013` | 014 | solo | |
 | E | Canonical close | `whw close` + sync | close | planning/ | 014 | solo | |
