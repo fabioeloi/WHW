@@ -4,16 +4,39 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 permissions:
-  contents: write
-  id-token: write
+  contents: read
+
+concurrency:
+  group: npm-release
+  cancel-in-progress: false
 
 jobs:
-  github-release:
+  target:
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.target.outputs.sha }}
+      tag: ${{ steps.target.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Validate release target
+        id: target
+        run: node .github/scripts/release-target.mjs
+
+  verify:
+    needs: target
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.target.outputs.sha }}
       - uses: actions/setup-node@v7
         with:
           node-version: 24
@@ -26,25 +49,51 @@ jobs:
       - name: PR gates
         run: node ./bin/whw.js gate run --tier pr
       - name: Release readiness
+        env:
+          GITHUB_REF: refs/tags/${{ needs.target.outputs.tag }}
         run: node ./bin/whw.js gate run release-readiness
+
+  github-release:
+    if: github.event_name == 'push'
+    needs: [target, verify]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.target.outputs.sha }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
       - name: Notes from CHANGELOG
-        run: node src/changelog.js --version "${GITHUB_REF_NAME#v}" --out "${RUNNER_TEMP}/release-notes.md"
+        env:
+          RELEASE_TAG: ${{ needs.target.outputs.tag }}
+        run: node src/changelog.js --version "${RELEASE_TAG#v}" --out "${RUNNER_TEMP}/release-notes.md"
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" --notes-file "${RUNNER_TEMP}/release-notes.md" --verify-tag
+          RELEASE_TAG: ${{ needs.target.outputs.tag }}
+        run: gh release create "$RELEASE_TAG" --notes-file "${RUNNER_TEMP}/release-notes.md" --verify-tag
 
   npm:
-    needs: github-release
+    if: ${{ !cancelled() && needs.verify.result == 'success' && (needs.github-release.result == 'success' || (github.event_name == 'workflow_dispatch' && needs.github-release.result == 'skipped')) }}
+    needs: [target, verify, github-release]
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.target.outputs.sha }}
       - uses: actions/setup-node@v7
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-      - name: Publish to npm
-        run: npm publish --access public --provenance
+      - name: Select staging-capable npm
+        run: npm install --global npm@12.1.0
+      - name: Stage for operator approval
+        run: npm stage publish --access public --tag latest --provenance
+      - name: Record approval boundary
+        run: echo 'Package staged; operator review and 2FA approval on npmjs.com are required before public publication.' >> "$GITHUB_STEP_SUMMARY"
