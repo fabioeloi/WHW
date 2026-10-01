@@ -48,26 +48,6 @@ the same process debt.
 - [AGENTS.md](../../AGENTS.md) — never merge on red; never start the next wave until `main` is green
 - [docs/how/conventions.md](../how/conventions.md)
 
-## Addendum Wave 016 — Program 003 close hygiene
-
-Git inventory verified these historical commits on 2026-10-01:
-
-| SHA | Subject | Classification |
-| --- | --- | --- |
-| `2d6387a` | chore(maint): point quick start at npx after 0.1.1 publish | maintenance |
-| `769dda9` | chore(maint): pin consumer CI template to actions v7 | maintenance |
-| `18f6e5c` | chore(deps): Bump actions/checkout from 5 to 7 | dependency update |
-| `348a3fc` | chore(deps): Bump actions/setup-node from 5 to 7 | dependency update |
-| `0eaeca7` | chore(ci): keep checkout@v7 with setup-node@v7 | historical prefix divergence |
-
-The final subject does not match the permitted maint/deps prefixes. This
-inventory records the divergence; it does not retroactively approve the
-exception, rewrite history, or infer an issue label. The current maint-audit
-gate starts at the last program-close baseline and passed the current range.
-Future exceptions remain subject to the existing narrow policy above.
-The [Program 003 close](../how/program-close-016.md) retains the qualified
-runner/consumer proofs and defers publication evidence until observed.
-
 ## Addendum Wave 011 — program-close
 
 Accepted as the post-close exception for red CI: `chore(maint)` only with a
@@ -98,3 +78,23 @@ gates, README repositioning, npm publishes) is unchanged. Evidence: PRs
 fixture; `npm test` 66/66; `whw gate run --tier ops` GO (`maint-audit`).
 
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->
+
+## Addendum Wave 016 — Program 003 close hygiene
+
+Git inventory verified these historical commits on 2026-10-01:
+
+| SHA | Subject | Classification |
+| --- | --- | --- |
+| `2d6387a` | chore(maint): point quick start at npx after 0.1.1 publish | maintenance |
+| `769dda9` | chore(maint): pin consumer CI template to actions v7 | maintenance |
+| `18f6e5c` | chore(deps): Bump actions/checkout from 5 to 7 | dependency update |
+| `348a3fc` | chore(deps): Bump actions/setup-node from 5 to 7 | dependency update |
+| `0eaeca7` | chore(ci): keep checkout@v7 with setup-node@v7 | historical prefix divergence |
+
+The final subject does not match the permitted maint/deps prefixes. This
+inventory records the divergence; it does not retroactively approve the
+exception, rewrite history, or infer an issue label. The current maint-audit
+gate starts at the last program-close baseline and passed the current range.
+Future exceptions remain subject to the existing narrow policy above.
+The [Program 003 close](../how/program-close-016.md) retains the qualified
+runner/consumer proofs and defers publication evidence until observed.
