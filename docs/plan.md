@@ -289,7 +289,7 @@ ADR: `docs/adr/0013-program-trust-adoption.md`.
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
 | A | Planning seed | close protocol + refined notes | charter first | `planning/`, `docs/how/program-close-016.md` | 016 | solo | [#52](https://github.com/fabioeloi/WHW/pull/52) |
 | B | Inventory work | 0.2.0 candidate + CHANGELOG; SHA list; evidence recognition | close deliberately | `package.json`, `CHANGELOG.md`, `src/gates/` | 016 | solo | [#53](https://github.com/fabioeloi/WHW/pull/53) |
-| C | Verify | inventory GO, metrics snap, ops GO | evidence of done | `.whw/` | 016 | solo | |
+| C | Verify | inventory GO, metrics, package/notes audit, ops GO | evidence of done | `.whw/`, `docs/how/program-close-verification.md` | 016 | solo | [#54](https://github.com/fabioeloi/WHW/pull/54) |
 | D | Decide | ADR 0013 Accepted + retro | record outcome | `docs/adr/0013` | 016 | solo | |
 | E | Close | `whw close` + operator `v0.2.0` tag | canonical close | planning/ | 016 | solo | |
 
