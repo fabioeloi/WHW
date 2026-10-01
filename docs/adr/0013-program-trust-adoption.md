@@ -190,3 +190,43 @@ verified terminal A–D, this addendum and all four sync gates, then marked
 E done. No force override was used. The next pending step is Wave 015 A;
 the operator-assisted qualification above remains part of the decision.
 Close delivery: [#46](https://github.com/fabioeloi/WHW/pull/46), `38bfc73`.
+
+## Addendum Wave 015 — local consumer and gated resume
+
+Decision (2026-10-01): accept the candidate-source local consumer proof and
+make PR gate verification part of `whw resume`. Resume synchronizes unless
+`--no-sync`, reuses the existing gate executor, reports outcomes in text
+and JSON, and returns nonzero on NO_GO while preserving queue/next-action
+output. It neither claims work nor downgrades done rows. Configured custom
+PR gates and failure hooks now execute during resume just as during gate run;
+this can increase resume duration and must be considered by consumers.
+
+The [protocol](../how/consumer-proof.md) and independent
+[verification](../how/consumer-proof-verification.md) establish a fresh
+temporary Git consumer using the current source CLI. The ordered template
+steps `sync --all`, `doctor` and `gate run --tier pr` passed. The 24-command
+replay checked codex → claude → codex handoffs across two local baselines:
+`684880c2843eba9303973a3a9861342fde9b9fea` and
+`fda1ad3828f76b7fb5c80466d3a6e6aed2302029`. Each handoff named its direction
+and corresponding HEAD. SQL ref/status/evidence snapshots stayed unchanged
+after handoff and resume; a deliberately failing gate returned 1 in text
+and JSON without hiding the next action. The public e2e test recreates
+these checks with freshly generated SHAs; archived SHAs are local evidence.
+
+Phase A passed 79 tests, doctor passed and all six PR gates were GO.
+Phase B scored 4/4/4/4: weighted 4.0, **APPROVE**. The versioned npm 0.1.1
+probe at A returned its version outside the checkout: the historical bin
+miss was not reproduced, and its original cause remains unknown. That
+published version does not contain this new resume behavior.
+
+Consequences and limits: this is local command replay, not a hosted consumer
+Actions run, Windows proof, private-chat migration or Codex/Claude model
+execution. No dependency, release, tag or token change is included. The
+program charter remains Proposed until Wave 016 D; release/OIDC proof remains
+in Wave 016. Canonical Wave 015 E close follows D merge and green main.
+
+Evidence: A [#47](https://github.com/fabioeloi/WHW/pull/47), merged `efeaa13`;
+B [#48](https://github.com/fabioeloi/WHW/pull/48), implementation `6512372`,
+merged `4cf7dec`; C [#49](https://github.com/fabioeloi/WHW/pull/49),
+verification `5aa15bc`, merged `fc7860782ed972aaa46e921cdc05319d408f70aa`.
+Main CI 36854583121 passed before D started.
