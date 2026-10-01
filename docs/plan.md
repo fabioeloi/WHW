@@ -287,7 +287,7 @@ ADR: `docs/adr/0013-program-trust-adoption.md`.
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-016-program-close.todos.sql` | 016 | solo | |
+| A | Planning seed | close protocol + refined notes | charter first | `planning/`, `docs/how/program-close-016.md` | 016 | solo | [#52](https://github.com/fabioeloi/WHW/pull/52) |
 | B | Inventory work | 0.2.0 version + CHANGELOG; SHA list | close deliberately | `package.json`, `CHANGELOG.md` | 016 | solo | |
 | C | Verify | inventory GO, metrics snap, ops GO | evidence of done | `.whw/` | 016 | solo | |
 | D | Decide | ADR 0013 Accepted + retro | record outcome | `docs/adr/0013` | 016 | solo | |
