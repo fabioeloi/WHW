@@ -60,3 +60,38 @@ escalation (`whw run` exhausted).
 `--json` emits parsed structures for `queue`, `status`, `gate run`, `gate list`,
 `evaluate`, `close`, `metrics`, `doctor`, `handoff`, `resume`, transitions, and scaffolds.
 Secrets are redacted (`[REDACTED]`) in `--json` data output.
+
+## Doctor runner discovery
+
+Doctor searches PATH for executable files named `codex`, `claude`, `gemini`,
+`ollama`, `opencode` and `aider`, reporting each as `runner:<name>`. The first
+executable file wins; directories and non-executable files are excluded.
+Missing runners are optional warnings, not failures. Discovery does not run
+these executables, log in, or trigger inference. Executable presence says
+nothing about authentication, installed models or backend health.
+`configured-runners` separately lists the configured default command and
+escalation tiers, without executing their shell commands.
+
+## Run metrics
+
+Metrics retain existing fields and add `runs`:
+
+- `processed`: valid direct `.whw/runs/<role>-YYYYMMDDTHHMMSSZ-attempt<N>.log`
+  files parsed, one per WHW attempt (not one per session or task).
+- `malformed`: matching files unreadable or missing a finite nonnegative
+  `durationMs`, integer `exit`, or the `$ ` command boundary; these do not
+  enter aggregates.
+- `unknown`: processed attempts with missing/blank `costClass`, or the literal
+  class `unknown`.
+- `byCostClass`: groups configured class strings (including custom classes).
+  Missing/blank values enter `unknown`. Each group has `attempts`, `successes`
+  (`exit=0`), `failures` (other exits), and summed `durationMs`.
+
+Only metadata before the `$ ` command line is parsed. Runner output cannot
+supply metadata. Non-attempt files and all subdirectories, including research
+and session logs, are excluded. Missing/empty runs directories produce zero
+counts and an empty `byCostClass`. There is no USD estimate: `costClass` is a
+configured category; configured model is not backend attestation. Success in
+these aggregates means process exit zero; SQL completion and rerunnable
+evidence require independent verification, as specified by the
+[Wave 014 proof protocol](../how/runner-proof-real.md).

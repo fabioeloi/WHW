@@ -60,6 +60,53 @@ function testMetrics(root) {
   return { testFiles: files.length, testCases: cases };
 }
 
+/**
+ * Aggregate only direct WHW attempt logs, reading metadata before shell output.
+ * @param {string} dir
+ * @returns {{ processed: number, malformed: number, unknown: number, byCostClass: Record<string, { attempts: number, successes: number, failures: number, durationMs: number }> }}
+ */
+export function runMetrics(dir) {
+  const result = { processed: 0, malformed: 0, unknown: 0, byCostClass: {} };
+  if (!isDir(dir)) return result;
+  for (const entry of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0)) {
+    if (!entry.isFile() || !/^.+-\d{8}T\d{6}Z-attempt\d+\.log$/.test(entry.name)) continue;
+    let fields;
+    try {
+      const text = readText(join(dir, entry.name));
+      const boundary = /\r?\n\$ /.exec(text);
+      if (!boundary) throw new Error('attempt log has no command boundary');
+      const header = text.slice(0, boundary.index);
+      fields = Object.fromEntries(header.split(/\r?\n/).map((line) => {
+        const match = /^(tier|model|costClass|durationMs|exit):\s*(.*)$/.exec(line);
+        return match ? [match[1], match[2].trim()] : [];
+      }).filter((pair) => pair.length));
+    } catch {
+      result.malformed++;
+      continue;
+    }
+    const duration = Number(fields.durationMs);
+    const exit = Number(fields.exit);
+    if (!fields.durationMs || !Number.isFinite(duration) || duration < 0 ||
+        !fields.exit || !Number.isInteger(exit)) {
+      result.malformed++;
+      continue;
+    }
+    result.processed++;
+    const costClass = fields.costClass || 'unknown';
+    if (costClass === 'unknown') result.unknown++;
+    if (!Object.hasOwn(result.byCostClass, costClass)) {
+      Object.defineProperty(result.byCostClass, costClass, {
+        value: { attempts: 0, successes: 0, failures: 0, durationMs: 0 }, enumerable: true,
+      });
+    }
+    const group = result.byCostClass[costClass];
+    group.attempts++;
+    group[exit === 0 ? 'successes' : 'failures']++;
+    group.durationMs += duration;
+  }
+  return result;
+}
+
 /** @param {any} ctx @returns {Promise<object>} */
 export async function collectMetrics(ctx) {
   const { root, paths } = ctx;
@@ -104,6 +151,7 @@ export async function collectMetrics(ctx) {
     planning: { seeds: tracks, ...planning },
     gates: { builtin: BUILTINS.length, custom: customs, checkpointsGo, checkpointsTotal },
     tests,
+    runs: runMetrics(join(root, '.whw', 'runs')),
   };
 }
 

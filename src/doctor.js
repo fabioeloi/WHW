@@ -1,9 +1,35 @@
 // SPDX-License-Identifier: MIT
 /** `whw doctor` — verify toolchain, config, and repo wiring (read-only). */
 
-import { join } from 'node:path';
+import { accessSync, constants, statSync } from 'node:fs';
+import { delimiter, join, resolve } from 'node:path';
 import { HOOK_NAMES } from './hooks.js';
 import { fileExists, isDir, runCmd } from './util.js';
+
+/** Known executable names; discovery never invokes them. */
+const RUNNERS = ['codex', 'claude', 'gemini', 'ollama', 'opencode', 'aider'];
+
+/**
+ * Find the first executable file on PATH for each known runner.
+ * @param {string} [path]
+ * @param {string} [cwd]
+ * @returns {{ name: string, path: string|null }[]}
+ */
+export function discoverRunners(path = process.env.PATH ?? '', cwd = process.cwd()) {
+  return RUNNERS.map((name) => {
+    for (const dir of path ? path.split(delimiter) : []) {
+      const candidate = resolve(cwd, dir || '.', name);
+      try {
+        if (!statSync(candidate).isFile()) continue;
+        accessSync(candidate, constants.X_OK);
+        return { name, path: candidate };
+      } catch {
+        // Absent, inaccessible or non-executable entries are not discoveries.
+      }
+    }
+    return { name, path: null };
+  });
+}
 
 /**
  * @param {string[]} positionals @param {any} ctx @returns {Promise<number>}
@@ -82,6 +108,20 @@ export async function cmdDoctor(positionals, ctx) {
   const named = HOOK_NAMES.filter((n) => typeof hooks[n] === 'string' && hooks[n].trim());
   if (named.length) ok('hooks', named.join(', '));
   else ok('hooks', 'none configured');
+
+  for (const runner of discoverRunners(process.env.PATH, ctx.root)) {
+    const detail = runner.path
+      ? `${runner.path} (executable only; authentication/backend unknown)`
+      : 'not found on PATH (optional)';
+    (runner.path ? ok : warn)(`runner:${runner.name}`, detail);
+  }
+  const configured = {
+    default: ctx.config?.runners?.default ?? null,
+    tiers: (ctx.config?.escalation?.tiers ?? []).map((t) => ({
+      name: t.name ?? null, runner: t.runner ?? null, human: Boolean(t.human),
+    })),
+  };
+  ok('configured-runners', JSON.stringify(configured));
 
   const fails = checks.filter((c) => c.status === 'fail');
   if (ctx.json) {
