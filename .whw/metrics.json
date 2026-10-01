@@ -1,35 +1,41 @@
 {
   "project": "WHW",
-  "at": "2026-09-10T20:36:43.371Z",
+  "at": "2026-10-01T11:51:18.430Z",
   "git": {
-    "commits": 54,
-    "head": "f546538",
-    "branch": "test/wave-011-program-close-c",
-    "firstCommit": "2026-09-10",
-    "lastCommit": "2026-09-10",
+    "commits": 123,
+    "head": "e2fdfc1",
+    "branch": "feat/wave-016-program-close-e",
+    "firstCommit": "2026-10-01",
+    "lastCommit": "2026-10-01",
     "calendarDays": 0,
-    "prRefsUnique": 19
+    "prRefsUnique": 51
   },
-  "adrs": 12,
+  "adrs": 14,
   "waves": {
-    "total": 11,
-    "closed": 10
+    "total": 16,
+    "closed": 16
   },
   "planning": {
-    "seeds": 11,
-    "todos": 55,
-    "done": 52,
-    "tracks": 11,
-    "doneRatio": 0.945
+    "seeds": 16,
+    "todos": 80,
+    "done": 80,
+    "tracks": 16,
+    "doneRatio": 1
   },
   "gates": {
-    "builtin": 9,
+    "builtin": 10,
     "custom": 0,
-    "checkpointsGo": 9,
-    "checkpointsTotal": 9
+    "checkpointsGo": 10,
+    "checkpointsTotal": 10
   },
   "tests": {
-    "testFiles": 14,
-    "testCases": 57
+    "testFiles": 22,
+    "testCases": 84
+  },
+  "runs": {
+    "processed": 0,
+    "malformed": 0,
+    "unknown": 0,
+    "byCostClass": {}
   }
 }
