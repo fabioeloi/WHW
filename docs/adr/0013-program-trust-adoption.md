@@ -189,3 +189,4 @@ main CI 36845270017 passed. `whw close wave-014-runner-proof-real`
 verified terminal A–D, this addendum and all four sync gates, then marked
 E done. No force override was used. The next pending step is Wave 015 A;
 the operator-assisted qualification above remains part of the decision.
+Close delivery: [#46](https://github.com/fabioeloi/WHW/pull/46), `38bfc73`.

@@ -253,7 +253,7 @@ ADR: `docs/adr/0013-program-trust-adoption.md`.
 | B | Implementation | real bounded Codex run + discovery + costClass metrics + tests | stubs are not proof | `src/doctor.js`, `src/metrics.js`, `tests/` | 014 | solo |  [#43](https://github.com/fabioeloi/WHW/pull/43) |
 | C | Verification | Phase A + rubric + sanitized replay | proof | `tests/`, `docs/how/runner-proof-verification.md` | 014 | solo | [#44](https://github.com/fabioeloi/WHW/pull/44) |
 | D | Decision record | ADR 0013 addendum + qualified run tail | record operator assistance | `docs/adr/0013` | 014 | solo | [#45](https://github.com/fabioeloi/WHW/pull/45) |
-| E | Canonical close | `whw close` + sync | close | planning/ | 014 | solo | |
+| E | Canonical close | `whw close` + sync | close | planning/ | 014 | solo | [#46](https://github.com/fabioeloi/WHW/pull/46) |
 
 Sync: `whw sync wave-014-runner-proof-real` · Close: `whw close wave-014-runner-proof-real`
 
