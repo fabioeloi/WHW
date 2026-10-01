@@ -9,7 +9,7 @@
 [![Zero dependencies](https://img.shields.io/badge/dependencies-zero-blue)](package.json)
 [![AGENTS.md](https://img.shields.io/badge/AGENTS.md-canonical-blueviolet)](AGENTS.md)
 [![Agent Skills](https://img.shields.io/badge/skills-agentskills.io%20compatible-brightgreen)](https://agentskills.io/specification)
-[![Version](https://img.shields.io/badge/version-0.1.1-purple)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.2.0-purple)](CHANGELOG.md)
 
 [Manifesto](docs/why/manifesto.md) •
 [Quick Start](#-quick-start) •
@@ -23,6 +23,10 @@
 </div>
 
 ---
+
+Source candidate: **0.2.0**. Publication follows the Program 003 close and
+operator-confirmed tag. The npm quick start uses the currently published
+package; see [CHANGELOG](CHANGELOG.md) for candidate features.
 
 ## 💡 The problem
 

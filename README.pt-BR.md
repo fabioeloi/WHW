@@ -14,6 +14,10 @@
 
 ---
 
+Versão candidata no código: **0.2.0**. A publicação ocorre após o fechamento
+do Programa 003 e a confirmação da tag. O início rápido usa o pacote já
+publicado; as mudanças candidatas estão no [CHANGELOG](CHANGELOG.md).
+
 > Tradução do `README.md`. Em caso de divergência, a versão em inglês prevalece.
 
 ## 💡 O problema
