@@ -237,7 +237,7 @@ revoke `NPM_TOKEN` in this wave. ADR: `docs/adr/0014-trusted-publish.md`.
 
 Sync: `whw sync wave-013-trusted-publish` · Close: `whw close wave-013-trusted-publish`
 
-## Wave 014 — runner-proof-real — **in progress**
+## Wave 014 — runner-proof-real — **closed**
 
 Real `whw run builder --ref wave014-B` on an installed CLI; unit tests for
 untested modules; `costClass` in `whw metrics`. At 014 A, Codex CLI 0.156.0
@@ -253,7 +253,7 @@ ADR: `docs/adr/0013-program-trust-adoption.md`.
 | B | Implementation | real bounded Codex run + discovery + costClass metrics + tests | stubs are not proof | `src/doctor.js`, `src/metrics.js`, `tests/` | 014 | solo |  [#43](https://github.com/fabioeloi/WHW/pull/43) |
 | C | Verification | Phase A + rubric + sanitized replay | proof | `tests/`, `docs/how/runner-proof-verification.md` | 014 | solo | [#44](https://github.com/fabioeloi/WHW/pull/44) |
 | D | Decision record | ADR 0013 addendum + qualified run tail | record operator assistance | `docs/adr/0013` | 014 | solo | [#45](https://github.com/fabioeloi/WHW/pull/45) |
-| E | Canonical close | `whw close` + sync | close | planning/ | 014 | solo | |
+| E | Canonical close | `whw close` + sync | close | planning/ | 014 | solo | [#46](https://github.com/fabioeloi/WHW/pull/46) |
 
 Sync: `whw sync wave-014-runner-proof-real` · Close: `whw close wave-014-runner-proof-real`
 
@@ -291,9 +291,10 @@ Sync: `whw sync wave-016-program-close` · Close: `whw close wave-016-program-cl
 
 ## Next
 
-Program 003 is **in progress** (waves 012–016). Waves 012 and 013 are **closed**.
-Next: Wave 014 A — confirm the installed agent CLI and plan the real runner
-proof. Wave 013 closed on 2026-10-01 after D merged in PR #40 and main CI
-passed; `whw close wave-013-trusted-publish` verified the sync gates.
+Program 003 is **in progress** (waves 012–016). Waves 012–014 are **closed**.
+Next: Wave 015 A — plan the fresh-repository consumer proof.
+Wave 014 closed on 2026-10-01 after D merged in PR #45 and main CI
+36845270017 passed; `whw close wave-014-runner-proof-real` verified the
+sync gates. Its real runner proof remains explicitly operator-assisted.
 Do not revoke `NPM_TOKEN`. Next tag is **v0.2.0** at 016 E (OIDC).
 There is no wave 017 without a new charter ADR.
