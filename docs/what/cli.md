@@ -52,7 +52,7 @@ escalation (`whw run` exhausted).
 
 | Command | Effect |
 | ------- | ------ |
-| `whw resume [--no-sync] [--track T]` | Revalidate after interruption: git baseline, sync (unless `--no-sync`), queue, next step. Does **not** claim. |
+| `whw resume [--no-sync] [--track T]` | Revalidate after interruption: git baseline, sync (unless `--no-sync`), PR gates, queue, next step. Returns nonzero on NO_GO; JSON includes `gates`. Does **not** claim. |
 | `whw handoff --from TOOL --to TOOL [--out FILE] [--task TEXT]` | Migration package (default `docs/handoff/handoff-<date>-<from>-to-<to>.md`). |
 
 ## JSON mode

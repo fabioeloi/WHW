@@ -17,10 +17,12 @@ describe('whw resume', () => {
     /** @type {any} */
     let captured;
     const ctx = makeCtx(root, { 'no-sync': true });
+    ctx.config.gates = { tiers: { pr: ['probe'] }, custom: [{ name: 'probe', command: 'exit 0' }] };
     ctx.json = true;
     ctx.log = { info() {}, warn() {}, error() {}, data(d) { captured = d; } };
     assert.equal(await cmdResume([], ctx), 0);
     assert.equal(captured.synced, false);
+    assert.equal(captured.gates[0].status, 'GO');
     assert.equal(captured.next.ref, 't1-1');
     assert.equal(captured.next.status, 'pending');
     const after = openDb(join(root, '.whw', 'state.db'));
@@ -35,6 +37,7 @@ describe('whw resume', () => {
     /** @type {any} */
     let captured;
     const ctx = makeCtx(root);
+    ctx.config.gates = { tiers: { pr: ['probe'] }, custom: [{ name: 'probe', command: 'exit 0' }] };
     ctx.json = true;
     ctx.log = { info() {}, warn() {}, error() {}, data(d) { captured = d; } };
     assert.equal(await cmdResume([], ctx), 0);

@@ -13,9 +13,11 @@ whw resume
 ```
 
 `whw resume` prints the git baseline, runs `whw sync --all` (skip with
-`--no-sync`), then the queue and next step. It does **not** claim. Then
+`--no-sync`), verifies the PR gates, then prints the queue and next step.
+`--no-sync` still verifies gates. A NO_GO returns nonzero; JSON includes
+the gate results alongside the queue. It does **not** claim. Then
 continue the nearest pending step and report only the delta (already done vs.
-still missing). Re-running `whw gate run --tier pr` buys fast confidence.
+still missing).
 Do not re-ask the operator for context unless a blocking divergence appears
 after revalidation.
 
