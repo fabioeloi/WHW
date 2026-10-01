@@ -58,11 +58,9 @@ PRs [#23](https://github.com/fabioeloi/WHW/pull/23),
 [#25](https://github.com/fabioeloi/WHW/pull/25); `npm test` 56/56;
 `whw gate run --tier pr` GO; `whw gate run --tier ops` GO.
 
-## Addendum Wave 013 — Dependabot as maint (draft)
+## Addendum Wave 013 — Dependabot as maint
 
-Drafted at 013 B; Accepted at 013 D.
-
-`chore(deps)` from Dependabot is maint when the PR carries label `maint`,
+Accepted at D (drafted at 013 B). `chore(deps)` from Dependabot is maint when the PR carries label `maint`,
 the diff is one dependency, and the CI matrix is green. A `maint` *issue*
 is not required for Dependabot — the PR label is the link (config:
 `.github/dependabot.yml` already applies `maint`). Human hotfixes stay
@@ -74,6 +72,9 @@ close (highest `program-close` wave whose E is `done`). A subject is
 allowed when it contains `(Wave NNN L)`, or starts with `chore(deps)` or
 `chore(maint)`. The gate does not fetch GitHub labels; one-dep / `maint`
 label remain merge discipline. Forbidden-as-maint (features, schema, new
-gates, README repositioning, npm publishes) is unchanged.
+gates, README repositioning, npm publishes) is unchanged. Evidence: PRs
+[#38](https://github.com/fabioeloi/WHW/pull/38),
+[#39](https://github.com/fabioeloi/WHW/pull/39); `tests/unit/maint-audit.test.js`
+fixture; `npm test` 66/66; `whw gate run --tier ops` GO (`maint-audit`).
 
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->

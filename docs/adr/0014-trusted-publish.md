@@ -1,6 +1,6 @@
 # ADR 0014 — Trusted publishing (OIDC)
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-10
 - **Wave:** 013
 - **Related:** WHY.md, [0010](0010-release-policy.md), [0012](0012-maintenance-policy.md), [0013](0013-program-trust-adoption.md)
@@ -23,8 +23,6 @@ the `maint` *label* on the PR, not an issue — a hole the 013 addendum to
 0012 must close.
 
 ## Decision
-
-Proposed (Accepted at wave 013 D):
 
 | Rule | Detail |
 | ---- | ------ |
@@ -86,5 +84,19 @@ Also confirmed:
 - [Trusted publishing for npm packages](https://docs.npmjs.com/trusted-publishers/)
 - [.github/workflows/release.yml](../../.github/workflows/release.yml)
 - [SECURITY.md](../../SECURITY.md)
+
+## Addendum Wave 013 — trusted-publish
+
+Accepted at D. Shipped: OIDC-only `release.yml` npm job (`id-token: write`,
+no `NODE_AUTH_TOKEN`); SECURITY.md; `maint-audit` ops gate; ADR 0012 Dependabot
+addendum Accepted. npm trusted-publisher fields confirmed at 013 A (operator
+must save the row on npmjs.com before any `v*` tag). OIDC publish proof and
+`NPM_TOKEN` revocation wait for wave 016 / `v0.2.0` — do not set npm "require
+2FA and disallow tokens" before that succeeds. Evidence: PRs
+[#37](https://github.com/fabioeloi/WHW/pull/37),
+[#38](https://github.com/fabioeloi/WHW/pull/38),
+[#39](https://github.com/fabioeloi/WHW/pull/39); `npm test` 66/66;
+`whw gate run --tier pr` GO; `whw gate run --tier ops` GO. Next: 014
+runner-proof-real.
 
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->

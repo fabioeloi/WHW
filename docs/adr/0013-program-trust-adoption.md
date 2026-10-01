@@ -110,4 +110,14 @@ Thematic decisions landed on [0010](0010-release-policy.md) (CHANGELOG notes,
 [#34](https://github.com/fabioeloi/WHW/pull/34). This letter records the
 contract; close is 012 E. Next: 013 trusted-publish.
 
+## Addendum Wave 013 — trusted-publish
+
+Thematic decisions on [0014](0014-trusted-publish.md) (OIDC publish path,
+`maint-audit`) and [0012](0012-maintenance-policy.md) (Dependabot as maint).
+Wave 013 A–C: PRs
+[#37](https://github.com/fabioeloi/WHW/pull/37),
+[#38](https://github.com/fabioeloi/WHW/pull/38),
+[#39](https://github.com/fabioeloi/WHW/pull/39). ADR 0014 Accepted at D.
+OIDC proof and token revocation at 016 / `v0.2.0`. Next: 014 runner-proof-real.
+
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->
