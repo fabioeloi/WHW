@@ -318,3 +318,20 @@ to require operator presence for npm publication while recovering immutable
 | C | Verify | Negative cases, gates, live staging and registry proof | Prove both security and delivery | tests, verification | after B | evaluator | [#59](https://github.com/fabioeloi/WHW/pull/59) |
 | D | Decide | Evidence-based ADR addendum | Record limits honestly | ADR 0015 | after C | closer | [#60](https://github.com/fabioeloi/WHW/pull/60) |
 | E | Close | Inventory, metrics, whw close | Canonical completion | planning, docs | after D | closer | [#61](https://github.com/fabioeloi/WHW/pull/61) |
+
+## Wave 018 — documentation-adoption
+
+ADR [0016](adr/0016-program-documentation-adoption.md) charters bilingual
+adoption documentation. Scope and acceptance: [editorial map](how/documentation-adoption.md).
+
+| Step | Delivery | Evidence |
+| --- | --- | --- |
+| A | Charter, seeds, gap inventory and bilingual map | ADR 0016 and planning SQL |
+| B | READMEs, pt-BR journey, positioning and security | Documentation diff |
+| C | Independent replay, links, rendering, parity, claims | Verification report |
+| D | Accepted decision with sources and limits | ADR addendum |
+| E | Metrics, gates, canonical close | SQL evidence and green main |
+
+Publication 0.2.0 is complete; see [staged release verification](how/staged-release-verification.md).
+Wave 018 changes GitHub documentation only. The immutable tag and published
+package remain unchanged; npm documentation follows in the next release.
