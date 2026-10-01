@@ -183,3 +183,9 @@ merged `5437284`), C [#44](https://github.com/fabioeloi/WHW/pull/44)
 D delivery: [#45](https://github.com/fabioeloi/WHW/pull/45).
 The program charter remains Proposed until Wave 016 D. Next: canonical
 Wave 014 E close after this addendum merges and main is green.
+
+Wave 014 E close (2026-10-01): D merged as `fddb2c3` in PR #45;
+main CI 36845270017 passed. `whw close wave-014-runner-proof-real`
+verified terminal A–D, this addendum and all four sync gates, then marked
+E done. No force override was used. The next pending step is Wave 015 A;
+the operator-assisted qualification above remains part of the decision.
