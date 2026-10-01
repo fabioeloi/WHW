@@ -5,6 +5,7 @@
 | Version | Supported |
 | ------- | --------- |
 | 0.1.x   | Yes       |
+| 0.2.x   | Yes       |
 
 WHW is pre-1.0: APIs and file layouts may change in minor releases. The
 [Changelog](CHANGELOG.md) documents breaking changes.
@@ -36,13 +37,20 @@ otherwise.
 - `.whw/state.db` is derived local state and is gitignored by default. Do not
   commit it: evidence belongs in versioned `planning/*.todos.sql`,
   checkpoint files, and commit messages.
-- npm publish (`release.yml`) authenticates with GitHub Actions OIDC
-  (`permissions.id-token: write`) and `npm publish --access public
-  --provenance`. The workflow does **not** set `NODE_AUTH_TOKEN`. Do not
-  commit tokens. The GitHub `NPM_TOKEN` secret remains until the first OIDC
-  publish succeeds (wave 016 / `v0.2.0`); do not revoke it and do not set
-  npm "require 2FA and disallow tokens" before that (ADR 0010 / 0014).
-  Configure the npmjs.com trusted-publisher row (`fabioeloi` / `WHW` /
-  `release.yml`, empty environment, allow **`npm publish`**) before any
-  `v*` tag. Tagging is irreversible toward the registry — confirm at
-  execution time. `@fabioeloi/whw@0.1.1` is already on npm.
+- This repository's `release.yml` uses GitHub Actions OIDC
+  (`permissions.id-token: write`) and `npm stage publish --access public
+  --provenance`. The trusted publisher grants staging only; direct publish
+  and dist-tag permissions are disabled. An operator reviews and approves
+  publication on npm with 2FA/passkey. The workflow does not set
+  `NODE_AUTH_TOKEN`; never commit credentials.
+- Version 0.2.0 was published on 2026-10-01. The GitHub `NPM_TOKEN` secret
+  was subsequently deleted with operator authorization; npm package policy
+  requires 2FA and disallows bypass tokens. These are verified repository
+  settings, not automatic security guarantees for WHW consumers.
+- Dispatch recovery attestation identifies the workflow main commit rather
+  than the checked-out release tag. Independent file comparison established
+  0.2.0 source contents. See [release verification](docs/how/staged-release-verification.md)
+  and [staging runbook](docs/how/staged-release.md) for evidence and limits.
+  Tag-triggered future publication remains a separate live verification.
+- Approval and release operations affect the public registry. Review the
+  exact version, artifact and destination before approving a staged release.
