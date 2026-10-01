@@ -135,3 +135,51 @@ included. Acceptance and the sanitized real-run outcome belong at D.
 Planning delivery: [#42](https://github.com/fabioeloi/WHW/pull/42).
 
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->
+
+## Addendum Wave 014 — real runner proof with operator assistance
+
+Decision (2026-10-01): accept the shipped runner discovery, additive
+attempt metrics and module coverage, and retain the real run as
+**operator-assisted proof**. Do not describe it as autonomous task delivery.
+The independent [verification](../how/runner-proof-verification.md) passed
+78 tests, PR gates and Phase A; Phase B approved at 3.783 (4/4/4/3).
+
+The initially selected PATH executable was Codex CLI 0.156.0. Its real
+attempt rejected `gpt-6.1-sol` with HTTP 400. After the operator-authorized
+CLI update, version 0.159.3 accepted the same requested model and `low`
+reasoning with the existing login. No model fallback was used.
+
+Sanitized outcome tail (abridged metadata, not a verbatim transcript):
+
+```text
+CLI=codex 0.156.0 model=gpt-6.1-sol effort=low costClass=closed
+exit=1 durationMs=7375
+outcome=HTTP 400 model rejection; no implementation
+
+CLI=codex 0.159.3 model=gpt-6.1-sol effort=low costClass=closed
+exit=0 durationMs=308271
+outcome=code produced; sandbox blocked Git write; no builder commit/done
+completion=operator-assisted review, commit and live SQL evidence
+```
+
+Both attempts total 315646 ms. The second supervisor completed within the
+20-minute deadline (308336 ms, no timeout). The public
+[fixture](../../tests/fixtures/runner-proof/attempts.json) and
+[replay test](../../tests/unit/runner-proof.test.js) preserve the distinction
+between process success and task completion. Raw local transcripts stay
+under ignored `.whw/runs/`; no credentials or full transcripts are published.
+
+Consequences: `src/run.js` still trusts exit zero, so callers must independently
+check Git, SQL evidence, tests and gates. Autonomous Git/SQL completion in
+the managed sandbox remains unproven; changing runner completion policy
+requires a separately chartered scope. Configured model and costClass are
+metadata, not backend attestation; billed USD is unknown. No CLM benchmark,
+new runtime dependency, release, tag or token revocation belongs to this wave.
+
+Evidence: A [#42](https://github.com/fabioeloi/WHW/pull/42),
+B [#43](https://github.com/fabioeloi/WHW/pull/43) (implementation `4763c85`,
+merged `5437284`), C [#44](https://github.com/fabioeloi/WHW/pull/44)
+(verification `8da5191`, merged `cdd2cf4`; main CI 36843465872 green).
+D delivery: [#45](https://github.com/fabioeloi/WHW/pull/45).
+The program charter remains Proposed until Wave 016 D. Next: canonical
+Wave 014 E close after this addendum merges and main is green.
