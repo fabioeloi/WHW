@@ -277,7 +277,7 @@ checkout on 2026-10-01; the historical bin miss was not reproduced.
 
 Sync: `whw sync wave-015-consumer-proof` · Close: `whw close wave-015-consumer-proof`
 
-## Wave 016 — program-close — **in progress**
+## Wave 016 — program-close — **closed**
 
 `v0.2.0` via OIDC (operator tag after E); inventory; metrics; ADR 0012
 close-hygiene maint SHAs; retrospective. Do not tag in B.
@@ -291,14 +291,14 @@ ADR: `docs/adr/0013-program-trust-adoption.md`.
 | B | Inventory work | 0.2.0 candidate + CHANGELOG; SHA list; evidence recognition | close deliberately | `package.json`, `CHANGELOG.md`, `src/gates/` | 016 | solo | [#53](https://github.com/fabioeloi/WHW/pull/53) |
 | C | Verify | inventory GO, metrics, package/notes audit, ops GO | evidence of done | `.whw/`, `docs/how/program-close-verification.md` | 016 | solo | [#54](https://github.com/fabioeloi/WHW/pull/54) |
 | D | Decide | ADR 0013 Accepted + qualified retro | record outcome | `docs/adr/0013` | 016 | solo | [#55](https://github.com/fabioeloi/WHW/pull/55) |
-| E | Close | `whw close` + operator `v0.2.0` tag | canonical close | planning/ | 016 | solo | |
+| E | Close | `whw close` + release confirmation boundary | canonical close | planning/ | 016 | solo | [#56](https://github.com/fabioeloi/WHW/pull/56) |
 
 Sync: `whw sync wave-016-program-close` · Close: `whw close wave-016-program-close`
 
 ## Next
 
-Program 003 is **in progress** (waves 012–016). Waves 012–015 are **closed**.
-Next: Wave 016 A — plan program inventory and release readiness.
+Program 003 engineering is **closed** (waves 012–016); publication is pending.
+Next: confirm the exact v0.2.0 tag target after E merge and green main.
 Wave 014 closed on 2026-10-01 after D merged in PR #45 and main CI
 36845270017 passed; `whw close wave-014-runner-proof-real` verified the
 sync gates. Its real runner proof remains explicitly operator-assisted.

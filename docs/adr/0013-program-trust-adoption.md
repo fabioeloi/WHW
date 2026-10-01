@@ -83,9 +83,9 @@ addenda land on 0010 and 0011.
 
 ## Close criteria
 
-- [ ] Every wave 012–016 closed via `whw close`
-- [ ] `whw gate run program-inventory` GO
-- [ ] `whw metrics --out .whw/metrics.json` recorded and linked below
+- [x] Every wave 012–016 closed via `whw close`
+- [x] `whw gate run program-inventory` GO
+- [x] `whw metrics --out .whw/metrics.json` recorded and linked below
 - [ ] `@fabioeloi/whw@0.2.0` on npm via OIDC (no `NODE_AUTH_TOKEN` in
       `release.yml`); GitHub Release notes match CHANGELOG
 - [x] ADR 0014 Accepted; ADR 0012 addendum covers Dependabot
@@ -280,3 +280,19 @@ Evidence: A [#52](https://github.com/fabioeloi/WHW/pull/52), B
 main CI 36857509980 passed before D. Next: canonical E close and release
 confirmation, with pending criteria retained until verified.
 D delivery: [#55](https://github.com/fabioeloi/WHW/pull/55), `6d8a5d6`.
+
+Wave 016 E engineering close (2026-10-01): D merged as `e2fdfc1`;
+main CI 36857849104 passed. `whw close wave-016-program-close` verified
+terminal A–D, this addendum and four sync gates, then marked E done without
+force. Program inventory GO after close verifies all 16 seeds and done hooks
+inside their charter ranges, with all 80 todos terminal. The close snapshot
+is `.whw/metrics.json`; a public copy is
+[program-003-metrics.json](../what/program-003-metrics.json). It records
+16 closed waves, 80/80 done and 14 ADRs. Static test counts are not executed
+counts; 79 tests passed at C. Git timing fields describe the local checkout.
+
+Engineering close does not satisfy the pending publication checkbox.
+After E merge and green main, the exact release target is presented for
+operator confirmation. No wave 017 is created without a new charter.
+Engineering close delivery: [#56](https://github.com/fabioeloi/WHW/pull/56),
+`54575db`; inventory snapshot `ce465c8`.
