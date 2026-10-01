@@ -5,9 +5,9 @@
 -- in_progress/blocked/cancelled). Close with `whw close wave-015-consumer-proof`.
 
 INSERT INTO todos (ref, title, status, track, step, letter, adr, notes) VALUES
-  ('wave015-A', 'Wave 015 A — Plan: consumer-proof', 'pending', 'wave-015-consumer-proof', 1, 'A', '0013', 'Name the two tools for the handoff round-trip. Reproduce or close the `npx @fabioeloi/whw@0.1.1` `whw: command not found` miss.'),
-  ('wave015-B', 'Wave 015 B — Build: consumer-proof', 'pending', 'wave-015-consumer-proof', 2, 'B', '0013', 'e2e: fresh temp repo via `init`, run templates/ci-whw.yml steps against the local bin, pr gates GO. Round-trip handoff. Add `gate run --tier pr` to `whw resume`.'),
-  ('wave015-C', 'Wave 015 C — Verify: consumer-proof', 'pending', 'wave-015-consumer-proof', 3, 'C', '0013', 'Tests + `whw gate run --tier pr` green. Record both handoff baselines.'),
+  ('wave015-A', 'Wave 015 A — Plan: consumer-proof', 'pending', 'wave-015-consumer-proof', 1, 'A', '0013', 'Protocol docs/how/consumer-proof.md: codex -> claude -> codex. Versioned npm exec and npx 0.1.1 passed outside checkout on Node 24.5.0/npm 11.11.1, historical bin miss not reproduced. Stop before B.'),
+  ('wave015-B', 'Wave 015 B — Build: consumer-proof', 'pending', 'wave-015-consumer-proof', 2, 'B', '0013', 'Follow docs/how/consumer-proof.md: fresh temp Git consumer init with codex,claude; replay CI template commands with candidate local bin; verify codex -> claude -> codex baselines and SQL invariants. Resume runs PR gates after optional sync, reports text/JSON outcomes, exits nonzero on NO_GO without claiming. No model calls or runtime dependencies.'),
+  ('wave015-C', 'Wave 015 C — Verify: consumer-proof', 'pending', 'wave-015-consumer-proof', 3, 'C', '0013', 'npm test, doctor, Phase A/B and PR gates green; record local consumer replay command exits, both handoff baselines and unchanged SQL statuses. Local replay is not hosted CI or model execution.'),
   ('wave015-D', 'Wave 015 D — Decide: consumer-proof', 'pending', 'wave-015-consumer-proof', 4, 'D', '0013', 'ADR 0013 addendum: consumer path proven; resume now includes pr gates. (ADR 0013)'),
   ('wave015-E', 'Wave 015 E — Close: consumer-proof', 'pending', 'wave-015-consumer-proof', 5, 'E', '0013', 'Run `whw close <wave>` (applies the .done.sql, runs sync gates).')
 ON CONFLICT (ref) DO UPDATE SET
