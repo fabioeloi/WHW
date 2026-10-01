@@ -21,6 +21,8 @@ and review what changed with artifacts you can rerun.
 **0.2.0 is published** on [npm](https://www.npmjs.com/package/@fabioeloi/whw)
 and [GitHub](https://github.com/fabioeloi/WHW/releases/tag/v0.2.0).
 This repository's documentation evolves independently of that immutable package.
+The **0.2.1 documentation patch** packages this bilingual adoption journey;
+the quick start remains pinned to the verified 0.2.0 baseline.
 
 ## Contents
 
@@ -208,7 +210,7 @@ Start at the [documentation index](docs/README.md) or the
 | --- | --- |
 | Published 0.1.0 / 0.1.1 | Core CLI, SQL, gates, roles and initial distribution |
 | Published 0.2.0 | Runner discovery, continuity verification, run metrics and consumer proof; [changelog](CHANGELOG.md) |
-| Wave 018 | Bilingual adoption documentation on GitHub; npm documentation updates with the next release |
+| 0.2.1 documentation patch | Distributes wave 018 bilingual adoption documentation; staging requires human approval |
 | Proposals requiring new charters | Runner postcondition hardening, stronger context persistence, additional platform proofs; no delivery date promised |
 
 Historical ADRs remain in English. See [positioning](docs/why/positioning.md)

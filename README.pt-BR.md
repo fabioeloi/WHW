@@ -21,6 +21,8 @@ revise as mudanças com artefatos que podem ser executados novamente.
 **0.2.0 está publicada** no [npm](https://www.npmjs.com/package/@fabioeloi/whw)
 e no [GitHub](https://github.com/fabioeloi/WHW/releases/tag/v0.2.0).
 A documentação deste repositório evolui separadamente do pacote imutável.
+O **patch documental 0.2.1** empacota esta jornada bilíngue de adoção;
+o início rápido permanece fixado na base 0.2.0 verificada.
 O inglês permanece canônico em caso de divergência.
 
 ## Índice
@@ -214,7 +216,7 @@ Comece pelo [índice de documentação](docs/README.md) (em inglês) ou pela
 | --- | --- |
 | 0.1.0 / 0.1.1 publicadas | CLI núcleo, SQL, gates, papéis e distribuição inicial |
 | 0.2.0 publicada | Descoberta de runners, continuidade verificada, métricas de execução e prova do consumidor; [changelog](CHANGELOG.md) em inglês |
-| Wave 018 | Documentação bilíngue no GitHub; documentação npm atualizada no próximo release |
+| Patch documental 0.2.1 | Distribui a documentação bilíngue da wave 018; staging exige aprovação humana |
 | Propostas que exigem novos charters | Pós-condições de runners, persistência de contexto mais forte, provas de outras plataformas; sem data prometida |
 
 ADRs históricos permanecem em inglês. Veja [posicionamento](docs/why/positioning.md)

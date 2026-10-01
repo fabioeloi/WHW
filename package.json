@@ -1,7 +1,7 @@
 {
   "name": "@fabioeloi/whw",
-  "version": "0.2.0",
-  "description": "WHW (Why \u00b7 How \u00b7 What) \u2014 an LLM- and tool-agnostic harness for autonomous, evidence-gated software delivery: waves, ADRs, SQL planning, gates, and agent roles.",
+  "version": "0.2.1",
+  "description": "WHW (Why · How · What) — portable, resumable and verifiable work for humans and coding agents, with purpose, ADRs, SQL planning and evidence gates.",
   "type": "module",
   "license": "MIT",
   "author": "Fabio Eloi <fabioeloi@gmail.com>",
@@ -23,10 +23,11 @@
     "evidence-gates",
     "sql-planning",
     "code-review",
-    "autonomous-engineering",
     "agents-md",
     "agent-skills",
-    "sqlite"
+    "sqlite",
+    "context-engineering",
+    "delivery-governance"
   ],
   "bin": {
     "whw": "bin/whw.js"
@@ -47,7 +48,8 @@
     "LICENSE",
     "ACKNOWLEDGMENTS.md",
     "CHANGELOG.md",
-    "whw.config.json"
+    "whw.config.json",
+    "SECURITY.md"
   ],
   "engines": {
     "node": ">=22.13.0"

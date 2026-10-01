@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-01
+
+### Added
+
+- Documentation index and complete Brazilian Portuguese adoption journey:
+  quickstart, concepts, operations/continuity, security and troubleshooting.
+- Public evidence reports and rerunnable documentation adoption audits.
+- SECURITY.md included in the npm package.
+
+### Changed
+
+- Equivalent English/pt-BR READMEs with navigation, Mermaid diagrams, verified
+  version-pinned consumer examples and explicit compatibility/proof limits.
+- Positioning and package metadata describe portable, resumable and verifiable
+  work. September 2026 external sources remain separate from WHW results.
+- Release/security documentation records published 0.2.0, staging-only OIDC,
+  human approval and the original recovery provenance boundary. The release
+  workflow uses npm staging; this patch exercises the tag-triggered path.
+
+No runtime API or dependency changes. Verified examples remain pinned to 0.2.0;
+0.2.1 distributes the updated documents without rewriting the earlier package.
+
 ## [0.2.0] - 2026-10-01
 
 ### Added
