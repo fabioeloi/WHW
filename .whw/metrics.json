@@ -1,25 +1,25 @@
 {
   "project": "WHW",
-  "at": "2026-10-01T11:51:18.430Z",
+  "at": "2026-10-01T12:51:30.611Z",
   "git": {
-    "commits": 123,
-    "head": "e2fdfc1",
-    "branch": "feat/wave-016-program-close-e",
+    "commits": 128,
+    "head": "4fa294c",
+    "branch": "feat/wave-017-staged-release-e",
     "firstCommit": "2026-10-01",
     "lastCommit": "2026-10-01",
     "calendarDays": 0,
-    "prRefsUnique": 51
+    "prRefsUnique": 56
   },
-  "adrs": 14,
+  "adrs": 15,
   "waves": {
-    "total": 16,
-    "closed": 16
+    "total": 17,
+    "closed": 17
   },
   "planning": {
-    "seeds": 16,
-    "todos": 80,
-    "done": 80,
-    "tracks": 16,
+    "seeds": 17,
+    "todos": 85,
+    "done": 85,
+    "tracks": 17,
     "doneRatio": 1
   },
   "gates": {
@@ -29,8 +29,8 @@
     "checkpointsTotal": 10
   },
   "tests": {
-    "testFiles": 22,
-    "testCases": 84
+    "testFiles": 23,
+    "testCases": 86
   },
   "runs": {
     "processed": 0,
