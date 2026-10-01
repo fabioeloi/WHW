@@ -332,3 +332,16 @@ adoption documentation. Scope and acceptance: [editorial map](how/documentation-
 Publication 0.2.0 is complete; see [staged release verification](how/staged-release-verification.md).
 Wave 018 changes GitHub documentation only. The immutable tag and published
 package remain unchanged; npm documentation follows in the next release.
+
+## Wave 019 — documentation-release
+
+ADR [0017](adr/0017-program-documentation-release.md) charters distribution
+of bilingual documentation through patch 0.2.1. [Protocol](how/documentation-release.md).
+
+| Letter | Delivery | Acceptance |
+| --- | --- | --- |
+| A | Charter, seeds, release protocol | Version scope and staging boundary |
+| B | Metadata/changelog and security-policy packaging | Tests, pack review, gates, green main |
+| C | Independent consumer and publication proof | Exact tag, stage review, Safari approval, registry proof |
+| D | Accepted ADR | Evidence and limits |
+| E | Canonical close and metrics | Five integrations and green main |
