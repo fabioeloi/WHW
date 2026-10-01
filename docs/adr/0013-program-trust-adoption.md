@@ -132,5 +132,6 @@ Success requires independent SQL/evidence, diff, tests and gates, beyond
 process exit zero. B waits for A merge, green main and implementation go.
 No new dependencies, CLM benchmark or persistence-policy changes are
 included. Acceptance and the sanitized real-run outcome belong at D.
+Planning delivery: [#42](https://github.com/fabioeloi/WHW/pull/42).
 
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->
