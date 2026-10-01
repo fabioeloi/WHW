@@ -251,7 +251,7 @@ ADR: `docs/adr/0013-program-trust-adoption.md`.
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
 | A | Confirm CLI and plan proof | installed CLI/auth checks + protocol + refined seeds | charter first | `planning/`, `docs/how/runner-proof-real.md` | 014 | solo | [#42](https://github.com/fabioeloi/WHW/pull/42) |
 | B | Implementation | real bounded Codex run + discovery + costClass metrics + tests | stubs are not proof | `src/doctor.js`, `src/metrics.js`, `tests/` | 014 | solo |  [#43](https://github.com/fabioeloi/WHW/pull/43) |
-| C | Verification | tests + `pr` gates | proof | `tests/` | 014 | solo | |
+| C | Verification | Phase A + rubric + sanitized replay | proof | `tests/`, `docs/how/runner-proof-verification.md` | 014 | solo | [#44](https://github.com/fabioeloi/WHW/pull/44) |
 | D | Decision record | ADR 0013 addendum + run log tail | record the CLI | `docs/adr/0013` | 014 | solo | |
 | E | Canonical close | `whw close` + sync | close | planning/ | 014 | solo | |
 
