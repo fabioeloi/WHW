@@ -277,7 +277,7 @@ checkout on 2026-10-01; the historical bin miss was not reproduced.
 
 Sync: `whw sync wave-015-consumer-proof` · Close: `whw close wave-015-consumer-proof`
 
-## Wave 016 — program-close — **in progress**
+## Wave 016 — program-close — **closed**
 
 `v0.2.0` via OIDC (operator tag after E); inventory; metrics; ADR 0012
 close-hygiene maint SHAs; retrospective. Do not tag in B.
@@ -297,8 +297,8 @@ Sync: `whw sync wave-016-program-close` · Close: `whw close wave-016-program-cl
 
 ## Next
 
-Program 003 is **in progress** (waves 012–016). Waves 012–015 are **closed**.
-Next: Wave 016 A — plan program inventory and release readiness.
+Program 003 engineering is **closed** (waves 012–016); publication is pending.
+Next: confirm the exact v0.2.0 tag target after E merge and green main.
 Wave 014 closed on 2026-10-01 after D merged in PR #45 and main CI
 36845270017 passed; `whw close wave-014-runner-proof-real` verified the
 sync gates. Its real runner proof remains explicitly operator-assisted.
