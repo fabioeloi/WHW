@@ -48,11 +48,11 @@ main must be green before the next letter.
 
 ## Close criteria
 
-- [ ] Equivalent English/pt-BR READMEs and complete adoption journey
-- [ ] Public 0.2.0 examples replayed in a fresh temporary repository
-- [ ] Changed links/anchors, GitHub diagrams, parity and claims reviewed
-- [ ] A–E integrated; SQL evidence recorded; wave closed; main green
-- [ ] Metrics and PR/ops gates recorded
+- [x] Equivalent English/pt-BR READMEs and complete adoption journey
+- [x] Public 0.2.0 examples replayed in a fresh temporary repository
+- [x] Changed links/anchors, GitHub diagrams, parity and claims reviewed
+- [x] A–D integrated; SQL evidence recorded; canonical close run (E integration/green main required for final completion)
+- [x] Metrics and PR/ops gates recorded
 
 ## References
 
@@ -101,3 +101,12 @@ change. No API, runtime, dependency, package version, tag or publication change.
 
 E must record metrics, canonical SQL close and final green integration.
 Any wave 019 requires a new charter; proposed runner/context work stays deferred.
+
+
+### E close observation
+
+The canonical CLI close passed on 2026-10-01 after D main CI 36880743145.
+[Close report](../how/documentation-adoption-close.md) records the 16-ADR,
+18-wave, 90-done-todo snapshot, ten GO gates and 81 executed passing tests.
+E integration and subsequent green main are the final completion boundary;
+no release/tag operation is part of this decision.

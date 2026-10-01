@@ -1,25 +1,25 @@
 {
   "project": "WHW",
-  "at": "2026-10-01T12:51:30.611Z",
+  "at": "2026-10-01T15:00:42.571Z",
   "git": {
-    "commits": 128,
-    "head": "4fa294c",
-    "branch": "feat/wave-017-staged-release-e",
+    "commits": 133,
+    "head": "2a3625b",
+    "branch": "feat/wave-018-documentation-adoption-e",
     "firstCommit": "2026-10-01",
     "lastCommit": "2026-10-01",
     "calendarDays": 0,
-    "prRefsUnique": 56
+    "prRefsUnique": 61
   },
-  "adrs": 15,
+  "adrs": 16,
   "waves": {
-    "total": 17,
-    "closed": 17
+    "total": 18,
+    "closed": 18
   },
   "planning": {
-    "seeds": 17,
-    "todos": 85,
-    "done": 85,
-    "tracks": 17,
+    "seeds": 18,
+    "todos": 90,
+    "done": 90,
+    "tracks": 18,
     "doneRatio": 1
   },
   "gates": {
