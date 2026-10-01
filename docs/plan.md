@@ -316,18 +316,18 @@ to require operator presence for npm publication while recovering immutable
 | D | Decide | Evidence-based ADR addendum | Record limits honestly | ADR 0015 | after C | closer | [#60](https://github.com/fabioeloi/WHW/pull/60) |
 | E | Close | Inventory, metrics, whw close | Canonical completion | planning, docs | after D | closer | [#61](https://github.com/fabioeloi/WHW/pull/61) |
 
-## Wave 018 — documentation-adoption
+## Wave 018 — documentation-adoption — **closed on E integration**
 
 ADR [0016](adr/0016-program-documentation-adoption.md) charters bilingual
 adoption documentation. Scope and acceptance: [editorial map](how/documentation-adoption.md).
 
 | Step | Delivery | Evidence |
 | --- | --- | --- |
-| A | Charter, seeds, gap inventory and bilingual map | ADR 0016 and planning SQL |
-| B | READMEs, pt-BR journey, positioning and security | Documentation diff |
-| C | Independent replay, links, rendering, parity, claims | Verification report |
-| D | Accepted decision with sources and limits | ADR addendum |
-| E | Metrics, gates, canonical close | SQL evidence and green main |
+| A | Charter, seeds, gap inventory and bilingual map | [#62](https://github.com/fabioeloi/WHW/pull/62) |
+| B | READMEs, pt-BR journey, positioning and security | [#63](https://github.com/fabioeloi/WHW/pull/63) |
+| C | Independent replay, links, rendering, parity, claims | [#64](https://github.com/fabioeloi/WHW/pull/64), [report](how/documentation-adoption-verification.md) |
+| D | Accepted decision with sources and limits | [#65](https://github.com/fabioeloi/WHW/pull/65) |
+| E | Metrics, gates, canonical close | [Close report](how/documentation-adoption-close.md) |
 
 Publication 0.2.0 is complete; see [staged release verification](how/staged-release-verification.md).
 Wave 018 changes GitHub documentation only. The immutable tag and published
