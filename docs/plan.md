@@ -219,7 +219,7 @@ Charter: `docs/adr/0013-program-trust-adoption.md`.
 
 Sync: `whw sync wave-012-release-truth` · Close: `whw close wave-012-release-truth`
 
-## Wave 013 — trusted-publish — **in progress**
+## Wave 013 — trusted-publish — **done**
 
 npm OIDC trusted publisher (`fabioeloi` / `WHW` / `release.yml`, empty
 environment, **allow `npm publish`** — new npm publishers default to
@@ -287,8 +287,9 @@ Sync: `whw sync wave-016-program-close` · Close: `whw close wave-016-program-cl
 
 ## Next
 
-Program 003 is **in progress** (waves 012–016). Wave 012 is **closed**.
-Wave 013 A confirms npm trusted-publisher fields. Do not start 013 B until
-an explicit operator go (and ideally the npmjs.com trusted-publisher row
-exists). Do not revoke `NPM_TOKEN`. Next tag is **v0.2.0** at 016 E (OIDC).
+Program 003 is **in progress** (waves 012–016). Waves 012 and 013 are **closed**.
+Next: Wave 014 A — confirm the installed agent CLI and plan the real runner
+proof. Wave 013 closed on 2026-10-01 after D merged in PR #40 and main CI
+passed; `whw close wave-013-trusted-publish` verified the sync gates.
+Do not revoke `NPM_TOKEN`. Next tag is **v0.2.0** at 016 E (OIDC).
 There is no wave 017 without a new charter ADR.

@@ -99,4 +99,10 @@ must save the row on npmjs.com before any `v*` tag). OIDC publish proof and
 `whw gate run --tier pr` GO; `whw gate run --tier ops` GO. Next: 014
 runner-proof-real.
 
+Canonical close (013 E), 2026-10-01: D merged in
+[#40](https://github.com/fabioeloi/WHW/pull/40) (`dc4e572`), with main CI
+green on Node 22 and 24. `whw close wave-013-trusted-publish` verifies
+A–D terminal, this addendum, and the four sync gates. No tag or token
+revocation is part of this close; OIDC publish proof remains at 016.
+
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->
