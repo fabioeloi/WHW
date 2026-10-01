@@ -60,11 +60,11 @@ automated approval, credential creation, or unrelated security redesign.
 
 ## Close criteria
 
-- [ ] Workflow stages with OIDC and cannot publish directly through its npm grant
-- [ ] Recovery stages the immutable v0.2.0 source; operator approval publishes it
-- [ ] Registry, integrity, provenance and CHANGELOG notes independently verified
-- [ ] Legacy credential disposition recorded without exposing secret values
-- [ ] A–E merged, PR gates GO, inventory GO and metrics recorded
+- [x] Workflow stages with OIDC and cannot publish directly through its npm grant
+- [x] Recovery stages the immutable v0.2.0 source; operator approval publishes it
+- [x] Registry, integrity, provenance and CHANGELOG notes independently verified
+- [x] Legacy credential disposition recorded without exposing secret values
+- [x] A–E merged, PR gates GO, inventory GO and metrics recorded
 
 ## References
 
@@ -98,3 +98,12 @@ were retained in evidence. No deletion of the expired npm history was needed.
 The 016 publication criterion is now satisfied via recovery staging plus
 operator approval; its terminal SQL evidence is supplemented by notes.
 E will record inventory/metrics and close the wave, without retagging.
+
+## Canonical close — Wave 017 E
+
+Local whw close wave-017-staged-release passed after A–D merge. Inventory,
+evidence-quality, release-readiness, maint-audit and all six PR gates are GO.
+Metrics at D merge 4fa294c: 17 waves closed, 85/85 todos done, 15 ADRs and
+10/10 GO checkpoints. The metrics file is a snapshot; its testCases field
+counts source declarations, while actual npm test execution passed 81 tests.
+E becomes canonical only when its PR merges. No wave 018 is chartered.
