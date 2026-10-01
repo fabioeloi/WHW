@@ -2,7 +2,7 @@
 
 <!-- whw:program slug="trust-adoption" waves="012-016" -->
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-10
 - **Waves:** 012–016 (5 waves)
 - **Related:** WHY.md, [0009](0009-program-002.md), [0010](0010-release-policy.md), [0011](0011-derived-state.md), [0012](0012-maintenance-policy.md), [0014](0014-trusted-publish.md)
@@ -88,8 +88,8 @@ addenda land on 0010 and 0011.
 - [ ] `whw metrics --out .whw/metrics.json` recorded and linked below
 - [ ] `@fabioeloi/whw@0.2.0` on npm via OIDC (no `NODE_AUTH_TOKEN` in
       `release.yml`); GitHub Release notes match CHANGELOG
-- [ ] ADR 0014 Accepted; ADR 0012 addendum covers Dependabot
-- [ ] ADR 0012 close-hygiene lists maint SHAs `2d6387a`, `769dda9`,
+- [x] ADR 0014 Accepted; ADR 0012 addendum covers Dependabot
+- [x] ADR 0012 close-hygiene lists maint SHAs `2d6387a`, `769dda9`,
       `18f6e5c`, `348a3fc`, `0eaeca7`
 
 ## References
@@ -237,3 +237,45 @@ Wave 015 E close (2026-10-01): D merged as `c7f49e3`; main CI
 A–D, the addendum and four sync gates, then marked E done without force.
 Next: Wave 016 A. The local-consumer qualifications remain unchanged.
 Close delivery: [#51](https://github.com/fabioeloi/WHW/pull/51), `241c8eb`.
+
+## Addendum Wave 016 — engineering acceptance and release boundary
+
+Decision (2026-10-01): accept the delivered Program 003 engineering
+policies and candidate 0.2.0, with publication evidence still pending.
+Waves 012–015 are canonically closed; Wave 016 E closes after this decision
+merges on green main. Accepted status records the decision, not a claim
+that every publication close criterion has already been achieved.
+
+Shipped: CHANGELOG-derived notes, deterministic checkpoints, OIDC workflow
+without NODE_AUTH_TOKEN, maint-audit, runner discovery/attempt metrics,
+gated resume and fresh-consumer verification. The runner proof remains
+operator-assisted; the consumer proof remains local command replay. Neither
+is a CLM benchmark, backend model attestation or hosted consumer Actions run.
+
+The [candidate audit](../how/program-close-verification.md) passed 79 tests,
+6 PR and 4 ops gates, Phase B 4.0 APPROVE, and extracted-package consumer
+checks. Metrics and candidate packing artifacts are archived in
+`.whw/runs/wave016-C/`; E records a fresh closed-program snapshot. The five
+maintenance SHAs (`2d6387a`, `769dda9`, `18f6e5c`, `348a3fc`, `0eaeca7`)
+are listed in [ADR 0012](0012-maintenance-policy.md), including the historical
+chore(ci) prefix divergence rather than silently legitimizing it.
+
+Retrospective: real CLI evidence exposed an obsolete executable shadowing
+an available model and a sandbox Git limitation; independent postconditions
+prevented process exit zero from becoming a false autonomous-delivery claim.
+Consumer/package replays exercised the public contract. The close audit
+also exposed a source-CLI command recognition gap in evidence-quality;
+its narrow tested fix preserved terminal evidence and rejected unrelated
+commands. Deferred research/learning and runner completion policy changes
+require a new charter; there is no Wave 017 in this program.
+
+Release boundary: after E merges and main is green, prepare the exact tag
+SHA for operator confirmation. Only an observed OIDC publish and matching
+GitHub notes satisfy the publication checkbox. NPM_TOKEN stays until then;
+no token revocation or publication is claimed here.
+
+Evidence: A [#52](https://github.com/fabioeloi/WHW/pull/52), B
+[#53](https://github.com/fabioeloi/WHW/pull/53), C
+[#54](https://github.com/fabioeloi/WHW/pull/54), merged `29d8ab1`;
+main CI 36857509980 passed before D. Next: canonical E close and release
+confirmation, with pending criteria retained until verified.
