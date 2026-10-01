@@ -317,4 +317,4 @@ to require operator presence for npm publication while recovering immutable
 | B | Stage-only workflow | OIDC + guarded dispatch | Human approval before publication | release.yml, runbook | after A | builder | [#58](https://github.com/fabioeloi/WHW/pull/58) |
 | C | Verify | Negative cases, gates, live staging and registry proof | Prove both security and delivery | tests, verification | after B | evaluator | [#59](https://github.com/fabioeloi/WHW/pull/59) |
 | D | Decide | Evidence-based ADR addendum | Record limits honestly | ADR 0015 | after C | closer | [#60](https://github.com/fabioeloi/WHW/pull/60) |
-| E | Close | Inventory, metrics, whw close | Canonical completion | planning, docs | after D | closer | PR pending |
+| E | Close | Inventory, metrics, whw close | Canonical completion | planning, docs | after D | closer | [#61](https://github.com/fabioeloi/WHW/pull/61) |
