@@ -230,3 +230,4 @@ B [#48](https://github.com/fabioeloi/WHW/pull/48), implementation `6512372`,
 merged `4cf7dec`; C [#49](https://github.com/fabioeloi/WHW/pull/49),
 verification `5aa15bc`, merged `fc7860782ed972aaa46e921cdc05319d408f70aa`.
 Main CI 36854583121 passed before D started.
+D delivery: [#50](https://github.com/fabioeloi/WHW/pull/50), `c53ee3e`.
