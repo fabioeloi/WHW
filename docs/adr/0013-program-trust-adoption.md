@@ -86,7 +86,7 @@ addenda land on 0010 and 0011.
 - [x] Every wave 012–016 closed via `whw close`
 - [x] `whw gate run program-inventory` GO
 - [x] `whw metrics --out .whw/metrics.json` recorded and linked below
-- [ ] `@fabioeloi/whw@0.2.0` on npm via OIDC (no `NODE_AUTH_TOKEN` in
+- [x] `@fabioeloi/whw@0.2.0` on npm via OIDC (no `NODE_AUTH_TOKEN` in
       `release.yml`); GitHub Release notes match CHANGELOG
 - [x] ADR 0014 Accepted; ADR 0012 addendum covers Dependabot
 - [x] ADR 0012 close-hygiene lists maint SHAs `2d6387a`, `769dda9`,
@@ -296,3 +296,11 @@ After E merge and green main, the exact release target is presented for
 operator confirmation. No wave 017 is created without a new charter.
 Engineering close delivery: [#56](https://github.com/fabioeloi/WHW/pull/56),
 `54575db`; inventory snapshot `ce465c8`.
+
+## Publication follow-up — Wave 017
+
+On 2026-10-01 immutable v0.2.0 was published through OIDC staging run
+36861416962 and operator passkey approval. GitHub Release notes match
+CHANGELOG, registry latest is 0.2.0 and signatures/attestation verify.
+See [ADR 0015](0015-program-secure-release.md) for the stronger approval
+boundary and credential disposition. Existing done evidence is not rewritten.
