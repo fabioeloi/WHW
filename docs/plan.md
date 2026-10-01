@@ -277,15 +277,17 @@ checkout on 2026-10-01; the historical bin miss was not reproduced.
 
 Sync: `whw sync wave-015-consumer-proof` · Close: `whw close wave-015-consumer-proof`
 
-## Wave 016 — program-close — **pending**
+## Wave 016 — program-close — **in progress**
 
 `v0.2.0` via OIDC (operator tag after E); inventory; metrics; ADR 0012
 close-hygiene maint SHAs; retrospective. Do not tag in B.
+Protocol: [program-close-016](how/program-close-016.md), including the
+documented source-CLI evidence recognition fix and release audit boundaries.
 ADR: `docs/adr/0013-program-trust-adoption.md`.
 
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-016-program-close.todos.sql` | 016 | solo | |
+| A | Planning seed | close protocol + refined notes | charter first | `planning/`, `docs/how/program-close-016.md` | 016 | solo | [#52](https://github.com/fabioeloi/WHW/pull/52) |
 | B | Inventory work | 0.2.0 version + CHANGELOG; SHA list | close deliberately | `package.json`, `CHANGELOG.md` | 016 | solo | |
 | C | Verify | inventory GO, metrics snap, ops GO | evidence of done | `.whw/` | 016 | solo | |
 | D | Decide | ADR 0013 Accepted + retro | record outcome | `docs/adr/0013` | 016 | solo | |
