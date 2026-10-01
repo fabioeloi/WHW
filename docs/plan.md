@@ -257,7 +257,7 @@ ADR: `docs/adr/0013-program-trust-adoption.md`.
 
 Sync: `whw sync wave-014-runner-proof-real` · Close: `whw close wave-014-runner-proof-real`
 
-## Wave 015 — consumer-proof — **in progress**
+## Wave 015 — consumer-proof — **closed**
 
 Fresh-repo `init` + `templates/ci-whw.yml` e2e; handoff round-trip; `whw resume`
 runs `gate run --tier pr`. Reproduce or close the versioned-npx bin miss.
@@ -273,7 +273,7 @@ checkout on 2026-10-01; the historical bin miss was not reproduced.
 | B | Implementation | e2e consumer + resume gate step | `npx` path must work | `tests/e2e/`, `src/resume.js` | 015 | solo | [#48](https://github.com/fabioeloi/WHW/pull/48) |
 | C | Verification | Phase A/B + independent consumer replay + `pr` gates | proof | `tests/`, `docs/how/consumer-proof-verification.md` | 015 | solo | [#49](https://github.com/fabioeloi/WHW/pull/49) |
 | D | Decision record | ADR 0013 addendum | record consumer proof | `docs/adr/0013` | 015 | solo | [#50](https://github.com/fabioeloi/WHW/pull/50) |
-| E | Canonical close | `whw close` + sync | close | planning/ | 015 | solo | |
+| E | Canonical close | `whw close` + sync | close | planning/ | 015 | solo | [#51](https://github.com/fabioeloi/WHW/pull/51) |
 
 Sync: `whw sync wave-015-consumer-proof` · Close: `whw close wave-015-consumer-proof`
 
@@ -295,8 +295,8 @@ Sync: `whw sync wave-016-program-close` · Close: `whw close wave-016-program-cl
 
 ## Next
 
-Program 003 is **in progress** (waves 012–016). Waves 012–014 are **closed**.
-Next: Wave 015 A — plan the fresh-repository consumer proof.
+Program 003 is **in progress** (waves 012–016). Waves 012–015 are **closed**.
+Next: Wave 016 A — plan program inventory and release readiness.
 Wave 014 closed on 2026-10-01 after D merged in PR #45 and main CI
 36845270017 passed; `whw close wave-014-runner-proof-real` verified the
 sync gates. Its real runner proof remains explicitly operator-assisted.
