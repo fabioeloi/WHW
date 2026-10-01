@@ -233,7 +233,7 @@ revoke `NPM_TOKEN` in this wave. ADR: `docs/adr/0014-trusted-publish.md`.
 | B | Implementation | drop `NODE_AUTH_TOKEN`; SECURITY.md; `maint-audit`; 0012 draft | token path is deprecated | `.github/workflows/release.yml`, `src/gates/` | 013 | solo | [#38](https://github.com/fabioeloi/WHW/pull/38) |
 | C | Verification | tests + `pr` gates; `maint-audit` fixture | proof | `tests/` | 013 | solo | [#39](https://github.com/fabioeloi/WHW/pull/39) |
 | D | Decision record | Accept ADR 0014; 0012 Dependabot addendum | record identity | `docs/adr/0014`, `0012` | 013 | solo | [#40](https://github.com/fabioeloi/WHW/pull/40) |
-| E | Canonical close | `whw close` + sync | close | planning/ | 013 | solo | |
+| E | Canonical close | `whw close` + sync | close | planning/ | 013 | solo | [#41](https://github.com/fabioeloi/WHW/pull/41) |
 
 Sync: `whw sync wave-013-trusted-publish` · Close: `whw close wave-013-trusted-publish`
 

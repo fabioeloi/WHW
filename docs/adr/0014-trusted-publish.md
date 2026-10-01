@@ -104,5 +104,7 @@ Canonical close (013 E), 2026-10-01: D merged in
 green on Node 22 and 24. `whw close wave-013-trusted-publish` verifies
 A–D terminal, this addendum, and the four sync gates. No tag or token
 revocation is part of this close; OIDC publish proof remains at 016.
+Close delivery: [#41](https://github.com/fabioeloi/WHW/pull/41);
+`npm test` 66/66 and `whw gate run --tier pr` GO.
 
 <!-- Addenda: append `## Addendum Wave NNN — <topic>` per wave D, newest last. -->
