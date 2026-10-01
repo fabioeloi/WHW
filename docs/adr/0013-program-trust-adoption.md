@@ -279,3 +279,4 @@ Evidence: A [#52](https://github.com/fabioeloi/WHW/pull/52), B
 [#54](https://github.com/fabioeloi/WHW/pull/54), merged `29d8ab1`;
 main CI 36857509980 passed before D. Next: canonical E close and release
 confirmation, with pending criteria retained until verified.
+D delivery: [#55](https://github.com/fabioeloi/WHW/pull/55), `6d8a5d6`.
