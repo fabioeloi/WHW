@@ -257,15 +257,19 @@ ADR: `docs/adr/0013-program-trust-adoption.md`.
 
 Sync: `whw sync wave-014-runner-proof-real` · Close: `whw close wave-014-runner-proof-real`
 
-## Wave 015 — consumer-proof — **pending**
+## Wave 015 — consumer-proof — **in progress**
 
 Fresh-repo `init` + `templates/ci-whw.yml` e2e; handoff round-trip; `whw resume`
 runs `gate run --tier pr`. Reproduce or close the versioned-npx bin miss.
 ADR: `docs/adr/0013-program-trust-adoption.md`.
 
+Protocol: [consumer-proof](how/consumer-proof.md). Tool identifiers:
+Codex → Claude → Codex. The versioned npm invocation passed outside the
+checkout on 2026-10-01; the historical bin miss was not reproduced.
+
 | #   | What | How | Why | Where | When | Who | How much |
 | --- | ---- | --- | --- | ----- | ---- | --- | -------- |
-| A | Planning seed | `whw wave new` + refined notes | charter first | `planning/wave-015-consumer-proof.todos.sql` | 015 | solo | |
+| A | Planning seed | isolated package probe + consumer protocol + refined notes | charter first | `planning/`, `docs/how/consumer-proof.md` | 015 | solo | |
 | B | Implementation | e2e consumer + resume gate step | `npx` path must work | `tests/e2e/`, `src/resume.js` | 015 | solo | |
 | C | Verification | tests + `pr` gates | proof | `tests/` | 015 | solo | |
 | D | Decision record | ADR 0013 addendum | record consumer proof | `docs/adr/0013` | 015 | solo | |
