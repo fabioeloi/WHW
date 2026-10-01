@@ -50,3 +50,12 @@ Temporary maintainer CLI login was used to download the staged tarball and
 then logged out. No credential values entered evidence. Legacy token
 revocation and package bypass-token protection are tracked separately before
 D acceptance; no historical done record is rewritten.
+
+## Credential disposition and package protection
+
+Safari showed success and the selected package policy requiring 2FA while
+disallowing bypass tokens. OIDC permissions remained staging-only. The
+operator explicitly authorized deletion of GitHub NPM_TOKEN; deletion
+succeeded and gh secret list returned no secrets. npm Access Tokens showed
+one WHW_init entry marked Expired, expiry 2026-09-17, and no active tokens.
+This is evidence of inactive credentials, not a claim of new npm revocation.

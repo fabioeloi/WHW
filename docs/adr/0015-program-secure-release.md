@@ -2,7 +2,7 @@
 
 <!-- whw:program slug="secure-release" waves="017-017" -->
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-10-01
 - **Waves:** 017–017
 - **Related:** WHY.md, [0013](0013-program-trust-adoption.md), [0014](0014-trusted-publish.md)
@@ -74,3 +74,27 @@ automated approval, credential creation, or unrelated security redesign.
 - https://github.com/fabioeloi/WHW/actions/runs/36858567547
 
 <!-- Addenda: append per wave D. -->
+
+## Addendum Wave 017 — staged publication accepted
+
+Accepted 2026-10-01. A [#57](https://github.com/fabioeloi/WHW/pull/57),
+B [#58](https://github.com/fabioeloi/WHW/pull/58), C
+[#59](https://github.com/fabioeloi/WHW/pull/59) merged with green CI.
+[Verification](../how/staged-release-verification.md) records 81 passing
+tests, guarded recovery, stage-only OIDC, operator passkey approval, byte
+identity to v0.2.0, public latest=0.2.0 and verified signature/attestation.
+The recovery attestation identifies workflow main; the independent file
+comparison establishes tag contents. Future tag-triggered execution remains
+untested live. No claim of automated approval or tag-only attestation is made.
+
+Safari confirmed package protection requiring 2FA and disallowing bypass
+tokens. After explicit operator authorization, the GitHub NPM_TOKEN secret
+was deleted; the secret inventory is empty. npm's token inventory showed one
+legacy WHW_init token, already expired on 2026-09-17, and no active tokens.
+An expired token was not newly revoked; its inactive disposition is recorded.
+The temporary inspection CLI session was logged out. No credential values
+were retained in evidence. No deletion of the expired npm history was needed.
+
+The 016 publication criterion is now satisfied via recovery staging plus
+operator approval; its terminal SQL evidence is supplemented by notes.
+E will record inventory/metrics and close the wave, without retagging.
