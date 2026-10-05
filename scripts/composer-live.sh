@@ -34,8 +34,12 @@ fi
 
 if [[ -n "${CURSOR_AGENT_SOCKET:-}" && -S "${CURSOR_AGENT_SOCKET}" ]]; then
   env_id="$(curl -sS --unix-socket "$CURSOR_AGENT_SOCKET" http://localhost/v1/meta-data/workspace/environment-id 2>/dev/null || true)"
+  branch="$(curl -sS --unix-socket "$CURSOR_AGENT_SOCKET" http://localhost/v1/meta-data/workspace/branch-name 2>/dev/null || true)"
   if [[ -n "$env_id" ]]; then
     echo "composer live: cloud environment-id=$env_id" >&2
+  fi
+  if [[ -n "$branch" ]]; then
+    echo "composer live: git branch=$branch" >&2
   fi
 fi
 
