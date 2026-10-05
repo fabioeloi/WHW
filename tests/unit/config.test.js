@@ -14,6 +14,8 @@ describe('config', () => {
     assert.equal(c.evaluate.threshold, 3.5);
     assert.equal(c.evaluate.criteria.length, 4);
     assert.deepEqual(c.hooks, {});
+    assert.equal(c.process.profile, 'classic');
+    assert.deepEqual(c.fitness, []);
   });
 
   it('mergeDeep merges objects and replaces arrays', () => {

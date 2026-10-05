@@ -15,5 +15,8 @@ PASS wave-013-trusted-publish.todos.sql: 5 refs applied
 PASS wave-014-runner-proof-real.todos.sql: 5 refs applied
 PASS wave-015-consumer-proof.todos.sql: 5 refs applied
 PASS wave-016-program-close.todos.sql: 5 refs applied
+PASS wave-017-staged-release.todos.sql: 5 refs applied
+PASS wave-018-documentation-adoption.todos.sql: 5 refs applied
+PASS wave-019-documentation-release.todos.sql: 5 refs applied
 PASS all wave todos reference an ADR
 status=GO failures=0

@@ -1,6 +1,6 @@
 -- Wave {{WAVE}} — {{SLUG}} (ADR {{ADR}})
 -- Apply: whw sync {{TRACK}}
--- Refs: {{REF_PREFIX}}-A .. {{REF_PREFIX}}-E (chain A→B→C→D→E)
+-- Refs: {{REF_PREFIX}} chain {{CHAIN}}
 -- Idempotent: re-syncing never downgrades `done` (runtime also preserves
 -- in_progress/blocked/cancelled). Close with `whw close {{TRACK}}`.
 

@@ -12,7 +12,7 @@ half of evidence. Same repo + same command = same numbers.
 | `adrs` | Count of `docs/adr/*.md` |
 | `waves` | `total` seed files, `closed` (E done) |
 | `planning` | `seeds`, `todos`, `done`, `tracks`, `doneRatio` |
-| `gates` | `builtin` (8), `custom`, `checkpointsGo`, `checkpointsTotal` |
+| `gates` | `builtin` (`BUILTINS.length`), `custom`, `checkpointsGo`, `checkpointsTotal` |
 | `tests` | `testFiles`, `testCases` (`test(`/`it(` occurrences under `tests/`) |
 
 ```bash
@@ -36,3 +36,7 @@ whw metrics --out FILE      # JSON snapshot to file (e.g. .whw/metrics.json)
   design — no `gh` dependency).
 - Metrics describe the process surface, not product outcomes. Pair them with
   the WHY acceptance they serve.
+- `whw metrics` does not compare delivery profiles. That instrument is
+  [`npm run benchmark`](benchmark.md): a simulated ledger, a published
+  dimensionless cost model, and no model calls. It is not a measured
+  productivity or financial result.

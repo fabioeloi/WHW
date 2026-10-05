@@ -1,0 +1,16 @@
+{
+  "units": "dimensionless",
+  "note": "Weights are a published model, not observed hours, tokens, or wages. Do not retune them to force a verdict.",
+  "weights": {
+    "conformanceGate": 1,
+    "letterPair": 1,
+    "designCheckpoint": 5,
+    "walkthrough": 6,
+    "attestation": 8,
+    "reviewWait": 8,
+    "learning": 2,
+    "reworkPreBuild": 3,
+    "reworkPostBuild": 10,
+    "escapedDefect": 25
+  }
+}

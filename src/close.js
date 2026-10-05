@@ -5,10 +5,13 @@
  * .done.sql hook and audits the E transition. `done` is never downgraded.
  */
 
+import { appendCeremony } from './ceremony.js';
 import { all, closeDb, get, openDb, run } from './db/sqlite.js';
 import { runOne, writeCheckpoint } from './gates/runner.js';
 import { findAdrFile, listWaveFiles } from './gates/util.js';
 import { runHook } from './hooks.js';
+import { processProfile } from './risk.js';
+import { assertShiftLeftClose } from './shift-left.js';
 import { readText } from './util.js';
 
 const SYNC_GATES = ['planning-coverage', 'adr-link', 'wave-sync', 'readme-sync'];
@@ -45,24 +48,31 @@ export async function cmdClose(positionals, ctx) {
       else ctx.log.info(`${track}: already closed.`);
       return 0;
     }
-    // 1. A–D terminal
+    // 1. Predecessor letters terminal. classic keeps A–D. shift-left uses the seeded chain.
     const letters = all(db, 'SELECT ref, status FROM todos WHERE ref LIKE ? ORDER BY ref;', `${prefix}-%`);
     const byLetter = Object.fromEntries(letters.map((r) => [r.ref.split('-').pop(), r.status]));
-    const open = ['A', 'B', 'C', 'D'].filter((l) => !['done', 'cancelled'].includes(byLetter[l]));
+    const profile = processProfile(ctx.config);
+    const required = profile === 'classic'
+      ? ['A', 'B', 'C', 'D']
+      : Object.keys(byLetter).filter((letter) => letter !== 'E');
+    const open = required.filter((letter) => !['done', 'cancelled'].includes(byLetter[letter]));
     if (open.length) {
       throw new Error(`${track}: letters not terminal: ${open.map((l) => `${prefix}-${l} (${byLetter[l] ?? 'missing'})`).join(', ')}`);
     }
     // 2. ADR addendum present
     const adrRow = all(db, 'SELECT DISTINCT adr FROM todos WHERE track = ?;', track)[0];
     const adrFile = adrRow?.adr ? findAdrFile(ctx.paths.adr, adrRow.adr) : null;
+    const adrText = adrFile ? readText(adrFile) : '';
     const waveRe = new RegExp(`wave[-\\s]?${w.nnn}`, 'i');
-    if (!adrFile || !/addendum/i.test(readText(adrFile)) || !waveRe.test(readText(adrFile))) {
+    if (!adrFile || !/addendum/i.test(adrText) || !waveRe.test(adrText)) {
       throw new Error(`${track}: no \`## Addendum Wave ${w.nnn}\` in ADR ${adrRow?.adr ?? '(none)'} (wave D first)`);
     }
+    if (profile === 'shift-left') assertShiftLeftClose(ctx, byLetter, adrText, w.nnn);
     // 3. Sync gates GO
     for (const gateName of SYNC_GATES) {
       const result = await runOne(ctx, { name: gateName }, db);
       const cp = writeCheckpoint(ctx, gateName, result);
+      appendCeremony(ctx.root, { event: 'gate', name: gateName, kind: 'conformance', status: result.status });
       if (result.status !== 'GO') {
         throw new Error(`${track}: gate ${gateName} NO_GO — ${result.failures[0] ?? 'see ' + cp.latest}`);
       }
@@ -84,6 +94,7 @@ export async function cmdClose(positionals, ctx) {
       }
     }
     closed = true;
+    appendCeremony(ctx.root, { event: 'close', wave: w.nnn, track, learning: profile === 'shift-left' });
     if (ctx.json) {
       ctx.log.data({ wave: w.nnn, track, closed: before.map((r) => r.ref) });
     } else {

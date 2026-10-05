@@ -186,6 +186,7 @@ sem comprovar login, acesso ao modelo ou saúde do backend. Veja
 | Adoção e continuidade | [Verificação do consumidor](docs/how/consumer-proof-verification.md), [teste e2e](tests/e2e/consumer.test.js) | Replay local; sem migração de conversas de modelos nem certificação Windows |
 | Runner real | [Prova Codex](docs/how/runner-proof-real.md) | Assistida pelo operador: sandbox bloqueou commit Git; operador finalizou Git/SQL; modelo solicitado não atesta backend |
 | Release seguro | [Verificação staged](docs/how/staged-release-verification.md), [workflow](.github/workflows/release.yml) | Recuperação por dispatch observada; essa execução não prova publicação futura por tag |
+| Comparação shift-left | [Benchmark](docs/what/benchmark.md) (em inglês), [resumo](docs/pt-BR/comparacao-shift-left.md) | Ledger simulado e pesos publicados; não é produtividade nem economia medida |
 
 Este repositório publicou 0.2.0 com OIDC do GitHub Actions, permissão npm
 somente para staging e aprovação humana com chave-senha. A attestation da
@@ -195,7 +196,9 @@ deste repositório, não garantias automáticas para quem adota WHW. Veja
 [segurança](SECURITY.md) (em inglês).
 
 Não há alegação de ganho medido em benchmark do WHW, economia financeira,
-autonomia completa ou conformidade empresarial. Gates shell e runners
+autonomia completa ou conformidade empresarial. `npm run benchmark` compara o
+perfil classic com o shift-left opt-in sob um modelo de custo publicado; o
+relatório não é produtividade nem economia medida. Gates shell e runners
 executam código configurado por você: revise antes de usar.
 
 ## Documentação
@@ -206,7 +209,7 @@ Comece pelo [índice de documentação](docs/README.md) (em inglês) ou pela
 | Necessidade | Referência (em inglês) |
 | --- | --- |
 | Propósito e princípios | [WHY](WHY.md), [manifesto](docs/why/manifesto.md), [princípios](docs/why/principles.md) |
-| Processo | [Ondas](docs/how/waves.md), [gates](docs/how/gates.md), [evidências](docs/how/evidence.md) |
+| Processo | [Ondas](docs/how/waves.md), [gates](docs/how/gates.md), [revisão por risco](docs/how/risk-review.md), [evidências](docs/how/evidence.md) |
 | Referência técnica | [CLI](docs/what/cli.md), [schema](docs/what/schema.md), [adaptadores](docs/what/adapters.md) |
 | Decisões e trabalho atual | [ADRs](docs/adr/), [plano](docs/plan.md), [contrato canônico dos agentes](AGENTS.md) |
 

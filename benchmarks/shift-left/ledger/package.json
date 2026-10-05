@@ -1,0 +1,6 @@
+{
+  "name": "ledger-fixture",
+  "private": true,
+  "type": "module",
+  "description": "Tiny billing ledger used only as the WHW shift-left comparison fixture."
+}
