@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   advisoryRecord,
   buildAnalystPrompt,
@@ -161,6 +163,17 @@ describe('composer analysis contract', () => {
     assert.equal(typeof analysis.agreesWithOracle, 'boolean');
     assert.equal(typeof analysis.agreesWithVerdict, 'boolean');
     assert.equal(digestReport(report), before);
+    const evidence = {
+      model: 'composer-2.5',
+      runner: found.command,
+      bin: found.bin ?? null,
+      changeIds: analysis.changes.map((change) => change.id),
+      at: new Date().toISOString(),
+    };
+    writeFileSync(
+      join(new URL('../../benchmarks/shift-left/out', import.meta.url).pathname, 'live-invocation.json'),
+      `${JSON.stringify(evidence, null, 2)}\n`,
+    );
   });
 });
 

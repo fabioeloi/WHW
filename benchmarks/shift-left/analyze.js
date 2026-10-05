@@ -10,6 +10,7 @@ import { delimiter, dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { WALKTHROUGH_HEADINGS } from '../../src/shift-left.js';
 import { fileExists, readJson, readText, runCmd, runShell, writeText } from '../../src/util.js';
+import { loadDotEnvLocal, resolveComposerApiKey } from './composer-auth.js';
 import { CRITICAL_VARIANTS, CHANGES } from './scenario.js';
 import { runBenchmark } from './run.js';
 
@@ -44,8 +45,14 @@ export function expandComposerPath(pathEnv = process.env.PATH ?? '', home = home
  * @param {NodeJS.ProcessEnv} [base]
  */
 export function composerLiveEnv(base = process.env) {
+  loadDotEnvLocal();
   const home = base.HOME ?? homedir();
-  return { ...base, PATH: expandComposerPath(base.PATH ?? '', home) };
+  const key = resolveComposerApiKey(base);
+  return {
+    ...base,
+    PATH: expandComposerPath(base.PATH ?? '', home),
+    ...(key ? { CURSOR_API_KEY: key } : {}),
+  };
 }
 
 /**
@@ -247,7 +254,8 @@ export async function discoverComposerCommand(env = process.env, deps = {}) {
  * @param {NodeJS.ProcessEnv} [env]
  */
 export async function composerAuthReady(env = process.env) {
-  if (typeof env.CURSOR_API_KEY === 'string' && env.CURSOR_API_KEY.trim()) return true;
+  loadDotEnvLocal();
+  if (resolveComposerApiKey(env)) return true;
   if (typeof env.CURSOR_AUTH_TOKEN === 'string' && env.CURSOR_AUTH_TOKEN.trim()) return true;
   const bin = findComposerBin(env.PATH ?? '', COMPOSER_BINS, env.HOME ?? homedir());
   if (!bin) return false;

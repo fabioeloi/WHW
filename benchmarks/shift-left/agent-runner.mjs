@@ -10,7 +10,9 @@ import { spawnSync } from 'node:child_process';
 import { accessSync, constants, readFileSync, statSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { delimiter, join } from 'node:path';
-import { prepareComposerAgentEnv } from './composer-auth.js';
+import { loadDotEnvLocal, prepareComposerAgentEnv } from './composer-auth.js';
+
+loadDotEnvLocal();
 
 const REQUESTED_MODEL = 'composer-2.5';
 const COMPOSER_BINS = ['cursor-agent', 'agent'];
