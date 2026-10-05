@@ -27,11 +27,47 @@ jobs:
       - name: PR gates
         run: node ./bin/whw.js gate run --tier pr
 
+  composer-live:
+    name: composer-live (composer-2.5)
+    needs: whw
+    if: needs.whw.result == 'success'
+    runs-on: ubuntu-latest
+    env:
+      CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Install Cursor Agent CLI
+        if: env.CURSOR_API_KEY != ''
+        run: curl -fsSL https://cursor.com/install | bash
+      - name: Dependencies
+        if: env.CURSOR_API_KEY != ''
+        run: npm ci
+      - name: Live Composer 2.5 benchmark
+        if: env.CURSOR_API_KEY != ''
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          npm run test:composer:live
+      - name: Upload live invocation evidence
+        if: env.CURSOR_API_KEY != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: composer-live-invocation
+          path: benchmarks/shift-left/out/live-invocation.json
+      - name: Skip without CURSOR_API_KEY
+        if: env.CURSOR_API_KEY == ''
+        run: echo "Repository secret CURSOR_API_KEY not set; skipped WHW_COMPOSER_LIVE test"
+
   ci:
     name: ci
     if: always()
-    needs: whw
+    needs: [whw, composer-live]
     runs-on: ubuntu-latest
     steps:
       - name: All matrix cells green
         run: test "${{ needs.whw.result }}" = "success"
+      - name: Composer live green when configured
+        run: |
+          case "${{ needs.composer-live.result }}" in success|skipped) ;; *) exit 1 ;; esac
