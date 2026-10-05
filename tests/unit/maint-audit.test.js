@@ -54,6 +54,8 @@ describe('maint-audit fixture', () => {
   it('subjectIsAllowed accepts wave trailers and maint prefixes only', () => {
     const allowed = [
       'feat(gates): add maint-audit (Wave 013 B)',
+      'feat(design): checkpoint before build (Wave 020 D0)',
+      'docs(walk): systemic walkthrough (Wave 020 W)',
       'chore(deps): bump actions/checkout from 6 to 7',
       'chore(maint): pin actions/setup-node',
     ];

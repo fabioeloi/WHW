@@ -13,6 +13,7 @@ describe('gate runner', () => {
     const ctx = makeCtx(makeTmp());
     const gates = listGates(ctx);
     assert.equal(gates.filter((g) => g.builtin).length, 10);
+    assert.equal(gates.every((g) => g.kind === 'conformance'), true);
     assert.deepEqual(resolveSelection(ctx, [], {}), ctx.config.gates.tiers.pr);
     assert.deepEqual(resolveSelection(ctx, [], { tier: 'ops' }), ['program-inventory', 'evidence-quality', 'release-readiness', 'maint-audit']);
     assert.deepEqual(resolveSelection(ctx, ['no-secrets'], {}), ['no-secrets']);

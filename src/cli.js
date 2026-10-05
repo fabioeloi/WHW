@@ -3,6 +3,7 @@
 
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { appendCeremony } from './ceremony.js';
 import { loadConfig } from './config.js';
 import { closeDb, openDb } from './db/sqlite.js';
 import { createLogger } from './log.js';
@@ -11,6 +12,7 @@ import { applySeedFile, listSeedFiles } from './planning/seed.js';
 import { runHook } from './hooks.js';
 import { appendNote, setStatus } from './planning/transitions.js';
 import { renderStatus, statusData } from './report.js';
+import { guardClaim, guardDone, writeJudgment } from './shift-left.js';
 import { readJson } from './util.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -19,11 +21,11 @@ const VALUE_FLAGS = new Set([
   'root', 'config', 'actor', 'evidence', 'reason', 'message', 'm', 'note',
   'track', 'status', 'limit', 'tier', 'phase', 'scores', 'report', 'out', 'o',
   'tools', 'project', 'waves', 'adr', 'from', 'to', 'runner', 'ref', 'task',
-  'title', 'format', 'gate', 'name', 'max-attempts',
+  'title', 'format', 'gate', 'name', 'max-attempts', 'signals', 'decision',
 ]);
 const SHORT = { m: 'message', o: 'out', f: 'force', h: 'help' };
 
-const TWO_WORD = new Set(['adapters', 'adr', 'program', 'wave', 'gate']);
+const TWO_WORD = new Set(['adapters', 'adr', 'program', 'wave', 'gate', 'fitness']);
 
 /**
  * @param {string[]} argv
@@ -107,7 +109,7 @@ Setup
 Charter (WHY → HOW)
   adr new <slug> [--title T]                       create ADR NNNN-<slug>.md
   program new <slug> --waves N                     charter ADR with wave map
-  wave new <slug> --adr NNNN                       planning/wave-NNN-<slug>.{todos,done}.sql
+  wave new <slug> --adr NNNN [--signals a,b]       planning seeds; shift-left routes by signals
 
 Execute (HOW)
   sync [track|--all]                               apply planning seeds to .whw/state.db
@@ -121,10 +123,12 @@ Execute (HOW)
   run <role> [--ref R] [--runner C] [--task T]     invoke a configured agent CLI
 
 Verify (WHAT)
-  gate list                                        list builtin + custom gates
+  gate list                                        list builtin + custom gates (kind: conformance)
   gate run [NAME|--tier pr|--all]                  run gates → GO/NO_GO + checkpoints
+  fitness run                                      project fitness rules (conformance)
   evaluate --phase a|b [--scores JSON]             Phase A checks / Phase B rubric ingest
-  close <wave>                                     canonical close (A–D done + addendum + done.sql)
+  judge <wave> --decision approve|reject --note N  human attestation (not comprehension)
+  close <wave>                                     canonical close (predecessors + addendum + done.sql)
   metrics [--out FILE]                             reproducible repo metrics
 
 Continuity
@@ -140,7 +144,9 @@ const HELP_TOPICS = {
   queue: 'whw queue [--track T] [--status S] [--limit N]\n\nShow actionable work: in_progress todos first, then pending todos whose\ndependencies are all done/cancelled. --status lists one status verbatim.',
   claim: 'whw claim <ref> [--actor A] [--force-wip]\n\nMark pending|blocked → in_progress. Refuses a second in_progress todo\nfor the same actor unless --force-wip (one claim at a time).',
   done: 'whw done <ref> --evidence "PR #12, tests green" [--actor NAME]\n\nMark in_progress → done. Evidence is REQUIRED (commit/PR/test proof).\n`done` is terminal: to revisit, charter a new wave — never a downgrade.',
-  close: 'whw close <wave>\n\nCanonical close: asserts A–D done, ADR addendum present, sync gates green,\nthen applies the .done.sql and marks E. <wave> accepts 001, wave-001,\nor the full track wave-001-slug.',
+  close: 'whw close <wave>\n\nCanonical close: classic asserts A–D done; shift-left asserts every seeded\nletter except E, plus a learning section. Both require an ADR addendum and\nsync gates GO, then apply .done.sql and mark E. <wave> accepts 001, wave-001,\nor the full track wave-001-slug.',
+  judge: 'whw judge <wave> --decision approve|reject --note TEXT\n\nRecord a human attestation at docs/judgment/wave-NNN.md. This checks that\nsomeone signed a decision. It does not prove they understood the system.',
+  fitness: 'whw fitness run\n\nRun whw.config.json fitness commands. Exit 0 when all GO (or none configured).\nShift-left high/critical also runs these before claim of B. Letter C runs\nthem on done for every profile when rules exist.',
   gate: 'whw gate run [NAME|--tier pr|--all]\n\nRun gates → GO/NO_GO with checkpoints at .whw/checkpoints/<gate>/latest.txt.\nTier `pr` is blocking and lean; `ops` runs on demand. Exit 1 on NO_GO.',
   evaluate: 'whw evaluate --phase a|b [--scores JSON] [--report FILE]\n\nPhase A runs configured deterministic checks (lint/tests/build) at zero AI\ncost → evaluation-report.json. Phase B ingests rubric scores (JSON) for the\nweighted criteria (threshold 3.5) → APPROVE/REJECT + top-3 fixes.',
   run: 'whw run <role> [--ref REF] [--runner CMD] [--task TEXT]\n\nCompose role prompt + AGENTS.md + queue context and invoke a configured\nagent CLI (claude, codex, cursor-agent, gemini, aider, opencode, custom).\nHonors the escalation ladder in whw.config.json; final tier is human.',
@@ -156,7 +162,7 @@ const HELP_TOPICS = {
 export async function main(argv, opts = {}) {
   const parsed = typeof argv[0] === 'string' && Array.isArray(argv) ? parseArgs(argv) : argv;
   const { command, sub, positionals, flags } = parsed;
-  const log = createLogger({ json: Boolean(flags.json) });
+  const log = createLogger({ json: Boolean(flags.json), quiet: Boolean(flags.quiet) || Boolean(opts.quiet) });
 
   if (flags.version || command === 'version') {
     process.stdout.write(`${version()}\n`);
@@ -194,7 +200,7 @@ export async function main(argv, opts = {}) {
       if (sub !== 'new') throw new Error('usage: whw program new <slug> --waves N');
       return (await import('./scaffold/program.js')).cmdProgramNew(positionals, ctx);
     case 'wave':
-      if (sub !== 'new') throw new Error('usage: whw wave new <slug> --adr NNNN');
+      if (sub !== 'new') throw new Error('usage: whw wave new <slug> --adr NNNN [--signals a,b]');
       return (await import('./scaffold/wave.js')).cmdWaveNew(positionals, ctx);
     case 'sync':
       return cmdSync(positionals, ctx);
@@ -217,6 +223,11 @@ export async function main(argv, opts = {}) {
     case 'gate':
       if (sub === 'list') return (await import('./gates/runner.js')).cmdGateList(positionals, ctx);
       return (await import('./gates/runner.js')).cmdGateRun(positionals, ctx, sub);
+    case 'fitness':
+      if (sub !== 'run') throw new Error('usage: whw fitness run');
+      return (await import('./fitness.js')).cmdFitness(positionals, ctx);
+    case 'judge':
+      return cmdJudge(positionals, ctx);
     case 'evaluate':
       return (await import('./evaluate.js')).cmdEvaluate(positionals, ctx);
     case 'close':
@@ -294,10 +305,15 @@ export async function cmdTransition(positionals, ctx, kind) {
   const db = openDb(paths.state);
   /** @type {{ ref: string, from: string, to: string, changed?: boolean, actor?: string } | undefined} */
   let res;
+  /** @type {{ letter?: string|null, track?: string } | undefined} */
+  let row;
   try {
-    if (kind === 'claim') res = setStatus(db, ref, 'in_progress', { actor: flags.actor, forceWip: Boolean(flags['force-wip']) });
-    else if (kind === 'done') {
+    if (kind === 'claim') {
+      row = await guardClaim(ctx, db, ref);
+      res = setStatus(db, ref, 'in_progress', { actor: flags.actor, forceWip: Boolean(flags['force-wip']) });
+    } else if (kind === 'done') {
       if (!flags.evidence) throw new Error(`whw done requires --evidence (e.g. --evidence "PR #12, tests green")`);
+      row = await guardDone(ctx, db, ref);
       res = setStatus(db, ref, 'done', { actor: flags.actor, evidence: flags.evidence });
     } else if (kind === 'block') {
       const reason = flags.reason ?? flags.evidence ?? flags.message;
@@ -312,6 +328,7 @@ export async function cmdTransition(positionals, ctx, kind) {
     closeDb(db);
   }
   if (res?.changed && (kind === 'claim' || kind === 'done')) {
+    appendCeremony(ctx.root, { event: kind, ref: res.ref, letter: row?.letter ?? null, track: row?.track ?? null });
     await runHook(ctx, kind === 'claim' ? 'on_claim' : 'on_done', {
       WHW_REF: String(res.ref),
       WHW_FROM: String(res.from),
@@ -319,6 +336,27 @@ export async function cmdTransition(positionals, ctx, kind) {
       WHW_ACTOR: String(res.actor ?? ''),
     });
   }
+  return 0;
+}
+
+/** @param {string[]} positionals @param {any} ctx @returns {Promise<number>} */
+export async function cmdJudge(positionals, ctx) {
+  const arg = positionals[0] ?? ctx.flags.wave;
+  const decision = ctx.flags.decision;
+  const note = ctx.flags.note ?? ctx.flags.message ?? '';
+  if (!arg || !decision) {
+    throw new Error('usage: whw judge <wave> --decision approve|reject --note TEXT');
+  }
+  if (decision !== 'approve' && decision !== 'reject') {
+    throw new Error(`decision must be approve or reject (got ${JSON.stringify(decision)})`);
+  }
+  if (!String(note).trim()) throw new Error('whw judge requires --note');
+  const digits = String(arg).replace(/\D/g, '');
+  if (!digits) throw new Error(`usage: whw judge <wave> — could not read a wave number from ${JSON.stringify(arg)}`);
+  const nnn = digits.padStart(3, '0');
+  const file = writeJudgment(ctx, nnn, decision, String(note).trim());
+  if (ctx.json) ctx.log.data({ wave: nnn, decision, file });
+  else ctx.log.info(`judgment ${decision}: ${file}`);
   return 0;
 }
 

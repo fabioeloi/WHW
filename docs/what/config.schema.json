@@ -107,6 +107,40 @@
       },
       "additionalProperties": false
     },
+    "process": {
+      "type": "object",
+      "description": "Delivery profile. classic (default) keeps the A–E contract. shift-left is opt-in and routes each wave by declared signals.",
+      "properties": {
+        "profile": { "enum": ["classic", "shift-left"], "default": "classic" },
+        "signals": {
+          "type": "array",
+          "description": "Optional default signals for whw wave new when --signals is omitted. A shift-left wave still needs a non-empty set.",
+          "items": {
+            "enum": [
+              "docs", "local-refactor", "test-only",
+              "behavior", "schema", "new-module",
+              "auth", "payment", "pii", "infra", "logging",
+              "architecture", "security-boundary", "destructive-migration", "blast-radius"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "fitness": {
+      "type": "array",
+      "description": "Project-specific executable architecture checks. WHW does not ship universal domain rules.",
+      "items": {
+        "type": "object",
+        "required": ["id", "command"],
+        "properties": {
+          "id": { "type": "string" },
+          "command": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
     "hooks": {
       "type": "object",
       "description": "Optional post-event shell commands. Non-zero exit is logged; the transition is not rolled back. Same trust bar as custom gates.",

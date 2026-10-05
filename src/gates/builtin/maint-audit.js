@@ -11,8 +11,8 @@ import { listWaveFiles } from '../util.js';
 export const name = 'maint-audit';
 export const description = 'Non-merge commits since the last program close carry (Wave NNN L) or chore(deps|maint).';
 
-/** Subject contains a wave trailer, anywhere. */
-export const WAVE_TRAILER = /\(Wave \d{3} [A-E]\)/;
+/** Subject contains a wave trailer, anywhere. D0 and W belong to the opt-in shift-left profile. */
+export const WAVE_TRAILER = /\(Wave \d{3} (?:[A-E]|D0|W)\)/;
 /** Dependabot / grouped-deps subjects (ADR 0012 / 0014). */
 export const CHORE_DEPS = /^chore\(deps\)/;
 /** Human hotfix subjects (ADR 0012). */

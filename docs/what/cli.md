@@ -21,7 +21,7 @@ escalation (`whw run` exhausted).
 | ------- | ------ |
 | `whw adr new <slug> [--title T]` | Next `docs/adr/NNNN-<slug>.md` from template. |
 | `whw program new <slug> --waves N [--title T]` | Charter ADR with wave map for the next N global wave numbers. |
-| `whw wave new <slug> --adr NNNN [--force]` | `planning/wave-NNN-<slug>.{todos,done}.sql` (A–E chain). Refuses unknown ADRs unless `--force`. |
+| `whw wave new <slug> --adr NNNN [--signals a,b] [--force]` | Seeds plus `planning/wave-NNN-<slug>.risk.json`. Classic stays A–E and ignores signals. Shift-left requires signals and routes the chain. Refuses unknown ADRs unless `--force`. |
 
 ## Execute
 
@@ -29,7 +29,7 @@ escalation (`whw run` exhausted).
 | ------- | ------ |
 | `whw sync [track\|--all]` | Apply seed(s) to `.whw/state.db` (idempotent, never downgrades `done`). Bare `sync` applies all. |
 | `whw queue [--track T] [--status S] [--limit N]` | Actionable work: `in_progress` first, then dependency-ready `pending`. `--status` lists verbatim. |
-| `whw claim <ref> [--actor A] [--force-wip]` | `pending`/`blocked` → `in_progress`. Refuses a second `in_progress` for the same actor unless `--force-wip`. |
+| `whw claim <ref> [--actor A] [--force-wip]` | `pending`/`blocked` → `in_progress`. Refuses open SQL dependencies and a second `in_progress` for the same actor unless `--force-wip`. Shift-left high/critical also refuses B while fitness is NO_GO. |
 | `whw done <ref> --evidence E [--actor A]` | `in_progress` → `done`. Evidence required. Terminal. |
 | `whw block <ref> --reason R` | → `blocked` (reason appended to notes). |
 | `whw cancel <ref> [--reason R]` | → `cancelled`. |
@@ -41,11 +41,13 @@ escalation (`whw run` exhausted).
 
 | Command | Effect |
 | ------- | ------ |
-| `whw gate list` | Builtin + custom gates with tiers. |
+| `whw gate list` | Builtin + custom gates with tiers. Every gate listed here is `kind: conformance`. |
 | `whw gate run [NAME…\|--tier pr\|--all]` | Run gates → checkpoints + GO/NO_GO (bare = `pr` tier). `whw gate <name>` also works. |
+| `whw fitness run` | Run `fitness[]` shell rules. Exit 0 when all GO or none are configured. |
+| `whw judge <wave> --decision approve\|reject --note TEXT` | Write `docs/judgment/wave-NNN.md`. Records an attestation; does not prove comprehension. |
 | `whw evaluate --phase a` | Run deterministic checks → `.whw/evaluation-report.json` (gitignored). |
 | `whw evaluate --phase b [--scores JSON\|@file]` | Print scoring prompt, or ingest scores → APPROVE/REJECT. |
-| `whw close <wave>` | Canonical close: A–D terminal + addendum + sync gates GO → apply `.done.sql`. Accepts `001`, `wave-001`, or full track. |
+| `whw close <wave>` | Canonical close. Classic: A–D terminal. Shift-left: every seeded letter except E, plus `## Learning Wave NNN`. Both require an addendum and sync gates GO, then apply `.done.sql`. Accepts `001`, `wave-001`, or full track. |
 | `whw metrics [--out FILE]` | Reproducible repo metrics (JSON with `--json` or file). |
 
 ## Continuity

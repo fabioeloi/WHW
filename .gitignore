@@ -12,6 +12,9 @@ package-lock.json
 !.whw/checkpoints/**/latest.txt
 .whw/runs/
 .whw/evaluation-report.json
+.whw/ceremony.jsonl
+.whw/fitness-latest.json
+benchmarks/shift-left/out/
 
 # OS / editors
 .DS_Store

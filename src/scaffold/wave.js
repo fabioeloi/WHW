@@ -3,6 +3,7 @@
 
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { classify, lettersFor, parseSignals, policyFor, processProfile, writeWaveRisk } from '../risk.js';
 import { fileExists, isDir, localDate, pad3, slugify, writeText } from '../util.js';
 import { loadTemplate, render } from './files.js';
 
@@ -32,14 +33,17 @@ export function resolveAdr(adrDir, adr) {
   return found ? digits : null;
 }
 
-const LETTERS = ['A', 'B', 'C', 'D', 'E'];
-const VERBS = { A: 'Plan', B: 'Build', C: 'Verify', D: 'Decide', E: 'Close' };
+const VERBS = {
+  A: 'Plan', D0: 'Design', B: 'Build', C: 'Verify', D: 'Decide', W: 'Walkthrough', E: 'Close',
+};
 const NOTES = {
-  A: 'Seed planning + branch per letter. PR A: this seed file.',
-  B: 'Implement the wave scope. Small PRs only.',
-  C: 'Tests + `whw gate run --tier pr` green.',
-  D: 'Append the ADR addendum recording the decision.',
-  E: 'Run `whw close <wave>` (applies the .done.sql, runs sync gates).',
+  A: 'Seed planning and the wave risk file.',
+  D0: 'Write docs/design/wave-NNN.md before Build.',
+  B: 'Implement the wave scope. Small increments only.',
+  C: 'Tests, fitness, and conformance gates.',
+  D: 'Record the decision. Human judgment only when the risk policy requires it.',
+  W: 'Write docs/walkthrough/wave-NNN.md (six questions).',
+  E: 'Run whw close (applies the .done.sql, runs sync gates).',
 };
 
 /**
@@ -47,21 +51,24 @@ const NOTES = {
  * @returns {{ rows: string, deps: string }}
  */
 export function buildWaveSeedSql(w) {
-  const rows = LETTERS.map((letter, i) => {
+  const letters = w.letters ?? ['A', 'B', 'C', 'D', 'E'];
+  const rows = letters.map((letter, i) => {
     const ref = `${w.refPrefix}-${letter}`;
-    const title = `Wave ${w.wave} ${letter} — ${VERBS[letter]}: ${w.slug}`;
-    const note = letter === 'D' ? `${NOTES[letter]} (ADR ${w.adr})` : NOTES[letter];
-    return `  ('${ref}', '${title.replace(/'/g, "''")}', 'pending', '${w.track}', ${i + 1}, '${letter}', '${w.adr}', '${note}')`;
+    const verb = VERBS[letter] ?? letter;
+    const title = `Wave ${w.wave} ${letter} — ${verb}: ${w.slug}`;
+    const note = (NOTES[letter] ?? 'Wave letter.').replaceAll('NNN', w.wave);
+    const withAdr = letter === 'D' ? `${note} (ADR ${w.adr})` : note;
+    return `  ('${ref}', '${title.replace(/'/g, "''")}', 'pending', '${w.track}', ${i + 1}, '${letter}', '${w.adr}', '${withAdr.replace(/'/g, "''")}')`;
   }).join(',\n');
-  const deps = LETTERS.slice(1)
-    .map((letter, i) => `  ('${w.refPrefix}-${letter}', '${w.refPrefix}-${LETTERS[i]}')`)
+  const deps = letters.slice(1)
+    .map((letter, i) => `  ('${w.refPrefix}-${letter}', '${w.refPrefix}-${letters[i]}')`)
     .join(',\n');
   return { rows, deps };
 }
 
 const FALLBACK_TODOS = `-- Wave {{WAVE}} — {{SLUG}} (ADR {{ADR}})
 -- Apply: whw sync {{TRACK}}
--- Refs: {{REF_PREFIX}}-A .. {{REF_PREFIX}}-E (chain A→B→C→D→E)
+-- Refs: {{REF_PREFIX}} chain {{CHAIN}}
 
 INSERT INTO todos (ref, title, status, track, step, letter, adr, notes) VALUES
 {{ROWS}}
@@ -93,6 +100,15 @@ export async function cmdWaveNew(positionals, ctx) {
   if (!adr && !ctx.flags.force) {
     throw new Error(`no ADR ${adrFlag} in ${ctx.paths.adr} (create it with \`whw adr new <slug>\`, or pass --force)`);
   }
+  const profile = processProfile(ctx.config);
+  const flagged = parseSignals(ctx.flags.signals);
+  const signals = flagged.length ? flagged : parseSignals(ctx.config?.process?.signals);
+  let riskClass = null;
+  if (profile === 'shift-left') {
+    riskClass = classify(signals);
+  }
+  const policy = riskClass ? policyFor(riskClass) : null;
+  const letters = lettersFor(profile, riskClass);
   const n = nextWaveNumber(ctx.paths.planning);
   const wave = pad3(n);
   const track = `wave-${wave}-${slug}`;
@@ -100,22 +116,39 @@ export async function cmdWaveNew(positionals, ctx) {
   const vars = {
     WAVE: wave, TRACK: track, REF_PREFIX: refPrefix, SLUG: slug,
     ADR: adr ?? String(adrFlag).padStart(4, '0'), DATE: localDate(),
+    CHAIN: letters.join('→'),
   };
-  const { rows, deps } = buildWaveSeedSql({ wave, refPrefix, track, slug, adr: vars.ADR });
-  const todosTpl = loadTemplate(ctx, 'wave.todos.sql', FALLBACK_TODOS);
-  const doneTpl = loadTemplate(ctx, 'wave.done.sql', FALLBACK_DONE);
+  const { rows, deps } = buildWaveSeedSql({ wave, refPrefix, track, slug, adr: vars.ADR, letters });
   const todosFile = join(ctx.paths.planning, `${track}.todos.sql`);
   const doneFile = join(ctx.paths.planning, `${track}.done.sql`);
   if (fileExists(todosFile) && !ctx.flags.force) throw new Error(`wave already exists: ${todosFile}`);
+  writeWaveRisk(ctx.paths.planning, {
+    wave,
+    slug,
+    track,
+    profile,
+    signals,
+    class: riskClass,
+    letters,
+    humanJudgment: policy?.humanJudgment ?? null,
+    fitnessBeforeBuild: policy?.fitnessBeforeBuild ?? false,
+    designBeforeBuild: policy?.designBeforeBuild ?? false,
+    walkthrough: policy?.walkthrough ?? false,
+  });
+  const todosTpl = loadTemplate(ctx, 'wave.todos.sql', FALLBACK_TODOS);
+  const doneTpl = loadTemplate(ctx, 'wave.done.sql', FALLBACK_DONE);
   writeText(todosFile, render(todosTpl.text, { ...vars, ROWS: rows, DEPS: deps }));
   writeText(doneFile, render(doneTpl.text, vars));
   if (ctx.json) {
-    ctx.log.data({ wave, track, adr: vars.ADR, todos: todosFile, done: doneFile });
+    ctx.log.data({
+      wave, track, adr: vars.ADR, profile, class: riskClass, letters, signals,
+      todos: todosFile, done: doneFile,
+    });
     return 0;
   }
   ctx.log.info(`created ${todosFile}`);
   ctx.log.info(`created ${doneFile}`);
+  ctx.log.info(`profile: ${profile}${riskClass ? ` · risk: ${riskClass}` : ''} · chain: ${letters.join('→')}`);
   ctx.log.info(`next: whw sync ${track} && whw queue --track ${track}`);
-  ctx.log.info(`branches: feat/wave-${wave}-${slug}-a … docs/wave-${wave}-${slug}-e`);
   return 0;
 }
