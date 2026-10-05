@@ -72,4 +72,12 @@ Cursor `agent` binary whose help names Composer) is missing, the command
 exits 2 and does not invent an analysis. `npm test` checks the JSON contract
 with a recorded reply and does not call the model. `WHW_COMPOSER_LIVE=1`
 runs one live call and checks that all five change ids come back; the
-recommendation text is not pinned.
+recommendation text is not pinned. The live path uses
+`benchmarks/shift-left/agent-runner.mjs` (`--model composer-2.5`, `--mode ask`,
+`-f`) and discovers `cursor-agent` / `agent` under `~/.local/bin` as well as
+`PATH`. Authenticate first (`agent login`) or set `CURSOR_API_KEY` (Cloud Agent
+runtime secret). Then:
+
+```bash
+npm run test:composer:live
+```

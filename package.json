@@ -63,6 +63,7 @@
     "gates": "node ./bin/whw.js gate run --tier pr",
     "benchmark": "node benchmarks/shift-left/run.js",
     "benchmark:composer": "node benchmarks/shift-left/analyze.js",
+    "test:composer:live": "WHW_COMPOSER_LIVE=1 node --test tests/benchmark/composer-analysis.test.js",
     "example": "node ./bin/whw.js --help"
   }
 }

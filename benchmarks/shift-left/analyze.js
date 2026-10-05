@@ -5,7 +5,7 @@
  */
 
 import { accessSync, constants, mkdtempSync, statSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { homedir, tmpdir } from 'node:os';
 import { delimiter, dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { WALKTHROUGH_HEADINGS } from '../../src/shift-left.js';
@@ -23,6 +23,30 @@ export const RECOMMENDATIONS = ['adopt', 'reject', 'defer'];
 /** Requested CLI model id. Not proof that the backend served this version. */
 export const REQUESTED_MODEL = 'composer-2.5';
 const COMPOSER_BINS = ['cursor-agent', 'agent'];
+export const AGENT_RUNNER = join(HERE, 'agent-runner.mjs');
+
+/**
+ * @param {string} [pathEnv]
+ * @param {string} [home]
+ */
+export function expandComposerPath(pathEnv = process.env.PATH ?? '', home = homedir()) {
+  const extra = [join(home, '.local', 'bin'), join(home, '.cursor', 'bin')];
+  const seen = new Set();
+  const parts = [...(pathEnv ? pathEnv.split(delimiter) : []), ...extra].filter((dir) => {
+    if (!dir || seen.has(dir)) return false;
+    seen.add(dir);
+    return true;
+  });
+  return parts.join(delimiter);
+}
+
+/**
+ * @param {NodeJS.ProcessEnv} [base]
+ */
+export function composerLiveEnv(base = process.env) {
+  const home = base.HOME ?? homedir();
+  return { ...base, PATH: expandComposerPath(base.PATH ?? '', home) };
+}
 
 /**
  * @param {object} report
@@ -167,7 +191,9 @@ export function commandFromHelp(bin, help) {
   }
   if (/\s/.test(bin)) throw new Error(`composer binary path has spaces (${bin}); set WHW_COMPOSER_RUNNER`);
   const format = /--output-format\b/.test(help) ? ' --output-format text' : '';
-  return `${bin} -p --model ${REQUESTED_MODEL}${format} "$(cat "$WHW_PROMPT_FILE")"`;
+  const trust = /(?:^|\s)-f,?\s|--force\b|--trust\b/.test(help) ? ' -f' : '';
+  const ask = /--mode\b/.test(help) ? ' --mode ask' : '';
+  return `${bin} -p${trust}${ask} --model ${REQUESTED_MODEL}${format} "$(cat "$WHW_PROMPT_FILE")"`;
 }
 
 /**
@@ -175,9 +201,10 @@ export function commandFromHelp(bin, help) {
  * @param {string[]} [names]
  * @returns {string|null}
  */
-export function findComposerBin(pathEnv = process.env.PATH ?? '', names = COMPOSER_BINS) {
+export function findComposerBin(pathEnv = process.env.PATH ?? '', names = COMPOSER_BINS, home = homedir()) {
+  const expanded = expandComposerPath(pathEnv, home);
   for (const name of names) {
-    for (const dir of pathEnv ? pathEnv.split(delimiter) : []) {
+    for (const dir of expanded ? expanded.split(delimiter) : []) {
       if (!dir) continue;
       const candidate = join(dir, name);
       try {
@@ -202,7 +229,7 @@ export async function discoverComposerCommand(env = process.env, deps = {}) {
   if (typeof configured === 'string' && configured.trim()) {
     return { command: configured.trim(), source: 'env' };
   }
-  const lookup = deps.lookup ?? findComposerBin;
+  const lookup = deps.lookup ?? ((path) => findComposerBin(path, COMPOSER_BINS, env.HOME ?? homedir()));
   const bin = lookup(env.PATH ?? '');
   if (!bin) return null;
   const runHelp = deps.runHelp ?? (async (candidate) => {
@@ -212,7 +239,21 @@ export async function discoverComposerCommand(env = process.env, deps = {}) {
     return text;
   });
   const help = await runHelp(bin);
-  return { command: commandFromHelp(bin, help), source: 'help', bin };
+  commandFromHelp(bin, help);
+  return { command: `node "${AGENT_RUNNER}"`, source: 'help', bin };
+}
+
+/**
+ * @param {NodeJS.ProcessEnv} [env]
+ */
+export async function composerAuthReady(env = process.env) {
+  if (typeof env.CURSOR_API_KEY === 'string' && env.CURSOR_API_KEY.trim()) return true;
+  const bin = findComposerBin(env.PATH ?? '', COMPOSER_BINS, env.HOME ?? homedir());
+  if (!bin) return false;
+  const res = await runCmd(bin, ['status'], { env, timeoutMs: 20000 });
+  const text = `${res.stdout}\n${res.stderr}`;
+  if (/Not logged in/i.test(text)) return false;
+  return /Logged in|Login successful/i.test(text);
 }
 
 /**
@@ -246,7 +287,12 @@ export async function invokeComposer(opts) {
   const res = await runShell(opts.command, {
     cwd: opts.cwd ?? dir,
     timeoutMs: opts.timeoutMs ?? 360000,
-    env: { ...process.env, WHW_PROMPT_FILE: promptFile },
+    env: {
+      ...process.env,
+      ...(opts.env ?? {}),
+      WHW_PROMPT_FILE: promptFile,
+      ...(opts.bin ? { WHW_COMPOSER_BIN: opts.bin } : {}),
+    },
   });
   if (res.code !== 0) {
     const tail = `${res.stdout}\n${res.stderr}`.trim().split('\n').slice(-8).join('\n');
@@ -271,7 +317,13 @@ export async function runComposerAnalysis(opts = {}) {
   }
   const report = opts.report ?? (fileExists(REPORT_PATH) ? readJson(REPORT_PATH) : await runBenchmark({ outFile: REPORT_PATH }));
   const prompt = buildAnalystPrompt(report);
-  const raw = await invokeComposer({ prompt, command: found.command, cwd: HERE });
+  const raw = await invokeComposer({
+    prompt,
+    command: found.command,
+    cwd: HERE,
+    env: opts.env,
+    bin: found.bin,
+  });
   const record = advisoryRecord(parseAnalysis(raw));
   writeText(opts.outFile ?? ANALYSIS_PATH, `${JSON.stringify(record, null, 2)}\n`);
   return 0;

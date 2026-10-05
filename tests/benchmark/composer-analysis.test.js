@@ -7,6 +7,8 @@ import {
   buildAnalystPrompt,
   CHANGE_IDS,
   commandFromHelp,
+  composerAuthReady,
+  composerLiveEnv,
   discoverComposerCommand,
   extractJsonObject,
   MISSING_CLI,
@@ -110,9 +112,9 @@ describe('composer analysis contract', () => {
   });
 
   it('derives a Composer command only from help that names print and model', async () => {
-    const help = `Usage: cursor-agent [options]\n  -p, --print\n  --model <id>\n  --output-format text|json\n`;
+    const help = `Usage: cursor-agent [options]\n  -p, --print\n  -f, --force\n  --mode <mode>\n  --model <id>\n  --output-format text|json\n`;
     const command = commandFromHelp('/usr/bin/cursor-agent', help);
-    assert.match(command, /cursor-agent -p --model composer-2\.5 --output-format text/);
+    assert.match(command, /cursor-agent -p -f --mode ask --model composer-2\.5 --output-format text/);
     assert.match(command, /WHW_PROMPT_FILE/);
     assert.throws(() => commandFromHelp('cursor-agent', 'Usage: cursor-agent\n  -p, --print\n'), /set WHW_COMPOSER_RUNNER/);
     assert.throws(() => commandFromHelp('agent', 'Usage: agent\n  -p, --print\n  --model <id>\n'), /generic agent/);
@@ -133,21 +135,27 @@ describe('composer analysis contract', () => {
     const report = miniReport();
     const code = await runComposerAnalysis({
       report,
-      env: { PATH: '' },
+      env: { PATH: '', HOME: '/tmp/whw-no-composer-cli' },
     });
     assert.equal(code, 2);
     assert.equal(report.verdict, 'recommend-adopt');
   });
 
   it('asks Composer when WHW_COMPOSER_LIVE=1', { skip: process.env.WHW_COMPOSER_LIVE !== '1', timeout: 360000 }, async () => {
-    const found = await discoverComposerCommand();
+    const env = composerLiveEnv(process.env);
+    const found = await discoverComposerCommand(env);
     assert.ok(found, 'WHW_COMPOSER_LIVE=1 but no Composer CLI and no WHW_COMPOSER_RUNNER');
+    assert.ok(
+      await composerAuthReady(env),
+      'Composer live test needs `agent login` or CURSOR_API_KEY to call composer-2.5',
+    );
+    assert.match(found.command, /agent-runner\.mjs/);
     const { runBenchmark } = await import('../../benchmarks/shift-left/run.js');
     const report = await runBenchmark();
     const before = digestReport(report);
     const prompt = buildAnalystPrompt(report);
     const { invokeComposer } = await import('../../benchmarks/shift-left/analyze.js');
-    const raw = await invokeComposer({ prompt, command: found.command });
+    const raw = await invokeComposer({ prompt, command: found.command, bin: found.bin, env });
     const analysis = parseAnalysis(raw);
     assert.equal(analysis.changes.map((change) => change.id).sort().join(), [...CHANGE_IDS].sort().join());
     assert.equal(typeof analysis.agreesWithOracle, 'boolean');

@@ -38,4 +38,6 @@ prova de que o backend atendeu com essa versão. O parecer pode discordar do
 veredito. Ele não refaz as ondas, não entra na rubrica e não liga o perfil
 `shift-left`. Sem o CLI do Composer, o comando para e não inventa análise.
 `WHW_COMPOSER_RUNNER` troca o comando inteiro. O teste automático usa uma
-resposta gravada; a chamada real só ocorre com `WHW_COMPOSER_LIVE=1`.
+resposta gravada; a chamada real só ocorre com `WHW_COMPOSER_LIVE=1`
+(`npm run test:composer:live`), com `agent login` ou `CURSOR_API_KEY`, via
+`agent-runner.mjs` e `--model composer-2.5`.
