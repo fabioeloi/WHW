@@ -222,19 +222,53 @@ export async function prepareComposerAgentEnv(env) {
 /**
  * @param {NodeJS.ProcessEnv} [env]
  */
-export async function probeComposerAgentAuth(env = process.env) {
+/**
+ * @param {NodeJS.ProcessEnv} [env]
+ * @returns {Promise<string>}
+ */
+export async function describeComposerAuthGap(env = process.env) {
   const scrubbed = scrubIdentityAuthTokens(env);
   const home = scrubbed.HOME ?? homedir();
   const pathEnv = scrubbed.PATH ?? '';
   const bin = findComposerBin(pathEnv, home);
-  if (!bin) return false;
+  const lines = [];
+  if (
+    typeof env.CURSOR_AUTH_TOKEN === 'string'
+    && env.CURSOR_AUTH_TOKEN.trim()
+    && isCloudAgentIdentityToken(env.CURSOR_AUTH_TOKEN)
+  ) {
+    lines.push('CURSOR_AUTH_TOKEN looked like a cloud-agent OIDC JWT (from $CURSOR_AGENT_SOCKET); ignored for cursor-agent.');
+  }
+  const apiKey = resolveComposerApiKey(scrubbed);
+  if (!bin) {
+    lines.push('cursor-agent/agent not found on PATH (install via curl -fsSL https://cursor.com/install | bash).');
+    return lines.join(' ');
+  }
+  if (!apiKey && !scrubbed.CURSOR_AUTH_TOKEN?.trim()) {
+    lines.push('No CURSOR_API_KEY, CURSOR_AUTH_TOKEN session, or agent login.');
+    lines.push('Cloud Agents: add Runtime Secret CURSOR_API_KEY on this environment, then start a new agent run.');
+    lines.push('See docs/pt-BR/composer-live-auth.md');
+    return lines.join(' ');
+  }
   let agentEnv;
   try {
     agentEnv = await prepareComposerAgentEnv(scrubbed);
-  } catch {
-    return false;
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    lines.push(msg);
+    return lines.join(' ');
   }
   const res = await runCmd(bin, ['status'], { env: agentEnv, timeoutMs: 20000 });
-  const text = `${res.stdout}\n${res.stderr}`;
-  return agentStatusLooksLoggedIn(text);
+  const text = `${res.stdout}\n${res.stderr}`.trim();
+  if (agentStatusLooksLoggedIn(text)) return '';
+  lines.push(text.split('\n')[0] || 'cursor-agent status did not report a login');
+  return lines.join(' ');
+}
+
+/**
+ * @param {NodeJS.ProcessEnv} [env]
+ */
+export async function probeComposerAgentAuth(env = process.env) {
+  const gap = await describeComposerAuthGap(env);
+  return gap === '';
 }

@@ -2,6 +2,7 @@
 import { describe, it, mock } from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  describeComposerAuthGap,
   exchangeUserApiKey,
   isCloudAgentIdentityToken,
   resolveComposerApiKey,
@@ -36,6 +37,11 @@ describe('composer-auth', () => {
     const env = scrubIdentityAuthTokens({ CURSOR_AUTH_TOKEN: token, FOO: 'bar' });
     assert.equal(env.CURSOR_AUTH_TOKEN, undefined);
     assert.equal(env.FOO, 'bar');
+  });
+
+  it('describes missing credentials for live runs', async () => {
+    const gap = await describeComposerAuthGap({ PATH: '', HOME: '/tmp/whw-no-agent' });
+    assert.match(gap, /not found on PATH|No CURSOR_API_KEY/);
   });
 
   it('reads CURSOR_API_KEY from WHW_CURSOR_API_KEY_FILE', () => {

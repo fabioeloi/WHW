@@ -32,17 +32,24 @@ try{const j=JSON.parse(Buffer.from(p,'base64url')); process.exit(j.cloud_agent_i
   fi
 fi
 
-if [[ -z "$key" && -z "${CURSOR_AUTH_TOKEN:-}" ]]; then
-  status="$(agent status 2>&1 || true)"
-  if [[ "$status" == *'Not logged in'* ]] || [[ "$status" == *'not logged in'* ]]; then
-    echo "composer live: need CURSOR_API_KEY (Runtime Secret or .env.local) or agent login" >&2
-    echo "See docs/pt-BR/composer-live-auth.md" >&2
-    exit 2
+if [[ -n "${CURSOR_AGENT_SOCKET:-}" && -S "${CURSOR_AGENT_SOCKET}" ]]; then
+  env_id="$(curl -sS --unix-socket "$CURSOR_AGENT_SOCKET" http://localhost/v1/meta-data/workspace/environment-id 2>/dev/null || true)"
+  if [[ -n "$env_id" ]]; then
+    echo "composer live: cloud environment-id=$env_id" >&2
   fi
-  if [[ "$status" != *'Logged in'* ]] && [[ "$status" != *'Login successful'* ]]; then
-    echo "composer live: could not confirm agent login ($(printf '%s' "$status" | head -1))" >&2
-    exit 2
-  fi
+fi
+
+if ! node --input-type=module -e "
+import { probeComposerAgentAuth, describeComposerAuthGap } from './benchmarks/shift-left/composer-auth.js';
+const ok = await probeComposerAgentAuth(process.env);
+if (!ok) {
+  const gap = await describeComposerAuthGap(process.env);
+  if (gap) console.error(gap);
+}
+process.exit(ok ? 0 : 2);
+"; then
+  echo "composer live: cursor-agent auth not ready for composer-2.5" >&2
+  exit 2
 fi
 
 exec env WHW_COMPOSER_LIVE=1 node --env-file-if-exists=.env.local --test tests/benchmark/composer-analysis.test.js

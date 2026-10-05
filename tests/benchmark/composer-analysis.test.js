@@ -147,9 +147,11 @@ describe('composer analysis contract', () => {
     const env = composerLiveEnv(process.env);
     const found = await discoverComposerCommand(env);
     assert.ok(found, 'WHW_COMPOSER_LIVE=1 but no Composer CLI and no WHW_COMPOSER_RUNNER');
+    const { describeComposerAuthGap } = await import('../../benchmarks/shift-left/composer-auth.js');
+    const authGap = await describeComposerAuthGap(env);
     assert.ok(
       await composerAuthReady(env),
-      'Composer live test needs `agent login`, CURSOR_API_KEY, CURSOR_AUTH_TOKEN, or .env.local to call composer-2.5',
+      authGap || 'Composer live test needs `agent login`, CURSOR_API_KEY, CURSOR_AUTH_TOKEN, or .env.local to call composer-2.5',
     );
     assert.match(found.command, /agent-runner\.mjs/);
     const { runBenchmark } = await import('../../benchmarks/shift-left/run.js');
