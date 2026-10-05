@@ -261,8 +261,8 @@ export async function composerAuthReady(env = process.env) {
   if (!bin) return false;
   const res = await runCmd(bin, ['status'], { env, timeoutMs: 20000 });
   const text = `${res.stdout}\n${res.stderr}`;
-  if (/Not logged in/i.test(text)) return false;
-  return /Logged in|Login successful/i.test(text);
+  if (/\bnot logged in\b/i.test(text)) return false;
+  return /^Logged in/m.test(text) || /Login successful/i.test(text);
 }
 
 /**

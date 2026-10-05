@@ -13,6 +13,13 @@ const DEFAULT_API = 'https://api2.cursor.sh';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, '../..');
 
+/** Env names that may carry a Cursor user API key (first non-empty wins). */
+const API_KEY_ENV_NAMES = [
+  'CURSOR_API_KEY',
+  'WHW_CURSOR_API_KEY',
+  'CURSOR_USER_API_KEY',
+];
+
 /** @type {string[]} */
 const API_KEY_FILE_CANDIDATES = [
   'CURSOR_API_KEY_FILE',
@@ -55,8 +62,10 @@ export function loadDotEnvLocal(cwd = REPO_ROOT) {
  * @param {NodeJS.ProcessEnv} [env]
  */
 export function resolveComposerApiKey(env = process.env) {
-  const direct = typeof env.CURSOR_API_KEY === 'string' ? env.CURSOR_API_KEY.trim() : '';
-  if (direct) return direct;
+  for (const name of API_KEY_ENV_NAMES) {
+    const value = env[name];
+    if (typeof value === 'string' && value.trim()) return value.trim();
+  }
   for (const name of API_KEY_FILE_CANDIDATES) {
     const file = env[name];
     if (typeof file === 'string' && file.trim()) {

@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: MIT
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+export PATH="${HOME}/.local/bin:${PATH}"
+
+if [[ -f .env.local ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  source <(grep -v '^#' .env.local | grep -v '^$' | sed 's/^/export /')
+  set +a
+fi
+
+key="${CURSOR_API_KEY:-}"
+for name in WHW_CURSOR_API_KEY CURSOR_USER_API_KEY; do
+  if [[ -z "$key" && -n "${!name:-}" ]]; then
+    export CURSOR_API_KEY="${!name}"
+    key="${!name}"
+  fi
+done
+
+if [[ -z "$key" && -z "${CURSOR_AUTH_TOKEN:-}" ]]; then
+  status="$(agent status 2>&1 || true)"
+  if [[ "$status" == *'Not logged in'* ]] || [[ "$status" == *'not logged in'* ]]; then
+    echo "composer live: need CURSOR_API_KEY (Runtime Secret or .env.local) or agent login" >&2
+    echo "See docs/pt-BR/composer-live-auth.md" >&2
+    exit 2
+  fi
+  if [[ "$status" != *'Logged in'* ]] && [[ "$status" != *'Login successful'* ]]; then
+    echo "composer live: could not confirm agent login ($(printf '%s' "$status" | head -1))" >&2
+    exit 2
+  fi
+fi
+
+exec env WHW_COMPOSER_LIVE=1 node --env-file-if-exists=.env.local --test tests/benchmark/composer-analysis.test.js

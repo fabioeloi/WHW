@@ -64,6 +64,7 @@
     "benchmark": "node benchmarks/shift-left/run.js",
     "benchmark:composer": "node benchmarks/shift-left/analyze.js",
     "test:composer:live": "WHW_COMPOSER_LIVE=1 node --env-file-if-exists=.env.local --test tests/benchmark/composer-analysis.test.js",
+    "composer:live": "bash scripts/composer-live.sh",
     "example": "node ./bin/whw.js --help"
   }
 }

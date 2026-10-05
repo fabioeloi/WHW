@@ -170,10 +170,9 @@ describe('composer analysis contract', () => {
       changeIds: analysis.changes.map((change) => change.id),
       at: new Date().toISOString(),
     };
-    writeFileSync(
-      join(new URL('../../benchmarks/shift-left/out', import.meta.url).pathname, 'live-invocation.json'),
-      `${JSON.stringify(evidence, null, 2)}\n`,
-    );
+    const outDir = fileURLToPath(new URL('../../benchmarks/shift-left/out', import.meta.url));
+    mkdirSync(outDir, { recursive: true });
+    writeFileSync(join(outDir, 'live-invocation.json'), `${JSON.stringify(evidence, null, 2)}\n`);
   });
 });
 
