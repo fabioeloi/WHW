@@ -100,7 +100,7 @@ describe('composer analysis contract', () => {
     const report = miniReport();
     const before = digestReport(report);
     const saved = advisoryRecord(validateAnalysis(reply));
-    assert.equal(saved.model, 'composer');
+    assert.equal(saved.model, 'composer-2.5');
     assert.equal(saved.advisory, true);
     assert.equal(saved.changesDefaultProfile, false);
     assert.equal(digestReport(report), before);
@@ -112,7 +112,7 @@ describe('composer analysis contract', () => {
   it('derives a Composer command only from help that names print and model', async () => {
     const help = `Usage: cursor-agent [options]\n  -p, --print\n  --model <id>\n  --output-format text|json\n`;
     const command = commandFromHelp('/usr/bin/cursor-agent', help);
-    assert.match(command, /cursor-agent -p --model composer --output-format text/);
+    assert.match(command, /cursor-agent -p --model composer-2\.5 --output-format text/);
     assert.match(command, /WHW_PROMPT_FILE/);
     assert.throws(() => commandFromHelp('cursor-agent', 'Usage: cursor-agent\n  -p, --print\n'), /set WHW_COMPOSER_RUNNER/);
     assert.throws(() => commandFromHelp('agent', 'Usage: agent\n  -p, --print\n  --model <id>\n'), /generic agent/);

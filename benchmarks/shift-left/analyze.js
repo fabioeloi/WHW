@@ -20,6 +20,8 @@ export const ANALYSIS_PATH = join(OUT_DIR, 'composer-analysis.json');
 export const ANALYST_PATH = join(HERE, 'analyst.md');
 export const CHANGE_IDS = CHANGES.map((change) => change.id);
 export const RECOMMENDATIONS = ['adopt', 'reject', 'defer'];
+/** Requested CLI model id. Not proof that the backend served this version. */
+export const REQUESTED_MODEL = 'composer-2.5';
 const COMPOSER_BINS = ['cursor-agent', 'agent'];
 
 /**
@@ -165,7 +167,7 @@ export function commandFromHelp(bin, help) {
   }
   if (/\s/.test(bin)) throw new Error(`composer binary path has spaces (${bin}); set WHW_COMPOSER_RUNNER`);
   const format = /--output-format\b/.test(help) ? ' --output-format text' : '';
-  return `${bin} -p --model composer${format} "$(cat "$WHW_PROMPT_FILE")"`;
+  return `${bin} -p --model ${REQUESTED_MODEL}${format} "$(cat "$WHW_PROMPT_FILE")"`;
 }
 
 /**
@@ -227,7 +229,7 @@ export function parseAnalysis(raw, ids = CHANGE_IDS) {
 export function advisoryRecord(analysis) {
   return {
     ...analysis,
-    model: 'composer',
+    model: REQUESTED_MODEL,
     advisory: true,
     changesDefaultProfile: false,
   };

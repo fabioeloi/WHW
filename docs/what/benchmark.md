@@ -57,7 +57,9 @@ npm run benchmark
 
 ## Composer reading
 
-`npm run benchmark:composer` asks the Composer model to read that report. It
+`npm run benchmark:composer` asks Composer 2.5 (`--model composer-2.5`) to
+read that report. The `model` field is the id that was requested, not proof
+that the backend served that version. The command
 does not re-run the waves, does not edit `verdictFor`, and does not change
 `process.profile`. The opinion is written beside the report at
 `benchmarks/shift-left/out/composer-analysis.json` (gitignored) and may

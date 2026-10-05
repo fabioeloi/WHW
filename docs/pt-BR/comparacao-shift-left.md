@@ -32,8 +32,10 @@ O veredito (`recommend-adopt`, `recommend-reject`, `tradeoff` ou
 `inconclusive`) não altera o perfil padrão. Serve para uma decisão posterior.
 Não é ganho medido de produtividade nem economia financeira.
 
-`npm run benchmark:composer` pede ao modelo Composer um parecer sobre esse
-relatório já calculado. O parecer pode discordar do veredito. Ele não refaz
-as ondas, não entra na rubrica e não liga o perfil `shift-left`. Sem o CLI do
-Composer, o comando para e não inventa análise. O teste automático usa uma
+`npm run benchmark:composer` pede ao Composer 2.5 (`composer-2.5`) um parecer
+sobre esse relatório já calculado. O campo `model` é o id solicitado, não a
+prova de que o backend atendeu com essa versão. O parecer pode discordar do
+veredito. Ele não refaz as ondas, não entra na rubrica e não liga o perfil
+`shift-left`. Sem o CLI do Composer, o comando para e não inventa análise.
+`WHW_COMPOSER_RUNNER` troca o comando inteiro. O teste automático usa uma
 resposta gravada; a chamada real só ocorre com `WHW_COMPOSER_LIVE=1`.
