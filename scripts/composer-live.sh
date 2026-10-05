@@ -20,6 +20,18 @@ for name in WHW_CURSOR_API_KEY CURSOR_USER_API_KEY; do
   fi
 done
 
+# Drop mistaken cloud-agent OIDC JWTs (see docs/pt-BR/composer-live-auth.md).
+if [[ -n "${CURSOR_AUTH_TOKEN:-}" ]]; then
+  if node -e "
+const t=process.env.CURSOR_AUTH_TOKEN||'';
+const p=t.split('.')[1];
+if(!p) process.exit(1);
+try{const j=JSON.parse(Buffer.from(p,'base64url')); process.exit(j.cloud_agent_id?0:1);}catch{process.exit(1)}
+" 2>/dev/null; then
+    unset CURSOR_AUTH_TOKEN
+  fi
+fi
+
 if [[ -z "$key" && -z "${CURSOR_AUTH_TOKEN:-}" ]]; then
   status="$(agent status 2>&1 || true)"
   if [[ "$status" == *'Not logged in'* ]] || [[ "$status" == *'not logged in'* ]]; then

@@ -4,14 +4,16 @@
  * Hosted agent VMs do not persist `agent login`; use CURSOR_API_KEY or injected CURSOR_AUTH_TOKEN.
  */
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { accessSync, constants, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { delimiter, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { runCmd } from '../../src/util.js';
 
 const DEFAULT_API = 'https://api2.cursor.sh';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, '../..');
+const COMPOSER_BINS = ['cursor-agent', 'agent'];
 
 /** Env names that may carry a Cursor user API key (first non-empty wins). */
 const API_KEY_ENV_NAMES = [
@@ -56,6 +58,76 @@ export function loadDotEnvLocal(cwd = REPO_ROOT) {
     }
     if (process.env[name] === undefined) process.env[name] = value;
   }
+}
+
+/**
+ * @param {string} token
+ * @returns {Record<string, unknown>|null}
+ */
+export function decodeJwtPayload(token) {
+  const parts = token.trim().split('.');
+  if (parts.length < 2) return null;
+  try {
+    const json = Buffer.from(parts[1], 'base64url').toString('utf8');
+    const payload = JSON.parse(json);
+    return payload && typeof payload === 'object' ? payload : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * OIDC tokens from $CURSOR_AGENT_SOCKET are cloud-agent identity JWTs, not Origin CLI sessions.
+ * @param {string} token
+ */
+export function isCloudAgentIdentityToken(token) {
+  const payload = decodeJwtPayload(token);
+  if (!payload) return false;
+  return typeof payload.cloud_agent_id === 'string' && payload.cloud_agent_id.length > 0;
+}
+
+/**
+ * @param {NodeJS.ProcessEnv} env
+ */
+export function scrubIdentityAuthTokens(env) {
+  const out = { ...env };
+  const authToken = typeof out.CURSOR_AUTH_TOKEN === 'string' ? out.CURSOR_AUTH_TOKEN.trim() : '';
+  if (authToken && isCloudAgentIdentityToken(authToken)) {
+    delete out.CURSOR_AUTH_TOKEN;
+  }
+  return out;
+}
+
+/**
+ * @param {string} text agent status stdout/stderr
+ */
+export function agentStatusLooksLoggedIn(text) {
+  if (/\bnot logged in\b/i.test(text)) return false;
+  if (/stored authentication is invalid/i.test(text)) return false;
+  return /^Logged in/m.test(text) || /Login successful/i.test(text);
+}
+
+/**
+ * @param {string} pathEnv
+ * @param {string} [home]
+ */
+export function findComposerBin(pathEnv, home = homedir()) {
+  const extra = [join(home, '.local', 'bin'), join(home, '.cursor', 'bin')];
+  const dirs = [...(pathEnv ? pathEnv.split(delimiter) : []), ...extra];
+  for (const name of COMPOSER_BINS) {
+    for (const dir of dirs) {
+      if (!dir) continue;
+      const candidate = join(dir, name);
+      try {
+        if (!statSync(candidate).isFile()) continue;
+        accessSync(candidate, constants.X_OK);
+        return candidate;
+      } catch {
+        /* absent */
+      }
+    }
+  }
+  return null;
 }
 
 /**
@@ -130,18 +202,39 @@ export function writeCursorAuthJson(tokens, home = homedir()) {
  */
 export async function prepareComposerAgentEnv(env) {
   loadDotEnvLocal();
-  const out = { ...env };
-  const apiKey = resolveComposerApiKey(env);
-  const authToken = typeof env.CURSOR_AUTH_TOKEN === 'string' ? env.CURSOR_AUTH_TOKEN.trim() : '';
-  if (authToken) return out;
+  const scrubbed = scrubIdentityAuthTokens(env);
+  const out = { ...scrubbed };
+  const apiKey = resolveComposerApiKey(scrubbed);
+  const authToken = typeof scrubbed.CURSOR_AUTH_TOKEN === 'string' ? scrubbed.CURSOR_AUTH_TOKEN.trim() : '';
+  if (authToken && !isCloudAgentIdentityToken(authToken)) return out;
   if (!apiKey) return out;
   if (!out.CURSOR_API_KEY) out.CURSOR_API_KEY = apiKey;
-  const tokens = await exchangeUserApiKey(apiKey, env.CURSOR_API_ENDPOINT ?? DEFAULT_API);
+  const tokens = await exchangeUserApiKey(apiKey, scrubbed.CURSOR_API_ENDPOINT ?? DEFAULT_API);
   if (!tokens) {
     throw new Error('CURSOR_API_KEY is set but exchange_user_api_key failed (invalid or revoked key)');
   }
-  const home = env.HOME ?? homedir();
+  const home = scrubbed.HOME ?? homedir();
   writeCursorAuthJson(tokens, home);
   out.CURSOR_AUTH_TOKEN = tokens.accessToken;
   return out;
+}
+
+/**
+ * @param {NodeJS.ProcessEnv} [env]
+ */
+export async function probeComposerAgentAuth(env = process.env) {
+  const scrubbed = scrubIdentityAuthTokens(env);
+  const home = scrubbed.HOME ?? homedir();
+  const pathEnv = scrubbed.PATH ?? '';
+  const bin = findComposerBin(pathEnv, home);
+  if (!bin) return false;
+  let agentEnv;
+  try {
+    agentEnv = await prepareComposerAgentEnv(scrubbed);
+  } catch {
+    return false;
+  }
+  const res = await runCmd(bin, ['status'], { env: agentEnv, timeoutMs: 20000 });
+  const text = `${res.stdout}\n${res.stderr}`;
+  return agentStatusLooksLoggedIn(text);
 }

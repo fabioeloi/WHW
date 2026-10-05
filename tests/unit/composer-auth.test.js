@@ -1,7 +1,12 @@
 // SPDX-License-Identifier: MIT
 import { describe, it, mock } from 'node:test';
 import assert from 'node:assert/strict';
-import { exchangeUserApiKey, resolveComposerApiKey } from '../../benchmarks/shift-left/composer-auth.js';
+import {
+  exchangeUserApiKey,
+  isCloudAgentIdentityToken,
+  resolveComposerApiKey,
+  scrubIdentityAuthTokens,
+} from '../../benchmarks/shift-left/composer-auth.js';
 import { mkdtempSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -19,8 +24,18 @@ describe('composer-auth', () => {
     assert.deepEqual(tokens, { accessToken: 'at', refreshToken: 'rt' });
   });
 
-  it('treats CURSOR_AUTH_TOKEN as ready for live runs', async () => {
-    assert.equal(await composerAuthReady({ CURSOR_AUTH_TOKEN: 'session', PATH: '' }), true);
+  it('does not treat a bare CURSOR_AUTH_TOKEN as ready without agent login', async () => {
+    assert.equal(await composerAuthReady({ CURSOR_AUTH_TOKEN: 'session', PATH: '' }), false);
+  });
+
+  it('strips cloud-agent OIDC JWTs mistaken for CURSOR_AUTH_TOKEN', () => {
+    const header = Buffer.from(JSON.stringify({ alg: 'none', typ: 'JWT' })).toString('base64url');
+    const payload = Buffer.from(JSON.stringify({ cloud_agent_id: 'bc-test' })).toString('base64url');
+    const token = `${header}.${payload}.sig`;
+    assert.equal(isCloudAgentIdentityToken(token), true);
+    const env = scrubIdentityAuthTokens({ CURSOR_AUTH_TOKEN: token, FOO: 'bar' });
+    assert.equal(env.CURSOR_AUTH_TOKEN, undefined);
+    assert.equal(env.FOO, 'bar');
   });
 
   it('reads CURSOR_API_KEY from WHW_CURSOR_API_KEY_FILE', () => {
