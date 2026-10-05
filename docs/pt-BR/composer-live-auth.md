@@ -12,6 +12,10 @@ falha e **não inventa** JSON.
 3. Inicie um **novo** run do agente (secrets não entram em VMs já abertas).
 4. No terminal do agente: `npm run test:composer:live`.
 
+Sem o secret, runs de goal/thread neste ambiente (`environment-id` no stderr de
+`npm run composer:live`) falham no preflight — isso é esperado; o benchmark não
+inventa JSON.
+
 **Não** exporte o JWT de `POST /v1/tokens/oidc` em `$CURSOR_AGENT_SOCKET` como
 `CURSOR_AUTH_TOKEN`: é um token de identidade do cloud agent (audience OIDC), não
 a sessão do `cursor-agent`. O benchmark remove esse JWT e exige `CURSOR_API_KEY`,

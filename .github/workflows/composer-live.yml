@@ -14,7 +14,7 @@ jobs:
       - name: Install Cursor Agent CLI
         run: curl -fsSL https://cursor.com/install | bash
       - name: Dependencies
-        run: npm ci
+        run: bash scripts/npm-deps.sh
       - name: Live Composer 2.5 benchmark test
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
