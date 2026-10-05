@@ -147,7 +147,7 @@ describe('composer analysis contract', () => {
     assert.ok(found, 'WHW_COMPOSER_LIVE=1 but no Composer CLI and no WHW_COMPOSER_RUNNER');
     assert.ok(
       await composerAuthReady(env),
-      'Composer live test needs `agent login` or CURSOR_API_KEY to call composer-2.5',
+      'Composer live test needs `agent login`, CURSOR_API_KEY, CURSOR_AUTH_TOKEN, or .env.local to call composer-2.5',
     );
     assert.match(found.command, /agent-runner\.mjs/);
     const { runBenchmark } = await import('../../benchmarks/shift-left/run.js');

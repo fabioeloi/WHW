@@ -10,6 +10,7 @@ import { spawnSync } from 'node:child_process';
 import { accessSync, constants, readFileSync, statSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { delimiter, join } from 'node:path';
+import { prepareComposerAgentEnv } from './composer-auth.js';
 
 const REQUESTED_MODEL = 'composer-2.5';
 const COMPOSER_BINS = ['cursor-agent', 'agent'];
@@ -50,9 +51,18 @@ if (!bin) {
 
 const prompt = readFileSync(promptFile, 'utf8');
 const args = ['-p', '-f', '--mode', 'ask', '--output-format', 'text', '--model', REQUESTED_MODEL, prompt];
+
+let agentEnv;
+try {
+  agentEnv = await prepareComposerAgentEnv(process.env);
+} catch (err) {
+  process.stderr.write(`${err instanceof Error ? err.message : err}\n`);
+  process.exit(1);
+}
+
 const res = spawnSync(bin, args, {
   encoding: 'utf8',
-  env: process.env,
+  env: agentEnv,
   maxBuffer: 20 * 1024 * 1024,
   timeout: 360000,
 });

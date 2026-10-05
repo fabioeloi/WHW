@@ -1,0 +1,24 @@
+name: composer-live
+
+on:
+  workflow_dispatch:
+
+jobs:
+  composer-2-5:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Install Cursor Agent CLI
+        run: curl -fsSL https://cursor.com/install | bash
+      - name: Dependencies
+        run: npm ci
+      - name: Live Composer 2.5 benchmark test
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: |
+          test -n "$CURSOR_API_KEY"
+          export PATH="$HOME/.local/bin:$PATH"
+          npm run test:composer:live

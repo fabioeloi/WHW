@@ -248,6 +248,7 @@ export async function discoverComposerCommand(env = process.env, deps = {}) {
  */
 export async function composerAuthReady(env = process.env) {
   if (typeof env.CURSOR_API_KEY === 'string' && env.CURSOR_API_KEY.trim()) return true;
+  if (typeof env.CURSOR_AUTH_TOKEN === 'string' && env.CURSOR_AUTH_TOKEN.trim()) return true;
   const bin = findComposerBin(env.PATH ?? '', COMPOSER_BINS, env.HOME ?? homedir());
   if (!bin) return false;
   const res = await runCmd(bin, ['status'], { env, timeoutMs: 20000 });
