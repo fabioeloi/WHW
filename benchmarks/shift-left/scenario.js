@@ -123,6 +123,18 @@ test('taxCents rounds a tenth', () => {
   },
 ];
 
+/** Safe tree after an early design checkpoint, and the mechanical fix that drops the illegal import but keeps the direct read. */
+export const CRITICAL_VARIANTS = {
+  safe: {
+    'src/domain/invoice.js': PURE_INVOICE,
+    'src/api/pay.js': CLEAN_PAY,
+  },
+  mechanicalFix: {
+    'src/domain/invoice.js': PURE_INVOICE,
+    'src/api/pay.js': DIRECT_PAY,
+  },
+};
+
 export const FITNESS = [
   { id: 'domain-boundary', command: 'node scripts/fitness/domain-boundary.js', description: 'Domain must not import infra.' },
   { id: 'no-pii-logs', command: 'node scripts/fitness/no-pii-logs.js', description: 'Logs must not contain PII.' },

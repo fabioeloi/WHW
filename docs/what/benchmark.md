@@ -54,3 +54,20 @@ Regenerate with:
 ```bash
 npm run benchmark
 ```
+
+## Composer reading
+
+`npm run benchmark:composer` asks the Composer model to read that report. It
+does not re-run the waves, does not edit `verdictFor`, and does not change
+`process.profile`. The opinion is written beside the report at
+`benchmarks/shift-left/out/composer-analysis.json` (gitignored) and may
+disagree with `recommend-adopt`. `comprehensionProven` stays false. This is
+not a second productivity measurement.
+
+The runner is a shell command with `WHW_PROMPT_FILE`, same contract as
+`whw run`. Set `WHW_COMPOSER_RUNNER` to override it. If `cursor-agent` (or a
+Cursor `agent` binary whose help names Composer) is missing, the command
+exits 2 and does not invent an analysis. `npm test` checks the JSON contract
+with a recorded reply and does not call the model. `WHW_COMPOSER_LIVE=1`
+runs one live call and checks that all five change ids come back; the
+recommendation text is not pinned.

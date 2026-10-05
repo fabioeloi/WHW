@@ -62,6 +62,7 @@
     "doctor": "node ./bin/whw.js doctor",
     "gates": "node ./bin/whw.js gate run --tier pr",
     "benchmark": "node benchmarks/shift-left/run.js",
+    "benchmark:composer": "node benchmarks/shift-left/analyze.js",
     "example": "node ./bin/whw.js --help"
   }
 }
