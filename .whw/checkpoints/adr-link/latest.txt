@@ -15,4 +15,7 @@ PASS wave-013-trusted-publish → ADR 0014
 PASS wave-014-runner-proof-real → ADR 0013
 PASS wave-015-consumer-proof → ADR 0013
 PASS wave-016-program-close → ADR 0013
+PASS wave-017-staged-release → ADR 0015
+PASS wave-018-documentation-adoption → ADR 0016
+PASS wave-019-documentation-release → ADR 0017
 status=GO failures=0

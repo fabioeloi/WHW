@@ -2,7 +2,13 @@
 PASS program whw-v0-1-0: waves 1–6 (0008-program-001.md)
 PASS program 002: waves 7–11 (0009-program-002.md)
 PASS program trust-adoption: waves 12–16 (0013-program-trust-adoption.md)
+PASS program secure-release: waves 17–17 (0015-program-secure-release.md)
+PASS program documentation-adoption: waves 18–18 (0016-program-documentation-adoption.md)
+PASS program documentation-release: waves 19–19 (0017-program-documentation-release.md)
 PASS program whw-v0-1-0: closed — verifying inventory
 PASS program 002: closed — verifying inventory
 PASS program trust-adoption: closed — verifying inventory
+PASS program secure-release: closed — verifying inventory
+PASS program documentation-adoption: closed — verifying inventory
+PASS program documentation-release: open (close wave 19 not done yet)
 status=GO failures=0

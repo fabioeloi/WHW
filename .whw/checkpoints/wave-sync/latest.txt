@@ -15,4 +15,6 @@ PASS wave-013-trusted-publish: synced (.done.sql + plan + addendum)
 PASS wave-014-runner-proof-real: synced (.done.sql + plan + addendum)
 PASS wave-015-consumer-proof: synced (.done.sql + plan + addendum)
 PASS wave-016-program-close: synced (.done.sql + plan + addendum)
+PASS wave-017-staged-release: synced (.done.sql + plan + addendum)
+PASS wave-018-documentation-adoption: synced (.done.sql + plan + addendum)
 status=GO failures=0

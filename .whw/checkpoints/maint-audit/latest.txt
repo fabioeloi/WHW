@@ -1,4 +1,4 @@
 # whw gate maint-audit
-PASS baseline wave-016-program-close @ 54575db
-PASS no non-merge commits since 54575db
+PASS baseline wave-016-program-close @ 92f6d70
+PASS non-merge commits since 92f6d70 allowed
 status=GO failures=0
