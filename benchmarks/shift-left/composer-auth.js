@@ -104,7 +104,7 @@ export function scrubIdentityAuthTokens(env) {
 export function agentStatusLooksLoggedIn(text) {
   if (/\bnot logged in\b/i.test(text)) return false;
   if (/stored authentication is invalid/i.test(text)) return false;
-  return /^Logged in/m.test(text) || /Login successful/i.test(text);
+  return /\bLogged in\b/i.test(text) || /Login successful/i.test(text);
 }
 
 /**
@@ -244,12 +244,6 @@ export async function describeComposerAuthGap(env = process.env) {
     lines.push('cursor-agent/agent not found on PATH (install via curl -fsSL https://cursor.com/install | bash).');
     return lines.join(' ');
   }
-  if (!apiKey && !scrubbed.CURSOR_AUTH_TOKEN?.trim()) {
-    lines.push('No CURSOR_API_KEY, CURSOR_AUTH_TOKEN session, or agent login.');
-    lines.push('Cloud Agents: add Runtime Secret CURSOR_API_KEY on this environment, then start a new agent run.');
-    lines.push('See docs/pt-BR/composer-live-auth.md');
-    return lines.join(' ');
-  }
   let agentEnv;
   try {
     agentEnv = await prepareComposerAgentEnv(scrubbed);
@@ -262,6 +256,11 @@ export async function describeComposerAuthGap(env = process.env) {
   const text = `${res.stdout}\n${res.stderr}`.trim();
   if (agentStatusLooksLoggedIn(text)) return '';
   lines.push(text.split('\n')[0] || 'cursor-agent status did not report a login');
+  if (!apiKey && !scrubbed.CURSOR_AUTH_TOKEN?.trim()) {
+    lines.push('Local: run `agent login` (no API key required).');
+    lines.push('Cloud Agents: add Runtime Secret CURSOR_API_KEY, then start a new agent run.');
+  }
+  lines.push('See docs/pt-BR/composer-live-auth.md');
   return lines.join(' ');
 }
 

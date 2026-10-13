@@ -75,10 +75,10 @@ runs one live call and checks that all five change ids come back; the
 recommendation text is not pinned. The live path uses
 `benchmarks/shift-left/agent-runner.mjs` (`--model composer-2.5`, `--mode ask`,
 `-f`) and discovers `cursor-agent` / `agent` under `~/.local/bin` as well as
-`PATH`. Authenticate first (`agent login`), set `CURSOR_API_KEY` (Cloud Agent runtime
-secret or `.env.local` from `.env.local.example`), or rely on injected
-`CURSOR_AUTH_TOKEN` on hosted VMs. The runner exchanges API keys via
-`/auth/exchange_user_api_key` before calling `--model composer-2.5`. Then:
+`PATH`. **Local:** `agent login` (no API key). **Cloud / CI:** `CURSOR_API_KEY`
+(runtime secret or `.env.local` from `.env.local.example`). Optional injected
+`CURSOR_AUTH_TOKEN` on hosted VMs. API keys are exchanged via
+`/auth/exchange_user_api_key` when set. Then:
 
 ```bash
 npm run test:composer:live

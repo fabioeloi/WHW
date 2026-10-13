@@ -2,6 +2,7 @@
 import { describe, it, mock } from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  agentStatusLooksLoggedIn,
   describeComposerAuthGap,
   exchangeUserApiKey,
   isCloudAgentIdentityToken,
@@ -27,6 +28,13 @@ describe('composer-auth', () => {
 
   it('does not treat a bare CURSOR_AUTH_TOKEN as ready without agent login', async () => {
     assert.equal(await composerAuthReady({ CURSOR_AUTH_TOKEN: 'session', PATH: '' }), false);
+  });
+
+  it('treats checkmark-prefixed agent status as logged in', () => {
+    assert.equal(
+      agentStatusLooksLoggedIn('✓ Logged in as user@example.com\n'),
+      true,
+    );
   });
 
   it('strips cloud-agent OIDC JWTs mistaken for CURSOR_AUTH_TOKEN', () => {
