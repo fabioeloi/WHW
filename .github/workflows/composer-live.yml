@@ -1,24 +1,18 @@
 name: composer-live
 
+# Live Composer benchmark is run locally via `npm run composer:live`
+# using the Cursor Agent login (`agent login`); no repository secret is used.
+# This manual workflow only re-runs the offline fixture analysis.
 on:
   workflow_dispatch:
 
 jobs:
-  composer-2-5:
+  composer-offline:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
-      - name: Install Cursor Agent CLI
-        run: curl -fsSL https://cursor.com/install | bash
-      - name: Dependencies
-        run: bash scripts/npm-deps.sh
-      - name: Live Composer 2.5 benchmark test
-        env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
-        run: |
-          test -n "$CURSOR_API_KEY"
-          export PATH="$HOME/.local/bin:$PATH"
-          npm run test:composer:live
+      - name: Composer analysis (fixture, keyless)
+        run: node --test tests/benchmark/composer-analysis.test.js
