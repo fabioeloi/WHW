@@ -52,10 +52,10 @@ llama-cli -m /models/llama.gguf -f "$WHW_PROMPT_FILE" -n 2048
 # Open-weight — Aider + local Ollama
 aider --model ollama_chat/llama3.1 --message-file "$WHW_PROMPT_FILE" --yes-always
 
-# Closed — Claude Code (print mode, permissions pre-approved by you)
-claude -p --dangerously-skip-permissions "$(cat \"$WHW_PROMPT_FILE\")"
-# Closed — Codex (non-interactive)
-codex exec --skip-git-repo-check - < "$WHW_PROMPT_FILE"
+# Closed — Codex (non-interactive, sandboxed to the workspace; Wave 014 pattern)
+codex exec --ignore-user-config --sandbox workspace-write - < "$WHW_PROMPT_FILE"
+# Closed — Claude Code (print mode, edits only; no permission bypass)
+claude -p --permission-mode acceptEdits "$(cat \"$WHW_PROMPT_FILE\")"
 # Closed — Gemini CLI
 gemini --prompt "$(cat \"$WHW_PROMPT_FILE\")"
 ```
@@ -67,14 +67,14 @@ A ladder that tries a local model first, then a hosted CLI:
   "escalation": {
     "tiers": [
       { "name": "local", "runner": "ollama run llama3.1 < \"$WHW_PROMPT_FILE\"", "maxFailures": 2, "costClass": "open-weight", "model": "llama3.1" },
-      { "name": "hosted", "runner": "claude -p --dangerously-skip-permissions \"$(cat \\\"$WHW_PROMPT_FILE\\\")\"", "maxFailures": 1, "costClass": "closed", "model": "claude" },
+      { "name": "hosted", "runner": "codex exec --ignore-user-config --sandbox workspace-write - < \"$WHW_PROMPT_FILE\"", "maxFailures": 1, "costClass": "closed", "model": "codex" },
       { "name": "human", "human": true }
     ]
   }
 }
 ```
 
-Only configure runners you trust with shell execution — `whw run` is power
+Prefer sandboxed runners (see `docs/how/runner-proof-real.md`, Wave 014); never use permission-bypass flags such as `--dangerously-skip-permissions`. Only configure runners you trust with shell execution — `whw run` is power
 tools, and `SECURITY.md` applies.
 
 ## When to escalate vs. when to stop
