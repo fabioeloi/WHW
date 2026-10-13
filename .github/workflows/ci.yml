@@ -27,11 +27,25 @@ jobs:
       - name: PR gates
         run: node ./bin/whw.js gate run --tier pr
 
+  composer-offline:
+    name: composer-offline (fixture)
+    needs: whw
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Composer analysis against recorded fixture (no API key)
+        run: node --test tests/benchmark/composer-analysis.test.js tests/unit/composer-auth.test.js
+
   ci:
     name: ci
     if: always()
-    needs: whw
+    needs: [whw, composer-offline]
     runs-on: ubuntu-latest
     steps:
       - name: All matrix cells green
         run: test "${{ needs.whw.result }}" = "success"
+      - name: Composer offline check green
+        run: test "${{ needs.composer-offline.result }}" = "success"

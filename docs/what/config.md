@@ -74,6 +74,12 @@ Machine schema: [`config.schema.json`](config.schema.json).
 - **escalation** — ladder tiers `[{name, runner, maxFailures, model?, costClass?} | {name, human}]`.
   `costClass` is documentary (`open-weight`, `closed`, `human`); `model` is
   a free-form label written into `.whw/runs/*.log`.
+- **process.profile** — `classic` (default) or `shift-left`. Omitted means classic.
+  `process.signals` is an optional default list for `whw wave new` when
+  `--signals` is omitted. See `docs/how/risk-review.md`.
+- **fitness** — `[{id, command, description?}]` project shell checks. Not
+  universal WHW rules. `whw fitness run` executes them; high and critical
+  shift-left waves also run them before Build.
 - **hooks** — optional shell commands after `claim`, `done`, gate NO_GO, and
   `close`. Post-event only: a failing hook is logged and does **not** roll back
   the transition. Env: `WHW_HOOK`, `WHW_ROOT`, plus `WHW_REF` / `WHW_FROM` /

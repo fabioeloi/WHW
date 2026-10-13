@@ -21,8 +21,9 @@ O inglês é canônico; a jornada abaixo oferece adoção completa em pt-BR.
 Há provas públicas de adoção local, continuidade por arquivos/SQL, execução
 Codex assistida pelo operador e publicação npm preparada por OIDC com
 aprovação humana. Não equivalem a autonomia completa, conformidade empresarial,
-economia financeira ou ganhos de benchmark. Veja as evidências e limites
-no [README](../../README.pt-BR.md#evidências-e-limites).
+economia financeira ou ganhos de benchmark. A comparação opt-in classic vs
+shift-left é uma simulação regenerável, não esse ganho: [resumo](comparacao-shift-left.md).
+Veja as evidências e limites no [README](../../README.pt-BR.md#evidências-e-limites).
 
 ## Convenção de idioma
 

@@ -1,0 +1,38 @@
+{
+  "agreesWithOracle": false,
+  "oracleReason": "The safe ending is chosen by the driver when D0 already happened, so the escape is an assumption rather than an observed review.",
+  "agreesWithVerdict": true,
+  "verdictReason": "Shift-left ceremony cost is lower and the rubric's safety checks hold even if the oracle is set aside via costExcludingOracle.",
+  "recommendation": "defer",
+  "criticalWalkthroughAnswerable": {
+    "classic": false,
+    "shift-left": true
+  },
+  "changes": [
+    {
+      "id": "docs-readme",
+      "loadBearing": [],
+      "theater": ["letter D", "modeled judge"]
+    },
+    {
+      "id": "rename-local",
+      "loadBearing": [],
+      "theater": ["letter D", "modeled judge"]
+    },
+    {
+      "id": "invoice-module",
+      "loadBearing": ["fitness at verify"],
+      "theater": ["letter D when fitness is GO"]
+    },
+    {
+      "id": "debug-payment-log",
+      "loadBearing": ["fitness before Build", "D0"],
+      "theater": []
+    },
+    {
+      "id": "domain-owns-table",
+      "loadBearing": ["D0", "fitness before Build", "walkthrough"],
+      "theater": ["modeled classic judge"]
+    }
+  ]
+}

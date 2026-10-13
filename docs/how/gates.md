@@ -66,6 +66,15 @@ a failure message naming the smallest fix. When in doubt, it goes to `ops`.
   closed program-close wave. Empty range is GO. Does **not** check GitHub
   PR labels.
 
+## Conformance and judgment
+
+Every builtin and custom gate is `kind: conformance`: a deterministic GO/NO_GO.
+That is a different event from human judgment. `whw judge` records an
+attestation and does not join the `pr` tier. The opt-in shift-left profile
+decides when that attestation is required. See
+[risk review](risk-review.md). Passing a heading check is not evidence that
+a person understood the change.
+
 ## Custom gates
 
 Any shell command can be a gate. Declare it in `whw.config.json`:

@@ -13,7 +13,7 @@ adapter with identical semantics.
 | `status` | TEXT | `pending` `in_progress` `done` `blocked` `cancelled` (CHECK) |
 | `track` | TEXT NOT NULL | Wave track (`wave-NNN-slug`) or free-form track |
 | `step` | INTEGER | 1–999; queue order within a track |
-| `letter` | TEXT NULL | Wave letter A–E (NULL for non-wave tracks) |
+| `letter` | TEXT NULL | Wave letter `A`–`E`, plus `D0` and `W` on databases created with the current schema (NULL for non-wave tracks). An existing file keeps its old check until deleted and rebuilt |
 | `adr` | TEXT NULL | Serving ADR number, e.g. `0009` |
 | `notes` | TEXT NULL | Working notes; block/cancel reasons appended |
 | `evidence` | TEXT NULL | Proof of done (commits/PRs/tests/checkpoints) |
@@ -25,7 +25,7 @@ Indexes: `status`, `track`. `ref` is UNIQUE by primary key.
 
 DAG edges: (`ref`, `depends_on`), composite PK, both FKs to `todos(ref)`
 `ON DELETE CASCADE`, `CHECK (ref <> depends_on)`. Wave seeds chain
-A→B→C→D→E; E additionally fans in on A–D transitively through the chain.
+the seeded letters in order. Classic seeds A→B→C→D→E. Shift-left seeds the chain for the wave's risk class.
 
 ## transitions
 

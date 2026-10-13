@@ -181,6 +181,7 @@ login, entitlement or backend health. See [config](docs/what/config.md).
 | Consumer adoption and continuity | [Consumer verification](docs/how/consumer-proof-verification.md), [e2e test](tests/e2e/consumer.test.js) | Local replay; no model conversation migration or Windows certification |
 | Real runner | [Codex runner proof](docs/how/runner-proof-real.md) | Operator-assisted: sandbox blocked Git commit; operator finalized Git/SQL; requested model metadata is not backend attestation |
 | Secure release | [Staged release verification](docs/how/staged-release-verification.md), [workflow](.github/workflows/release.yml) | Observed dispatch recovery; future tag-triggered publication is not proved by that run |
+| Shift-left comparison | [Benchmark](docs/what/benchmark.md), [ADR 0018](docs/adr/0018-shift-left-profile.md) | Simulated ledger and published weights; not a field productivity or financial result |
 
 This repository published 0.2.0 with GitHub Actions OIDC, staging-only npm
 permissions and human passkey approval. The recovery attestation identifies
@@ -189,8 +190,10 @@ established the tag's package contents. These are repository practices, not
 automatic guarantees for repositories adopting WHW. See [security](SECURITY.md).
 
 No measured WHW benchmark gain, financial saving, complete autonomy or
-enterprise compliance claim is made. Custom shell checks and runners execute
-code you configure: review them before use.
+enterprise compliance claim is made. `npm run benchmark` compares the default
+classic profile with the opt-in shift-left profile under a published cost
+model; that report is not a measured productivity or financial gain. Custom
+shell checks and runners execute code you configure: review them before use.
 
 ## Documentation
 
@@ -200,7 +203,7 @@ Start at the [documentation index](docs/README.md) or the
 | Need | Reference |
 | --- | --- |
 | Purpose and principles | [WHY](WHY.md), [manifesto](docs/why/manifesto.md), [principles](docs/why/principles.md) |
-| Process | [Waves](docs/how/waves.md), [gates](docs/how/gates.md), [evidence](docs/how/evidence.md) |
+| Process | [Waves](docs/how/waves.md), [gates](docs/how/gates.md), [risk review](docs/how/risk-review.md), [evidence](docs/how/evidence.md) |
 | Technical reference | [CLI](docs/what/cli.md), [schema](docs/what/schema.md), [adapters](docs/what/adapters.md) |
 | Decisions and current work | [ADRs](docs/adr/), [plan](docs/plan.md), [canonical agent contract](AGENTS.md) |
 

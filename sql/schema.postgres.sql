@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS todos (
     CHECK (status IN ('pending', 'in_progress', 'done', 'blocked', 'cancelled')),
   track TEXT NOT NULL,
   step INTEGER NOT NULL CHECK (step BETWEEN 1 AND 999),
-  letter TEXT CHECK (letter IS NULL OR letter IN ('A', 'B', 'C', 'D', 'E')),
+  letter TEXT CHECK (letter IS NULL OR letter IN ('A', 'B', 'C', 'D', 'E', 'D0', 'W')),
   adr TEXT,
   notes TEXT,
   evidence TEXT,

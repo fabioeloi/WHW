@@ -66,3 +66,10 @@ does not need A, they are two waves.
 | Wave open for weeks | Split the remainder into a new wave; close this one |
 | "Done" without evidence | Reopen the letter (via a new wave) — evidence is the done |
 | Code in PR A, planning in PR B | Letters are ordered; keep each letter's scope |
+
+## Shift-left profile
+
+The contract above is the default (`classic`). An opt-in `shift-left` profile
+can seed `D0` before Build and `W` before close for higher risk classes, and
+can omit D for low risk. It does not replace A–E unless a repository sets
+`process.profile`. See [risk review](risk-review.md).

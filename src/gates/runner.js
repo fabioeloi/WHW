@@ -6,6 +6,7 @@
  */
 
 import { join } from 'node:path';
+import { appendCeremony } from '../ceremony.js';
 import { closeDb, get, openDb } from '../db/sqlite.js';
 import { runHook } from '../hooks.js';
 import { localDate, runShell, utcStamp, writeText } from '../util.js';
@@ -27,16 +28,29 @@ export const BUILTINS = [
 
 /**
  * @param {any} ctx
- * @returns {{ name: string, description: string, builtin: boolean, tiers: string[], command?: string }[]}
+ * @returns {{ name: string, description: string, builtin: boolean, kind: string, tiers: string[], command?: string }[]}
  */
 export function listGates(ctx) {
   const tiers = ctx.config?.gates?.tiers ?? {};
   const customs = Array.isArray(ctx.config?.gates?.custom) ? ctx.config.gates.custom : [];
   const tierOf = (name) => Object.entries(tiers).filter(([, names]) => names?.includes(name)).map(([t]) => t);
-  const out = BUILTINS.map((g) => ({ name: g.name, description: g.description, builtin: true, tiers: tierOf(g.name) }));
+  const out = BUILTINS.map((g) => ({
+    name: g.name,
+    description: g.description,
+    builtin: true,
+    kind: g.kind ?? 'conformance',
+    tiers: tierOf(g.name),
+  }));
   for (const c of customs) {
     if (!c?.name || !c?.command) continue;
-    out.push({ name: c.name, description: c.description ?? '(custom shell gate)', builtin: false, tiers: tierOf(c.name), command: c.command });
+    out.push({
+      name: c.name,
+      description: c.description ?? '(custom shell gate)',
+      builtin: false,
+      kind: 'conformance',
+      tiers: tierOf(c.name),
+      command: c.command,
+    });
   }
   return out;
 }
@@ -128,7 +142,7 @@ export async function cmdGateList(positionals, ctx) {
   }
   for (const g of gates) {
     const tiers = g.tiers.length ? g.tiers.join(',') : 'untiered';
-    ctx.log.info(`${g.builtin ? '[builtin]' : '[custom] '} ${g.name} (${tiers}) — ${g.description}`);
+    ctx.log.info(`${g.builtin ? '[builtin]' : '[custom] '} ${g.name} (${g.kind}, ${tiers}) — ${g.description}`);
   }
   return 0;
 }
@@ -158,6 +172,7 @@ export async function cmdGateRun(positionals, ctx, sub = null) {
         details: [],
       };
       const cp = writeCheckpoint(ctx, 'unsynced-state', result);
+      appendCeremony(ctx.root, { event: 'gate', name: 'unsynced-state', kind: 'conformance', status: result.status });
       if (ctx.json) {
         ctx.log.data({ results: [{ name: 'unsynced-state', ...result, checkpoint: cp.latest }] });
       } else {
@@ -176,7 +191,9 @@ export async function cmdGateRun(positionals, ctx, sub = null) {
           result = { status: 'NO_GO', failures: [err instanceof Error ? err.message : String(err)], details: [] };
         }
         const cp = writeCheckpoint(ctx, gateName, result);
-        results.push({ name: gateName, ...result, checkpoint: cp.latest });
+        const kind = listGates(ctx).find((gate) => gate.name === gateName)?.kind ?? 'conformance';
+        appendCeremony(ctx.root, { event: 'gate', name: gateName, kind, status: result.status });
+        results.push({ name: gateName, kind, ...result, checkpoint: cp.latest });
       }
       const failed = results.filter((r) => r.status !== 'GO');
       failedNames = failed.map((r) => r.name);
